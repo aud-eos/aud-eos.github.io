@@ -2,9 +2,14 @@
   "name": "audeos.com",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=19.8.1",
+    "npm": "please-use-yarn",
+    "yarn": ">=1.22.19"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
     "lint": "next lint"
   },
