@@ -5,7 +5,11 @@ import { TypeBlogPost } from "@/types";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import Link from "next/link";
 import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
+import Image from "next/image";
+import styles from "@/styles/BlogPost.module.scss";
+import DateTimeFormat from "@/components/DateTimeFormat";
 
+const IMAGE_SIZE = 750;
 
 export interface SlugProps {
   post: TypeBlogPost;
@@ -18,9 +22,28 @@ export const BlogPostView: FC<SlugProps> = ({ post }) => {
       <Head>
         <title>{ `${post.fields.title} - Audeos.com` }</title>
       </Head>
-      <h1>{ post.fields.title }</h1>
-      <ReactMarkdown>{ post.fields.body || "" }</ReactMarkdown>
-      <Link href="/">go back/home</Link>
+      <main className={ styles.main }>
+        <article>
+        <figure>
+          <Image
+            src={ `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}` }
+            alt={ post.fields.image?.fields.description || "" }
+            fill
+          />
+          <figcaption>
+            { post.fields.image?.fields.description || "" }
+          </figcaption>
+        </figure>
+        <h1>{ post.fields.title }</h1>
+        <address>
+          By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
+          { ` ` }on <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
+        </address>
+        <ReactMarkdown>{ post.fields.body || "" }</ReactMarkdown>
+
+        </article>
+        <Link href="/">go back/home</Link>
+      </main>
     </>
   );
 };
