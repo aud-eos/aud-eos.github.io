@@ -9,8 +9,8 @@ const CONTENTFUL_ACCESS_TOKEN: string = process.env[
   "CONTENTFUL_ACCESS_TOKEN"
 ] as string;
 
-assert(!!CONTENTFUL_SPACE_ID);
-assert(!!CONTENTFUL_ACCESS_TOKEN);
+assert( !!CONTENTFUL_SPACE_ID );
+assert( !!CONTENTFUL_ACCESS_TOKEN );
 
 const client = createClient({
   space: CONTENTFUL_SPACE_ID,

@@ -3,7 +3,7 @@
   "rules": {
     "arrow-parens": [ 2, "as-needed" ],
     "comma-dangle": ["error", "always-multiline"],
-    "keyword-spacing": [ 2, { "after": true, "overrides": { "if": { "after": false }, "return": { "after": false }}}],
+    "keyword-spacing": [ 2, { "after": true, "overrides": { "if": { "after": false } }}],
     "no-multi-spaces": [ 2 ],
     "object-curly-spacing": [ 2, "always" ],
     "quotes": [2, "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
