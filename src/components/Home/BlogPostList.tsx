@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { TypeBlogPost } from "@/types";
 import { sortBlogPostsByDate } from "@/utils/blogPostUtils";
-import DateTimeFormat from "../DateTimeFormat";
+import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 
 

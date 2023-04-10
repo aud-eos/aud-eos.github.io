@@ -1,0 +1,14 @@
+.main {
+  display: flex;
+  flex-direction: column;
+
+  article {
+    figure {
+      height: 25vh;
+      position: relative;
+      img {
+        object-fit: cover;
+      }
+    }
+  }
+}
