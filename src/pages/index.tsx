@@ -16,7 +16,7 @@ export interface HomeProps {
 
 export default function Home({ posts }: HomeProps ){
   console.log( "home component props:", { posts });
-  return(
+  return (
     <>
       <Head>
         <title>Audeos.com</title>
@@ -41,7 +41,7 @@ export default function Home({ posts }: HomeProps ){
           {
             posts.map( post => {
               console.log({ post });
-              return(
+              return (
                 <div key={ post.fields.slug }>
                   <h4>{ post.fields.title }</h4>
                   <p>/post/{ post.fields.slug }</p>
@@ -88,7 +88,7 @@ export default function Home({ posts }: HomeProps ){
 
 export async function getStaticProps(){
   const posts = await getBlogPosts();
-  return{
+  return {
     props: {
       posts,
     },
