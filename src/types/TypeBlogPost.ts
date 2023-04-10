@@ -1,0 +1,50 @@
+import type { Entry, EntryFields } from "contentful";
+
+/**
+ * Fields type definition for content type 'TypeBlogPost'
+ * @name TypeBlogPostFields
+ * @type {TypeBlogPostFields}
+ * @memberof TypeBlogPost
+ */
+export interface TypeBlogPostFields {
+    /**
+     * Field type definition for field 'title' (Title)
+     * @name Title
+     * @localized true
+     */
+    title: EntryFields.Symbol;
+    /**
+     * Field type definition for field 'slug' (Slug)
+     * @name Slug
+     * @localized false
+     */
+    slug: EntryFields.Symbol;
+    /**
+     * Field type definition for field 'date' (Date)
+     * @name Date
+     * @localized false
+     */
+    date?: EntryFields.Date;
+    /**
+     * Field type definition for field 'location' (Location)
+     * @name Location
+     * @localized true
+     */
+    location?: EntryFields.Location;
+    /**
+     * Field type definition for field 'body' (Body)
+     * @name Body
+     * @localized false
+     */
+    body?: EntryFields.Text;
+}
+
+/**
+ * Entry type definition for content type 'blogPost' (Blog Post)
+ * @name TypeBlogPost
+ * @type {TypeBlogPost}
+ * @author 5qtbtLdlsTzODfegrwA2Ez
+ * @since 2023-04-01T06:07:22.846Z
+ * @version 7
+ */
+export type TypeBlogPost = Entry<TypeBlogPostFields>;
