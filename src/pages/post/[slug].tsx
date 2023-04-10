@@ -18,22 +18,35 @@ export interface SlugProps {
 
 
 export const BlogPostView: FC<SlugProps> = ({ post }) => {
+  const metaTitle = `${post.fields.title} | Audeos.com`;
+  const metaImage = `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}`;
+  const metaImageDesc = post.fields.image?.fields.description || "";
   return (
     <>
       <Head>
-        <title>{ `${post.fields.title} - Audeos.com` }</title>
+        <title>{ metaTitle }</title>
+        <meta name="description" content={ post.fields.description } key="desc" />
+        <meta property="og:title" content={ metaTitle } />
+        <meta
+          property="og:description"
+          content={ post.fields.description }
+        />
+        <meta
+          property="og:image"
+          content={ metaImage }
+        />
       </Head>
       <Layout>
         <main className={ styles.main }>
           <article>
             <figure>
               <Image
-                src={ `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}` }
-                alt={ post.fields.image?.fields.description || "" }
+                src={ metaImage }
+                alt={ metaImageDesc }
                 fill
               />
               <figcaption>
-                { post.fields.image?.fields.description || "" }
+                { metaImageDesc }
               </figcaption>
             </figure>
             <h1>{ post.fields.title }</h1>
