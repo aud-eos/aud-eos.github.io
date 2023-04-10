@@ -14,3 +14,6 @@ types:
 		-t $(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN) \
 		-d \
 		-o src/types
+
+lint:
+	@yarn lint

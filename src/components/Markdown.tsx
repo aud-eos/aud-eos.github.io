@@ -1,5 +1,3 @@
-// Markdown.tsx
-import Image from "next/image";
 import { FC } from "react";
 import ReactMarkdown from "react-markdown";
 import styles from "@/styles/Markdown.module.scss";
