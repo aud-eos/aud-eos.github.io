@@ -1,10 +1,9 @@
 import Head from "next/head";
-import Link from "next/link";
 
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Home.module.scss";
 import { TypeBlogPost } from "@/types";
-import { sortBlogPostsByDate } from "@/utils/blogPostUtils";
 import { getBlogPosts } from "@/utils/contentfulUtils";
+import BlogPostList from "@/components/Home/BlogPostList";
 
 
 
@@ -13,7 +12,6 @@ export interface HomeProps {
 }
 
 export default function Home({ posts }: HomeProps ){
-  console.log( "home component props:", { posts });
   return (
     <>
       <Head>
@@ -22,20 +20,7 @@ export default function Home({ posts }: HomeProps ){
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={ styles.main }>
-        <ul>
-          {
-            posts
-              .sort( sortBlogPostsByDate )
-              .map( post => {
-                return (
-                  <li key={ post.fields.slug }>
-                    <Link href={ `/post/${post.fields.slug}` }>Post Title: { post.fields.title }</Link>
-                    <p>Date: { new Date( post.fields.date || post.sys.createdAt ).toLocaleString() }</p>
-                  </li>
-                );
-            })
-          }
-        </ul>
+        <BlogPostList posts={ posts } />
       </main>
     </>
   );

@@ -1,6 +1,7 @@
 {
   "extends": [ "eslint:recommended", "next/core-web-vitals" ],
   "rules": {
+    "array-bracket-spacing": [ 2, "always" ],
     "arrow-parens": [ 2, "as-needed" ],
     "comma-dangle": ["error", "always-multiline"],
     "keyword-spacing": [ 2, { "after": true, "overrides": { "if": { "after": false } }}],
