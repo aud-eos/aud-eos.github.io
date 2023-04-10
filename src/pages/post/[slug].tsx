@@ -1,22 +1,31 @@
 import { FC } from "react";
 import Head from "next/head";
 import { GetStaticPropsContext } from "next";
-import { getBlogPost, getBlogPosts } from "@/utils";
-import { BlogPost } from "..";
+import { TypeBlogPost } from "@/types";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import Link from "next/link";
+import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
+
 
 export interface SlugProps {
-  post: BlogPost;
+  post: TypeBlogPost;
 }
 
+
 export const BlogPostView: FC<SlugProps> = ({ post }) => {
+  console.log( "title:  " + post.fields.title );
   return (
     <>
       <Head>
-        <title>{ post.title } — My Next.js Static Blog</title>
+        <title>{ `${post.fields.title} - Audeos.com` }</title>
       </Head>
+      <h1>{ post.fields.title }</h1>
+      <ReactMarkdown>{ post.fields.body || "" }</ReactMarkdown>
+      <Link href="/">go back/home</Link>
     </>
   );
 };
+
 
 export async function getStaticProps( context: GetStaticPropsContext ){
   const slug = context.params?.slug;
