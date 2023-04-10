@@ -13,7 +13,6 @@ export interface SlugProps {
 
 
 export const BlogPostView: FC<SlugProps> = ({ post }) => {
-  console.log( "title:  " + post.fields.title );
   return (
     <>
       <Head>

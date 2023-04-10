@@ -2,7 +2,6 @@ import Link from "next/link";
 import { TypeBlogPost } from "@/types";
 import { sortBlogPostsByDate } from "@/utils/blogPostUtils";
 import DateTimeFormat from "../DateTimeFormat";
-import Image from "next/image";
 import styles from "@/styles/Home.module.scss";
 
 
@@ -15,7 +14,7 @@ export interface BlogPostListProps {
 
 export default function BlogPostList({ posts }: BlogPostListProps ){
   return (
-    <ul className={ styles.imageGallery }>
+    <ul className={ styles.imageGallery } role="list">
       {
         posts
           .sort( sortBlogPostsByDate )
@@ -25,11 +24,12 @@ export default function BlogPostList({ posts }: BlogPostListProps ){
               <li key={ post.sys.id }>
                 <Link href={ url }>
                   <figure>
-                    <Image
-                      src={ `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}` }
-                      alt={ post.fields.image?.fields.description || "" }
-                      fill
-                    />
+                    <picture>
+                      <img
+                        src={ `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}` }
+                        alt={ post.fields.image?.fields.description || "" }
+                      />
+                    </picture>
                     <figcaption>
                       <h3>{ post.fields.title }</h3>
                       <h5><DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } /></h5>

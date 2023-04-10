@@ -4,19 +4,31 @@
 
 ul.imageGallery {
   list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 
   li {
+    min-width: 250px;
+    max-width: 250px;
+    // flex: 1 1 250px;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    margin-bottom: 1rem;
+
     figure {
-      aspect-ratio: 1 / 1;
-      position: relative;
-      padding: 15px;
-      img {
-        object-fit: cover;
-        z-index: -1;
-        border: 5px solid white;
+      picture {
+        img {
+          display: block;
+          width: 100%;
+          object-fit: cover;
+          aspect-ratio: 1/1;
+        }
       }
       figcaption {
-        z-index: 1;
+        display: block;
+        padding: .625rem .5rem;
+        background: #474952;
       }
     }
   }
