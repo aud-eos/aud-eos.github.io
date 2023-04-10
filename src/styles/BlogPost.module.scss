@@ -1,15 +1,17 @@
 .main {
   display: flex;
   flex-direction: column;
-  article {
-    img {
-      max-width: 100vw;
-    }
-    figure {
-      height: 300px;
-      position: relative;
-      img {
-        object-fit: cover;
+  > article {
+    > header {
+      margin-bottom: 1rem;
+      > figure {
+        height: 350px;
+        position: relative;
+        > img {
+          object-fit: cover;
+          border: 15px solid white;
+          filter: grayscale(1);
+        }
       }
     }
   }
