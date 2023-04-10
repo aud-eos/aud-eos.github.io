@@ -8,6 +8,7 @@ import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
 import Image from "next/image";
 import styles from "@/styles/BlogPost.module.scss";
 import DateTimeFormat from "@/components/DateTimeFormat";
+import { Layout } from "@/components/Layout/Layout";
 
 const IMAGE_SIZE = 750;
 
@@ -22,28 +23,29 @@ export const BlogPostView: FC<SlugProps> = ({ post }) => {
       <Head>
         <title>{ `${post.fields.title} - Audeos.com` }</title>
       </Head>
-      <main className={ styles.main }>
-        <article>
-        <figure>
-          <Image
-            src={ `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}` }
-            alt={ post.fields.image?.fields.description || "" }
-            fill
-          />
-          <figcaption>
-            { post.fields.image?.fields.description || "" }
-          </figcaption>
-        </figure>
-        <h1>{ post.fields.title }</h1>
-        <address>
-          By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
-          { ` ` }on <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
-        </address>
-        <ReactMarkdown>{ post.fields.body || "" }</ReactMarkdown>
-
-        </article>
-        <Link href="/">go back/home</Link>
-      </main>
+      <Layout>
+        <main className={ styles.main }>
+          <article>
+            <figure>
+              <Image
+                src={ `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}` }
+                alt={ post.fields.image?.fields.description || "" }
+                fill
+              />
+              <figcaption>
+                { post.fields.image?.fields.description || "" }
+              </figcaption>
+            </figure>
+            <h1>{ post.fields.title }</h1>
+            <address>
+              By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
+              { ` ` }on <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
+            </address>
+            <ReactMarkdown>{ post.fields.body || "" }</ReactMarkdown>
+            </article>
+          <Link href="/">go back/home</Link>
+        </main>
+      </Layout>
     </>
   );
 };
