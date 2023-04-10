@@ -1,4 +1,5 @@
-import type { Entry, EntryFields } from "contentful";
+import type { Asset, Entry, EntryFields } from "contentful";
+import type { TypeAuthorFields } from "./TypeAuthor";
 
 /**
  * Fields type definition for content type 'TypeBlogPost'
@@ -20,11 +21,29 @@ export interface TypeBlogPostFields {
      */
     slug: EntryFields.Symbol;
     /**
+     * Field type definition for field 'description' (Description)
+     * @name Description
+     * @localized true
+     */
+    description: EntryFields.Text;
+    /**
+     * Field type definition for field 'image' (Image)
+     * @name Image
+     * @localized false
+     */
+    image?: Asset;
+    /**
      * Field type definition for field 'date' (Date)
      * @name Date
      * @localized false
      */
     date?: EntryFields.Date;
+    /**
+     * Field type definition for field 'body' (Body)
+     * @name Body
+     * @localized false
+     */
+    body?: EntryFields.Text;
     /**
      * Field type definition for field 'location' (Location)
      * @name Location
@@ -32,11 +51,11 @@ export interface TypeBlogPostFields {
      */
     location?: EntryFields.Location;
     /**
-     * Field type definition for field 'body' (Body)
-     * @name Body
+     * Field type definition for field 'author' (Author)
+     * @name Author
      * @localized false
      */
-    body?: EntryFields.Text;
+    author: Entry<TypeAuthorFields>;
 }
 
 /**
@@ -45,6 +64,6 @@ export interface TypeBlogPostFields {
  * @type {TypeBlogPost}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 7
+ * @version 11
  */
 export type TypeBlogPost = Entry<TypeBlogPostFields>;
