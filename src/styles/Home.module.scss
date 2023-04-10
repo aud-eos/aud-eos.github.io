@@ -11,7 +11,6 @@ ul.imageGallery {
   li {
     min-width: 250px;
     max-width: 250px;
-    // flex: 1 1 250px;
     padding-left: .5rem;
     padding-right: .5rem;
     margin-bottom: 1rem;
@@ -28,7 +27,7 @@ ul.imageGallery {
       figcaption {
         display: block;
         padding: .625rem .5rem;
-        background: #474952;
+        background: #1a1a1a;
       }
     }
   }

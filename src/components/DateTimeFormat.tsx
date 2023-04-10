@@ -32,8 +32,8 @@ export default function DateTimeFormat({ timestamp }: DateTimeFormatProps ){
   const timeString = `${ doubleDigit( twelveHourFormat ) }:${ doubleDigit( minutes ) } ${ ampm }`;
 
   return (
-    <>
+    <time>
       { dateString } { timeString }
-    </>
+    </time>
   );
 }

@@ -1,23 +1,26 @@
 import { FC } from "react";
-import Head from "next/head";
 import { GetStaticPropsContext } from "next";
-import { TypeBlogPost } from "@/types";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import Head from "next/head";
 import Link from "next/link";
-import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
 import Image from "next/image";
+
+import { TypeBlogPost } from "@/types";
+import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
 import styles from "@/styles/BlogPost.module.scss";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import { Layout } from "@/components/Layout/Layout";
+import { Markdown } from "@/components/Markdown";
+
 
 const IMAGE_SIZE = 750;
 
-export interface SlugProps {
+
+export interface BlogPostViewProps {
   post: TypeBlogPost;
 }
 
 
-export const BlogPostView: FC<SlugProps> = ({ post }) => {
+export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
@@ -39,24 +42,26 @@ export const BlogPostView: FC<SlugProps> = ({ post }) => {
       <Layout>
         <main className={ styles.main }>
           <article>
-            <figure>
-              <Image
-                src={ metaImage }
-                alt={ metaImageDesc }
-                fill
-                priority
-              />
-              <figcaption>
-                { metaImageDesc }
-              </figcaption>
-            </figure>
-            <h1>{ post.fields.title }</h1>
-            <address>
-              By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
-              { ` ` }on <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
-            </address>
-            <ReactMarkdown>{ post.fields.body || "" }</ReactMarkdown>
-            </article>
+            <header>
+              <figure>
+                <Image
+                  src={ metaImage }
+                  alt={ metaImageDesc }
+                  fill
+                  priority
+                />
+                <figcaption>
+                  { metaImageDesc }
+                </figcaption>
+              </figure>
+              <h1>{ post.fields.title }</h1>
+              <address>
+                By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
+                { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
+              </address>
+            </header>
+            <Markdown>{ post.fields.body || "" }</Markdown>
+          </article>
           <Link href="/">go back/home</Link>
         </main>
       </Layout>
