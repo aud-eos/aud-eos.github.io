@@ -11,7 +11,8 @@
     "dev": "next dev",
     "build": "next build && next export",
     "start": "next start",
-    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "lint": "yarn typecheck && next lint",
     "format": "next lint --fix"
   },
   "dependencies": {

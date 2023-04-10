@@ -1,6 +1,7 @@
-import { Entry, EntryFields, createClient } from "contentful";
-import { BlogPost } from "./pages";
 import { strict as assert } from "assert";
+import { createClient, EntryFields } from "contentful";
+import { TypeBlogPost, TypeBlogPostFields } from "@/types";
+import { CONTENT_TYPE_BLOG_POST } from "@/constants";
 
 const CONTENTFUL_SPACE_ID: string = process.env[
   "CONTENTFUL_SPACE_ID"
@@ -18,9 +19,9 @@ const client = createClient({
 });
 
 // Retrieve the list of blog posts from Contentful
-export const getBlogPosts = async (): Promise<Entry<BlogPost>[]> => {
-  const response = await client.getEntries<BlogPost>({
-    content_type: "blogPost",
+export const getBlogPosts = async (): Promise<TypeBlogPost[]> => {
+  const response = await client.getEntries<TypeBlogPostFields>({
+    content_type: CONTENT_TYPE_BLOG_POST,
   });
 
   return response.items;
@@ -28,10 +29,11 @@ export const getBlogPosts = async (): Promise<Entry<BlogPost>[]> => {
 
 export const getBlogPost = async (
   slug: EntryFields.Text
-): Promise<Entry<BlogPost> | undefined> => {
+): Promise<TypeBlogPost|undefined> => {
+
   // Fetch all results where `fields.slug` is equal to the `slug` param
-  const response = await client.getEntries<BlogPost>({
-    content_type: "blogPost",
+  const response = await client.getEntries<TypeBlogPostFields>({
+    content_type: CONTENT_TYPE_BLOG_POST,
     "fields.slug": slug,
   });
 
