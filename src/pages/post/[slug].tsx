@@ -44,6 +44,7 @@ export const BlogPostView: FC<SlugProps> = ({ post }) => {
                 src={ metaImage }
                 alt={ metaImageDesc }
                 fill
+                priority
               />
               <figcaption>
                 { metaImageDesc }
