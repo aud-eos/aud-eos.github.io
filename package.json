@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && next export",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "lint": "yarn typecheck && next lint",
@@ -23,6 +24,7 @@
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
     "next": "13.2.4",
+    "next-sitemap": "^4.0.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "^8.0.6",
