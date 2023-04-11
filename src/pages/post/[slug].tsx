@@ -22,8 +22,9 @@ export interface BlogPostViewProps {
 
 export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
-  const metaImage = `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}`;
+  const metaImage = `https:${post.fields.image?.fields.file.url}?w=${IMAGE_SIZE}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
+  const authorProfileImageSrc = `https:${post.fields.author.fields.image?.fields.file.url}?w=50`;
   return (
     <>
       <Head>
@@ -56,14 +57,23 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
               </figure>
               <h1>{ post.fields.title }</h1>
               <address>
+                <Image
+                  src={ authorProfileImageSrc }
+                  alt={ post.fields.author.fields.name }
+                  width="50"
+                  height="50"
+                />
                 By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
                 { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
               </address>
             </header>
+            <section>
+              { post.fields.description }
+            </section>
             <Markdown>{ post.fields.body || "" }</Markdown>
           </article>
-          <Link href="/">go back/home</Link>
         </main>
+        <Link href="/">go back/home</Link>
       </Layout>
     </>
   );

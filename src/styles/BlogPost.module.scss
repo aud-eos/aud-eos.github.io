@@ -1,9 +1,19 @@
 .main {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
   > article {
-    > header {
+    > header, section {
       margin-bottom: 1rem;
+      > h1 {
+        font-size: xxx-large;
+      }
+      > address > img {
+        vertical-align: middle;
+        border-radius: 100%;
+        border: 3px solid gold;
+        margin: .5rem .5rem .5rem 0;
+      }
       > figure {
         height: 350px;
         position: relative;
