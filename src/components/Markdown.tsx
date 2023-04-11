@@ -35,8 +35,6 @@ const SRCSETS: ImageSourceSetOptions[] = [
   { format: "webp", width: 450 },
   { format: "webp", width: 350 },
   { format: "webp", width: 250 },
-  { format: "jpg", width: 750 },
-  { format: "png", width: 750 },
 ];
 
 
