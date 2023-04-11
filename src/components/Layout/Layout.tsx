@@ -6,13 +6,11 @@ interface LayoutProps {
   children?: ReactNode
 }
 
+export const Container: FC<LayoutProps> = ({ children }) =>
+  <div className={ styles.container }>{ children }</div>;
 
-export const Layout: FC<LayoutProps> = ({ children }) => {
-  return (
-    <div className={ styles.container }>
-      <section className={ styles.wrapper }>
-        { children }
-      </section>
-    </div>
-  );
-};
+export const Wrapper: FC<LayoutProps> = ({ children }) =>
+  <section className={ styles.wrapper }>{ children }</section>;
+
+export const Layout: FC<LayoutProps> = ({ children }) =>
+  <Container><Wrapper>{ children }</Wrapper></Container>;

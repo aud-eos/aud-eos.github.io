@@ -4,6 +4,7 @@ import styles from "@/styles/Home.module.scss";
 import { TypeBlogPost } from "@/types";
 import { getBlogPosts } from "@/utils/contentfulUtils";
 import BlogPostList from "@/components/Home/BlogPostList";
+import { Container } from "@/components/Layout/Layout";
 
 
 
@@ -19,9 +20,11 @@ export default function Home({ posts }: HomeProps ){
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <main className={ styles.main }>
-        <BlogPostList posts={ posts } />
-      </main>
+      <Container>
+        <main className={ styles.main }>
+          <BlogPostList posts={ posts } />
+        </main>
+      </Container>
     </>
   );
 }
