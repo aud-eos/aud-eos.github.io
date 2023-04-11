@@ -2,27 +2,52 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
+
   > article {
     padding: 1rem;
+
+    // Article Header
     > header, section {
       margin-bottom: 1rem;
-      > h1 {
-        font-size: xxx-large;
-      }
-      > address > img {
-        vertical-align: middle;
-        border-radius: 100%;
-        border: 3px solid gold;
-        margin: .5rem .5rem .5rem 0;
-      }
       > figure {
         height: 350px;
         position: relative;
+        margin-bottom: 1rem;
         > img {
           object-fit: cover;
           border: 15px solid white;
           filter: grayscale(1);
         }
+      }
+      > h1 {
+        font-size: xxx-large;
+      }
+      > address {
+        margin-bottom: 1rem;
+        > img {
+          vertical-align: middle;
+          border-radius: 100%;
+          border: 3px solid gold;
+          margin: .5rem .5rem .5rem 0;
+        }
+      }
+      > p {
+        font-size: x-large;
+      }
+    }
+
+    // Article Body
+
+    > p {
+      margin-bottom: 1rem;
+    }
+
+    blockquote {
+      border-left: 25px solid #ccc;
+      padding-left: 1rem;
+      font-style: italic;
+      > p {
+        margin-bottom: 1rem;
       }
     }
   }

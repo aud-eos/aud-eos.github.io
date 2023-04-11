@@ -66,10 +66,10 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
                 By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
                 { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
               </address>
+              <p>
+                { post.fields.description }
+              </p>
             </header>
-            <section>
-              { post.fields.description }
-            </section>
             <Markdown>{ post.fields.body || "" }</Markdown>
           </article>
         </main>
