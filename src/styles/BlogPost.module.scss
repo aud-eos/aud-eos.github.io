@@ -7,8 +7,7 @@
     padding: 1rem;
 
     // Article Header
-    > header, section {
-      margin-bottom: 1rem;
+    > header {
       > figure {
         height: 350px;
         position: relative;
@@ -21,6 +20,7 @@
       }
       > h1 {
         font-size: xxx-large;
+        margin-bottom: 1rem;
       }
       > address {
         margin-bottom: 1rem;
@@ -28,11 +28,12 @@
           vertical-align: middle;
           border-radius: 100%;
           border: .2rem solid gold;
-          margin: .5rem .5rem .5rem 0;
+          margin: 0 .5rem 0 0;
         }
       }
       > p {
         font-size: x-large;
+        margin-bottom: 1rem;
       }
     }
 
@@ -46,6 +47,7 @@
       border-left: 2rem solid #ccc;
       padding-left: 1rem;
       font-style: italic;
+      margin-bottom: 1rem;
       > p {
         margin-bottom: 1rem;
       }

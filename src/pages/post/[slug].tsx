@@ -62,6 +62,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
                   alt={ post.fields.author.fields.name }
                   width="50"
                   height="50"
+                  priority
                 />
                 By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
                 { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
