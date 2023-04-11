@@ -7,6 +7,8 @@ ul.imageGallery {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  justify-content: center;
+  width: 100%;
 
   li {
     min-width: 250px;
