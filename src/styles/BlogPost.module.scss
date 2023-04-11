@@ -15,7 +15,7 @@
         margin-bottom: 1rem;
         > img {
           object-fit: cover;
-          border: 15px solid white;
+          border: 1rem solid white;
           filter: grayscale(1);
         }
       }
@@ -27,7 +27,7 @@
         > img {
           vertical-align: middle;
           border-radius: 100%;
-          border: 3px solid gold;
+          border: .2rem solid gold;
           margin: .5rem .5rem .5rem 0;
         }
       }
@@ -43,7 +43,7 @@
     }
 
     blockquote {
-      border-left: 25px solid #ccc;
+      border-left: 2rem solid #ccc;
       padding-left: 1rem;
       font-style: italic;
       > p {
