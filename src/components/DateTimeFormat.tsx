@@ -44,7 +44,6 @@ export default function DateTimeFormat({ timestamp }: DateTimeFormatProps ){
   // Convert the date to UTC format on the server, which should be
   // the same for all users. Then we still use the locale format
   // once the app is hydrated.
-  const month = ( hydrated ? date.getMonth() : date.getUTCMonth() ) + 1;
   const day = hydrated ? date.getDate() : date.getUTCDate();
   const year = hydrated ? date.getFullYear() : date.getUTCFullYear();
   const hours = hydrated ? date.getHours() : date.getUTCHours();
@@ -55,7 +54,6 @@ export default function DateTimeFormat({ timestamp }: DateTimeFormatProps ){
   const ampm = hours >= 12 ? "PM" : "AM";
   const twelveHourFormat = hours % 12 || 12;
 
-  // const dateString = `${ year }-${ doubleDigit( month ) }-${ doubleDigit( day ) }`;
   const timeString = `${ doubleDigit( twelveHourFormat ) }:${ doubleDigit( minutes ) } ${ ampm }`;
 
   return (
