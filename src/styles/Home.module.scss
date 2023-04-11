@@ -24,12 +24,12 @@ ul.imageGallery {
           width: 100%;
           object-fit: cover;
           aspect-ratio: 1/1;
+          border: .25rem solid white;
         }
       }
       figcaption {
         display: block;
-        padding: .625rem .5rem;
-        background: #1a1a1a;
+        padding: .5rem;
       }
     }
   }
