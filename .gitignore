@@ -37,3 +37,7 @@ next-env.d.ts
 
 # environment variables & secrets
 .env
+
+# generated static files
+public/robots.txt
+public/sitemap*
