@@ -3,9 +3,10 @@ import { TypeBlogPost } from "@/types";
 import { sortBlogPostsByDate } from "@/utils/blogPostUtils";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
+import Picture from "@/components/Picture";
 
 
-const IMAGE_SIZE = 350;
+const IMAGE_HEIGHT = 350;
 
 
 export interface BlogPostListProps {
@@ -19,25 +20,28 @@ export default function BlogPostList({ posts }: BlogPostListProps ){
         posts
           .sort( sortBlogPostsByDate )
           .map( post => {
+
             const url = `/post/${post.fields.slug}`;
+            const pictureUrl = post.fields.image?.fields.file.url || "";
+            const altText = post.fields.image?.fields.description || "";
+
             return (
               <li key={ post.sys.id }>
-                  <figure>
-                    <Link href={ url }>
-                      <picture>
-                        <img
-                          src={ `https:${post.fields.image?.fields.file.url}?h=${IMAGE_SIZE}` }
-                          alt={ post.fields.image?.fields.description || "" }
-                        />
-                      </picture>
-                    </Link>
-                    <figcaption>
-                      <Link href={ url }><h3>{ post.fields.title }</h3></Link>
-                      <h5><DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } /></h5>
-                    </figcaption>
-                  </figure>
+                <figure>
+                  <Link href={ url }>
+                    <Picture
+                      url={ pictureUrl }
+                      maxHeight={ IMAGE_HEIGHT }
+                      alt={ altText }
+                      />
+                  </Link>
+                  <figcaption>
+                    <Link href={ url }><h3>{ post.fields.title }</h3></Link>
+                    <h5><DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } /></h5>
+                  </figcaption>
+                </figure>
               </li>
-          );
+            );
         })
       }
     </ul>
