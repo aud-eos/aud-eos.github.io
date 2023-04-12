@@ -12,8 +12,9 @@ export interface TagProps {
 
 const Tag: FC<TagProps> = ({ tagName, isTagged }) => {
   const className = isTagged ? styles.isTagged : undefined;
+  const href = isTagged ? "/" : `/tags/${tagName}`;
   return (
-    <Link href={ `/tags/${tagName}` }>
+    <Link href={ href }>
       <code className={ className }>#{ tagName }</code>
     </Link>
   );
