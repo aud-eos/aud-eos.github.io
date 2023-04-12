@@ -37,10 +37,11 @@ export default function Home({ posts, tags, slug }: HomeProps ){
                 .sort( sortTagsByName )
                 .map( tag => {
                   const className = tag.sys.id == slug ? styles.isTagged : "";
+                  const href = tag.sys.id == slug ? "/" : `/tags/${tag.sys.id}`;
                   return (
                     <Link key={ tag.sys.id }
                       className={ className }
-                      href={ `/tags/${tag.sys.id}` }>
+                      href={ href }>
                       <h2>{ tag.sys.id }</h2>
                     </Link>
                   );
