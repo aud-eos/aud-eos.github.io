@@ -47,7 +47,7 @@ export default function Home({ posts, tags, slug }: HomeProps ){
               })
             }
           </nav>
-          <BlogPostList posts={ posts } />
+          <BlogPostList posts={ posts } slug={ slug } />
         </main>
       </Container>
     </>
