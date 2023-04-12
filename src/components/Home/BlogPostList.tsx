@@ -12,9 +12,10 @@ const IMAGE_HEIGHT = 350;
 
 export interface BlogPostListProps {
   posts: TypeBlogPost[];
+  slug?: string;
 }
 
-export default function BlogPostList({ posts }: BlogPostListProps ){
+export default function BlogPostList({ posts, slug }: BlogPostListProps ){
   return (
     <ul className={ styles.imageGallery } role="list">
       {
@@ -43,7 +44,7 @@ export default function BlogPostList({ posts }: BlogPostListProps ){
                       timestamp={ timestamp }
                       />
                   </figcaption>
-                  <Tags tags={ post.metadata.tags } />
+                  <Tags tags={ post.metadata.tags } slug={ slug } />
                 </figure>
               </li>
             );
