@@ -7,10 +7,14 @@
 
     // Article Header
     > header {
+
+      > figure, h1, address, p, section {
+        margin-bottom: 1rem;
+      }
+
       > figure {
         height: 350px;
         position: relative;
-        margin-bottom: 1rem;
         > img {
           object-fit: cover;
           border: 1rem solid white;
@@ -19,10 +23,8 @@
       }
       > h1 {
         font-size: xxx-large;
-        margin-bottom: 1rem;
       }
       > address {
-        margin-bottom: 1rem;
         display: flex;
         align-items: center;
         > img {
@@ -34,7 +36,6 @@
       }
       > p {
         font-size: x-large;
-        margin-bottom: 1rem;
       }
     }
   }

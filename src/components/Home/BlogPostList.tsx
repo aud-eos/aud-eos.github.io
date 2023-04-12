@@ -4,6 +4,7 @@ import { sortBlogPostsByDate } from "@/utils/blogPostUtils";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import Picture from "@/components/Picture";
+import { Tags } from "@/components/Tags";
 
 
 const IMAGE_HEIGHT = 350;
@@ -42,6 +43,7 @@ export default function BlogPostList({ posts }: BlogPostListProps ){
                       timestamp={ timestamp }
                       />
                   </figcaption>
+                  <Tags tags={ post.metadata.tags } />
                 </figure>
               </li>
             );
