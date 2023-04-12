@@ -1,5 +1,7 @@
 import { FC, ReactNode } from "react";
 import styles from "@/styles/Layout.module.scss";
+import { TopNav } from "@/components/Layout/TopNav";
+import { Footer } from "@/components/Layout/Footer";
 
 
 interface LayoutProps {
@@ -12,5 +14,17 @@ export const Container: FC<LayoutProps> = ({ children }) =>
 export const Wrapper: FC<LayoutProps> = ({ children }) =>
   <section className={ styles.wrapper }>{ children }</section>;
 
-export const Layout: FC<LayoutProps> = ({ children }) =>
-  <Container><Wrapper>{ children }</Wrapper></Container>;
+/**
+ * Layout component
+ */
+export const Layout: FC<LayoutProps> = ({ children }) => {
+  return (
+    <Container>
+      <TopNav />
+      <Wrapper>
+        { children }
+      </Wrapper>
+      <Footer />
+    </Container>
+  );
+};
