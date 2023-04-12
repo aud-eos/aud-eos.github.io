@@ -5,6 +5,7 @@ import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import Picture from "@/components/Picture";
 import { Tags } from "@/components/Tags";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 const IMAGE_HEIGHT = 350;
@@ -18,6 +19,7 @@ export interface BlogPostListProps {
 export default function BlogPostList({ posts, slug }: BlogPostListProps ){
   return (
     <ul className={ styles.imageGallery } role="list">
+      <AnimatePresence initial={ false } mode="wait">
       {
         posts
           .sort( sortBlogPostsByDate )
@@ -29,7 +31,17 @@ export default function BlogPostList({ posts, slug }: BlogPostListProps ){
             const timestamp = post.fields.date || post.sys.createdAt;
 
             return (
-              <li key={ post.sys.id }>
+              <motion.li key={ post.sys.id }
+                initial={ { y: 300, opacity: 0 } }
+                animate={ { y: 0, opacity: 1 } }
+                exit={ { x: 1000, opacity: 0 } }
+                transition={ {
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                  duration: 50,
+                } }
+                >
                 <figure>
                   <Link href={ url }>
                     <Picture
@@ -46,10 +58,11 @@ export default function BlogPostList({ posts, slug }: BlogPostListProps ){
                   </figcaption>
                   <Tags tags={ post.metadata.tags } slug={ slug } />
                 </figure>
-              </li>
+              </motion.li>
             );
         })
       }
+      </AnimatePresence>
     </ul>
   );
 }
