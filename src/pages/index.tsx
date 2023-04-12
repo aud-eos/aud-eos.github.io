@@ -10,13 +10,13 @@ import { sortTagsByName } from "@/utils/blogPostUtils";
 import Link from "next/link";
 
 
-
 export interface HomeProps {
   posts: TypeBlogPost[];
   tags: TagLink[];
+  slug?: string;
 }
 
-export default function Home({ posts, tags }: HomeProps ){
+export default function Home({ posts, tags, slug }: HomeProps ){
   return (
     <>
       <Head>
@@ -28,18 +28,22 @@ export default function Home({ posts, tags }: HomeProps ){
         <main className={ styles.main }>
           <header>
             <Link href="/">
-              <h1>Audeos.com</h1>
+              <h1 className={ slug ? "" : styles.isTagged }>Audeos.com</h1>
             </Link>
           </header>
           <nav>
             {
-              tags.sort( sortTagsByName ).map( tag => {
-                return (
-                  <Link key={ tag.sys.id }
-                    href={ `?tag=${tag.sys.id}` }>
-                    <h2>{ tag.sys.id }</h2>
-                  </Link>
-                );
+              tags
+                .sort( sortTagsByName )
+                .map( tag => {
+                  const className = tag.sys.id == slug ? styles.isTagged : "";
+                  return (
+                    <Link key={ tag.sys.id }
+                      className={ className }
+                      href={ `/tags/${tag.sys.id}` }>
+                      <h2>{ tag.sys.id }</h2>
+                    </Link>
+                  );
               })
             }
           </nav>
