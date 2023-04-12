@@ -59,6 +59,9 @@ const getImgSrc = ( src: string, {
 }: ImageSourceOptions ): string => {
   const imageUrl = new URL( `https:${src}` );
 
+  // Set "quality"
+  imageUrl.searchParams.set( "q", "100" );
+
   // Set "format"
   if( format ){
     imageUrl.searchParams.set( "fm", format );
