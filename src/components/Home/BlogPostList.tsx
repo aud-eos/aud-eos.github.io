@@ -19,7 +19,7 @@ export interface BlogPostListProps {
 export default function BlogPostList({ posts, slug }: BlogPostListProps ){
   return (
     <ul className={ styles.imageGallery } role="list">
-      <AnimatePresence initial={ false } mode="wait">
+      <AnimatePresence initial={ false }>
       {
         posts
           .sort( sortBlogPostsByDate )
@@ -34,12 +34,12 @@ export default function BlogPostList({ posts, slug }: BlogPostListProps ){
               <motion.li key={ post.sys.id }
                 initial={ { y: 300, opacity: 0 } }
                 animate={ { y: 0, opacity: 1 } }
-                exit={ { x: 1000, opacity: 0 } }
+                exit={ { opacity: 0 } }
                 transition={ {
                   type: "spring",
                   stiffness: 100,
                   damping: 20,
-                  duration: 50,
+                  duration: 25,
                 } }
                 >
                 <figure>
