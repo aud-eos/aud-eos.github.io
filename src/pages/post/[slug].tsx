@@ -10,6 +10,7 @@ import styles from "@/styles/BlogPost.module.scss";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import { Layout } from "@/components/Layout/Layout";
 import { Markdown } from "@/components/Markdown";
+import { Tags } from "@/components/Tags";
 
 
 const IMAGE_SIZE = 750;
@@ -69,6 +70,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
                   { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
                 </span>
               </address>
+              <Tags tags={ post.metadata.tags } />
               <p>
                 { post.fields.description }
               </p>

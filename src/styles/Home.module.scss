@@ -19,18 +19,21 @@ ul.imageGallery {
 
     figure {
       picture {
+        filter: drop-shadow(.25rem .25rem 10rem rgba(255, 255, 255, 0.25));
         img {
           display: block;
           width: 100%;
           object-fit: cover;
           aspect-ratio: 1/1;
           border: .25rem solid white;
-          filter: drop-shadow(.25rem .25rem 0 teal);
+          filter: drop-shadow(.25rem .25rem 0 rgb(0, 255, 0));
         }
       }
-      figcaption {
-        display: block;
+      > figcaption, section {
         padding: .5rem;
+        > a {
+          text-decoration: none;
+        }
       }
     }
   }
