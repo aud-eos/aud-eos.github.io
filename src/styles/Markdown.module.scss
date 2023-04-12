@@ -1,9 +1,35 @@
-figure.markdown {
-  margin-bottom: 1rem;
-  > picture > img {
-      object-fit: cover;
-      width: 100%;
-      max-width: 100%;
-      border: .5rem solid white;
+.reactMarkdown {
+
+  > p, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
   }
+
+  > figure {
+    margin-bottom: 1rem;
+    > picture > img {
+        object-fit: cover;
+        width: 100%;
+        max-width: 100%;
+        border: .5rem solid white;
+    }
+  }
+
+  > blockquote {
+    border-left: 2rem solid #ccc;
+    padding-left: 1rem;
+    font-style: italic;
+    margin-bottom: 1rem;
+    > p {
+      margin-bottom: 1rem;
+    }
+  }
+
+  ul {
+    padding-left: 2rem;
+    list-style-type: square;
+    margin-bottom: 1rem;
+  }
+
 }
+
+

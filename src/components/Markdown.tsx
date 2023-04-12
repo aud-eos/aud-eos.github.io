@@ -12,7 +12,7 @@ const markdownComponents: object = {
       const image = node.children[0];
       const { src } = image.properties;
       return (
-        <figure className={ styles.markdown }>
+        <figure>
           <Picture
             url={ src }
             alt={ image.properties.alt }
@@ -33,7 +33,7 @@ interface MarkdownProps {
 
 export const Markdown: FC<MarkdownProps> = ({ children }) => {
   return (
-    <ReactMarkdown
+    <ReactMarkdown className={ styles.reactMarkdown }
       components={ markdownComponents }
     >{ children || "" }</ReactMarkdown>
   );
