@@ -24,6 +24,7 @@ export default function BlogPostList({ posts }: BlogPostListProps ){
             const url = `/post/${post.fields.slug}`;
             const pictureUrl = post.fields.image?.fields.file.url || "";
             const altText = post.fields.image?.fields.description || "";
+            const timestamp = post.fields.date || post.sys.createdAt;
 
             return (
               <li key={ post.sys.id }>
@@ -37,7 +38,9 @@ export default function BlogPostList({ posts }: BlogPostListProps ){
                   </Link>
                   <figcaption>
                     <Link href={ url }><h3>{ post.fields.title }</h3></Link>
-                    <h5><DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } /></h5>
+                    <DateTimeFormat
+                      timestamp={ timestamp }
+                      />
                   </figcaption>
                 </figure>
               </li>
