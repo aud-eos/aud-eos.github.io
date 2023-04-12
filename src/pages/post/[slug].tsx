@@ -64,8 +64,10 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
                   height="50"
                   priority
                 />
-                By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
-                { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
+                <span>
+                  By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
+                  { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
+                </span>
               </address>
               <p>
                 { post.fields.description }
@@ -74,7 +76,6 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
             <Markdown>{ post.fields.body || "" }</Markdown>
           </article>
         </main>
-        <Link href="/">go back/home</Link>
       </Layout>
     </>
   );
