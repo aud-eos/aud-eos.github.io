@@ -39,3 +39,8 @@ export const getBlogPost = async (
 
   return response.items.pop();
 };
+
+export const getTags = async () => {
+  const response = await client.getTags();
+  return response.items;
+};

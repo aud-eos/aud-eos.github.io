@@ -6,7 +6,7 @@ import styles from "@/styles/Layout.module.scss";
 export const Footer: FC = () => {
   return (
     <footer className={ styles.footer }>
-      © <Link href="/">Audeos.com</Link>
+      © <Link href="/" scroll={ false } >Audeos.com</Link>
     </footer>
   );
 };

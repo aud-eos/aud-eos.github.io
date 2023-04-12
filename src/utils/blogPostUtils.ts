@@ -1,4 +1,5 @@
 import { TypeBlogPost } from "@/types";
+import { TagLink } from "contentful";
 
 
 /**
@@ -12,3 +13,8 @@ export const sortBlogPostsByDate = ( postA: TypeBlogPost, postB: TypeBlogPost ):
     const dateB = new Date( postB.fields.date || postB.sys.createdAt );
     return dateB.getTime() - dateA.getTime();
   };
+
+
+export const sortTagsByName = ( tagA: TagLink, tagB: TagLink ) => {
+  return tagA.sys.id.localeCompare( tagB.sys.id );
+};
