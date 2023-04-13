@@ -10,6 +10,10 @@ import { sortTagsByName } from "@/utils/blogPostUtils";
 import Link from "next/link";
 
 
+const META_TITLE = "Audeos.com";
+const META_DESCRIPTION = "Official website of DJ Audeos";
+const META_IMAGE = "/images/audeos.jpg";
+
 export interface HomeProps {
   posts: TypeBlogPost[];
   tags: TagLink[];
@@ -23,6 +27,16 @@ export default function Home({ posts, tags, slug }: HomeProps ){
         <title>Audeos.com</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
+        <meta name="description" content={ META_DESCRIPTION } key="desc" />
+        <meta property="og:title" content={ META_TITLE } />
+        <meta
+          property="og:description"
+          content={ META_DESCRIPTION }
+        />
+        <meta
+          property="og:image"
+          content={ META_IMAGE }
+        />
       </Head>
       <Container>
         <main className={ styles.main }>
