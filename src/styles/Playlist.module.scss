@@ -11,6 +11,11 @@ section.playlistHeader {
   }
 }
 
+h3.totalTracks {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
 ul.playlist {
   list-style: none;
   > li {
