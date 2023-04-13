@@ -45,6 +45,12 @@ export interface TypeBlogPostFields {
      */
     body?: EntryFields.Text;
     /**
+     * Field type definition for field 'spotifyPlaylistId' (Spotify Playlist ID)
+     * @name Spotify Playlist ID
+     * @localized false
+     */
+    spotifyPlaylistId?: EntryFields.Symbol;
+    /**
      * Field type definition for field 'location' (Location)
      * @name Location
      * @localized true
@@ -64,6 +70,6 @@ export interface TypeBlogPostFields {
  * @type {TypeBlogPost}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 11
+ * @version 15
  */
 export type TypeBlogPost = Entry<TypeBlogPostFields>;
