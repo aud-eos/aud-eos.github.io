@@ -31,7 +31,7 @@ export default function BlogPostList({ posts, slug }: BlogPostListProps ){
             return (
               <li key={ post.sys.id }>
                 <figure>
-                  <Link href={ url }>
+                  <Link href={ url } aria-label={ post.fields.title }>
                     <Picture
                       url={ pictureUrl }
                       maxHeight={ IMAGE_HEIGHT }
