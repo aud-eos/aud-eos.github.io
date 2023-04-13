@@ -11,14 +11,24 @@
   }
   > nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
     align-items: center;
     justify-content: center;
     padding: 1rem;
     font-size: 1rem;
-    margin-top: 2rem;
-    margin-bottom: 3rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
     text-decoration: underline;
+    > a {
+      min-height: 3rem;
+      min-width: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
   }
 }
 
