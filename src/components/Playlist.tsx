@@ -68,12 +68,16 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ){
                   <li>
                     Artist: {
                       track.track.artists
-                        .map( artist =>
-                          <Link
-                            key={ artist.id }
-                            href={ artist.external_urls.spotify }>
-                            { artist.name }
-                          </Link>
+                        .map( ( artist, idx ) =>
+                          <>
+                            <Link
+                              key={ artist.id }
+                              href={ artist.external_urls.spotify }>
+                              { artist.name }
+                            </Link>
+                            { /* Conditionally add comma delimiter to artist list */ }
+                            { ( track.track.artists?.[idx + 1] ) && `, ` }
+                          </>
                           )
                     }
                   </li>
