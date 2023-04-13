@@ -10,6 +10,7 @@
  * https://developer.spotify.com/web-api/authorization-guide/#client_credentials_flow
  */
 import axios from "axios";
+import { strict as assert } from "assert";
 
 
 const SPOTIFY_CLIENT_ID: string = process.env[
@@ -18,6 +19,10 @@ const SPOTIFY_CLIENT_ID: string = process.env[
 const SPOTIFY_CLIENT_SECRET: string = process.env[
   "SPOTIFY_CLIENT_SECRET"
 ] as string;
+
+
+assert( !!SPOTIFY_CLIENT_ID );
+assert( !!SPOTIFY_CLIENT_SECRET );
 
 
 export const getClientCredentials = async () => {

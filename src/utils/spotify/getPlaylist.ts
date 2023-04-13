@@ -132,25 +132,15 @@ interface SpotifyUser {
 export async function getPlaylist( playlist_id: string ){
   return getClientCredentials()
     .then( async response => {
-      try {
-        const { access_token } = response;
-        const url = `https://api.spotify.com/v1/playlists/${playlist_id}`;
-        const headers = {
-          "Accept": "application/json",
-          "Authorization": `Bearer ${access_token}`,
-        };
-        const cfg = { headers };
-        const { data } = await axios.get<SpotifyPlaylist>( url, cfg );
-        return data;
-
-      } catch ( error ){
-        if( axios.isAxiosError( error ) ){
-          console.error( "error message: ", error.message );
-        } else {
-          console.error( "unexpected error: ", error );
-        }
-        throw error;
-      }
+      const { access_token } = response;
+      const url = `https://api.spotify.com/v1/playlists/${playlist_id}`;
+      const headers = {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${access_token}`,
+      };
+      const cfg = { headers };
+      const { data } = await axios.get<SpotifyPlaylist>( url, cfg );
+      return data;
     });
 
 }

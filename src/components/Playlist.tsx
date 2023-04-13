@@ -8,9 +8,8 @@ export interface SpotifyPlaylistProps {
   playlist: SpotifyPlaylist;
 }
 
-export default function Playlist({ playlist }: SpotifyPlaylistProps ){
+export function PlaylistHeader({ playlist }: SpotifyPlaylistProps ){
   return (
-    <>
     <section className={ styles.playlistHeader }>
       <Link href={ playlist.external_urls.spotify }>
         <Image src={ "/images/spotify.png" } alt="Spotify logo" width={ 50 } height={ 50 } />
@@ -29,6 +28,13 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ){
         </h2>
       </section>
     </section>
+  );
+}
+
+export default function Playlist({ playlist }: SpotifyPlaylistProps ){
+  return (
+    <>
+    <PlaylistHeader playlist={ playlist } />
     <ul className={ styles.playlist }>
     {
       playlist.tracks.items.map( track => {
@@ -89,8 +95,12 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ){
           </li>
           );
         })
-    }
+      }
     </ul>
+    <PlaylistHeader playlist={ playlist } />
+    <h3 className={ styles.totalTracks }>
+      [ { playlist.tracks.total } songs ... { playlist.followers.total } followers ]
+    </h3>
     </>
   );
 }
