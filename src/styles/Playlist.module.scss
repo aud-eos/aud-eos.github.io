@@ -1,0 +1,32 @@
+section.playlistHeader {
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  > a > img {
+    margin-right: 1rem;
+  }
+}
+
+ul.playlist {
+  list-style: none;
+  > li {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    > a {
+      filter: drop-shadow(.25rem .25rem 10rem rgba(255, 255, 255, 0.25));
+      > img {
+        border: .25rem solid white;
+        filter: drop-shadow(.25rem .25rem 0 grey);
+      }
+    }
+    > ul {
+      padding-left: 2rem;
+      list-style-type: square;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+}

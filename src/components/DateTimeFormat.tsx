@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 
 
 export interface DateTimeFormatProps {
-  timestamp: string;
-  withTime?: boolean;
+  timestamp: string
+  withTime?: boolean
+  withDayName?: boolean
 }
 
 const DAY_NAMES = [
@@ -36,6 +37,7 @@ const doubleDigit = ( number: number ): string => `0${number}`.slice( -2 );
 export default function DateTimeFormat({
   timestamp,
   withTime = true,
+  withDayName = true,
 }: DateTimeFormatProps ){
 
   const [ hydrated, setHydrated ] = useState( false );
@@ -62,7 +64,7 @@ export default function DateTimeFormat({
 
   return (
     <time>
-      { dayName }, { monthName } { day }, { year } { withTime && timeString }
+      { withDayName && `${dayName},` } { monthName } { day }, { year } { withTime && timeString }
     </time>
   );
 }

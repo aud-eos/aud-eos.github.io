@@ -11,17 +11,20 @@ import DateTimeFormat from "@/components/DateTimeFormat";
 import { Layout } from "@/components/Layout/Layout";
 import { Markdown } from "@/components/Markdown";
 import { Tags } from "@/components/Tags";
+import { SpotifyPlaylist, getPlaylist } from "@/utils/spotify/getPlaylist";
+import Playlist from "@/components/Playlist";
 
 
 const IMAGE_SIZE = 750;
 
 
 export interface BlogPostViewProps {
-  post: TypeBlogPost;
+  post: TypeBlogPost
+  playlist?: SpotifyPlaylist|null
 }
 
 
-export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
+export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file.url}?w=${IMAGE_SIZE}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
@@ -76,6 +79,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post }) => {
               </p>
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
+            { playlist && <Playlist playlist={ playlist } /> }
           </article>
         </main>
       </Layout>
@@ -90,9 +94,12 @@ export async function getStaticProps( context: GetStaticPropsContext ){
     return { props: {} };
   } else {
     const post = await getBlogPost( slug );
+    const playlist = post?.fields.spotifyPlaylistId
+      ? await getPlaylist( post.fields.spotifyPlaylistId ) : null;
     return {
       props: {
         post,
+        playlist,
       },
     };
   }
