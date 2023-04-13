@@ -34,7 +34,10 @@
 
 .isTagged {
   color: rgb(0, 255, 0);
-  filter: drop-shadow(.1rem .1rem 1rem black);
+  @media (prefers-color-scheme: light) {
+    filter: drop-shadow(.1rem .1rem .1rem black);
+    text-shadow: -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
+  }
   @media (prefers-color-scheme: dark) {
     color: gold!important;
   }
