@@ -3,12 +3,19 @@ section.tags {
     margin-right: .2rem;
     padding: .4rem;
     border-radius: 1rem;
-    background: rgb(33, 33, 33);
     display: inline-block;
+    background: lightgrey;
+    @media (prefers-color-scheme: dark) {
+      background: rgb(33, 33, 33);
+    }
   }
 }
 
 code.isTagged {
-  background: gold!important;
+  background: rgb(0, 255, 0)!important;
   color: darkgreen;
+  @media (prefers-color-scheme: dark) {
+    background: gold!important;
+    color: darkgreen;
+  }
 }

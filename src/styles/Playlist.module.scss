@@ -5,6 +5,9 @@ section.playlistHeader {
   margin-bottom: 2rem;
   > a > img {
     margin-right: 1rem;
+    @media (prefers-color-scheme: light) {
+      filter: invert(100%);
+    }
   }
 }
 
