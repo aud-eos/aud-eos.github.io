@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "@/styles/Playlist.module.scss";
 import DateTimeFormat from "./DateTimeFormat";
+import { Fragment } from "react";
 
 export interface SpotifyPlaylistProps {
   playlist: SpotifyPlaylist;
@@ -36,69 +37,69 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ){
     <>
     <PlaylistHeader playlist={ playlist } />
     <ul className={ styles.playlist }>
-    {
-      playlist.tracks.items.map( track => {
+      {
+        playlist.tracks.items
+          .map( track => {
 
-        const albumCover = track.track.album.images
-          .find( image => image.width == 300 );
+            const albumCover = track.track.album.images
+              .find( image => image.width == 300 );
 
-        const artists = track.track.artists
-          .map( artist => artist.name )
-          .join( ", " );
+            const artists = track.track.artists
+              .map( artist => artist.name )
+              .join( ", " );
 
-        return (
-          <li key={ track.track.id }>
-            {
-              !!albumCover &&
-              <>
-                <Link href={ track.track.external_urls.spotify }>
-                  <Image
-                    src={ albumCover.url }
-                    width={ 150 }
-                    height={ 150 }
-                    alt={ `${artists} - ${track.track.album.name} album cover` }
-                  />
-                </Link>
-                <ul>
-                  <li>
-                    Song Title: <Link href={ track.track.external_urls.spotify }>
-                      { track.track.name }
+            return (
+              <li key={ track.track.id }>
+                {
+                  !!albumCover &&
+                  <>
+                    <Link href={ track.track.external_urls.spotify }>
+                      <Image
+                        src={ albumCover.url }
+                        width={ 150 }
+                        height={ 150 }
+                        alt={ `${artists} - ${track.track.album.name} album cover` }
+                      />
                     </Link>
-                  </li>
-                  <li>
-                    Artist: {
-                      track.track.artists
-                        .map( ( artist, idx ) =>
-                          <>
-                            <Link
-                              key={ artist.id }
-                              href={ artist.external_urls.spotify }>
-                              { artist.name }
-                            </Link>
-                            { /* Conditionally add comma delimiter to artist list */ }
-                            { ( track.track.artists?.[idx + 1] ) && `, ` }
-                          </>
-                          )
-                    }
-                  </li>
-                  <li>
-                    Album: <Link href={ track.track.album.external_urls.spotify }>
-                      { track.track.album.name }
-                    </Link>
-                  </li>
-                  <li>
-                    Release Date: <DateTimeFormat
-                      timestamp={ track.track.album.release_date }
-                      withTime={ false }
-                      withDayName={ false }
-                    />
-                  </li>
-                </ul>
-                </>
-            }
-          </li>
-          );
-        })
+                    <ul>
+                      <li>
+                        Song Title: <Link href={ track.track.external_urls.spotify }>
+                          { track.track.name }
+                        </Link>
+                      </li>
+                      <li>
+                        Artist: {
+                          track.track.artists
+                            .map( ( artist, idx ) =>
+                              <Fragment key={ artist.id }>
+                                <Link
+                                  href={ artist.external_urls.spotify }>
+                                  { artist.name }
+                                </Link>
+                                { /* Conditionally add comma delimiter to artist list */ }
+                                { ( track.track.artists?.[idx + 1] ) && `, ` }
+                              </Fragment>
+                              )
+                        }
+                      </li>
+                      <li>
+                        Album: <Link href={ track.track.album.external_urls.spotify }>
+                          { track.track.album.name }
+                        </Link>
+                      </li>
+                      <li>
+                        Release Date: <DateTimeFormat
+                          timestamp={ track.track.album.release_date }
+                          withTime={ false }
+                          withDayName={ false }
+                        />
+                      </li>
+                    </ul>
+                    </>
+                }
+              </li>
+              );
+            })
       }
     </ul>
     <PlaylistHeader playlist={ playlist } />
