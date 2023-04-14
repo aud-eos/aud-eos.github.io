@@ -69,8 +69,12 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist }) => {
                   priority
                 />
                 <span>
-                  By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
-                  { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
+                  Last updated: <DateTimeFormat timestamp={ post.sys.updatedAt } withDayName={ false } />
+                  <br />
+                  <b>
+                    By <Link rel="author" href="/">{ post.fields.author.fields.name }</Link>
+                    { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
+                  </b>
                 </span>
               </address>
               <Tags tags={ post.metadata.tags } />
