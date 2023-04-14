@@ -44,23 +44,24 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ){
             const albumCover = track.track.album.images
               .find( image => image.width == 300 );
 
-            const artists = track.track.artists
-              .map( artist => artist.name )
-              .join( ", " );
+            // const artists = track.track.artists
+            //   .map( artist => artist.name )
+            //   .join( ", " );
 
             return (
               <li key={ track.track.id }>
                 {
                   !!albumCover &&
                   <>
-                    <Link href={ track.track.external_urls.spotify }>
+                    { /* @TODO ... these images seem to be making safari crash :( */ }
+                    { /* <Link href={ track.track.external_urls.spotify }>
                       <Image
                         src={ albumCover.url }
                         width={ 150 }
                         height={ 150 }
                         alt={ `${artists} - ${track.track.album.name} album cover` }
                       />
-                    </Link>
+                    </Link> */ }
                     <ul>
                       <li>
                         Song Title: <Link href={ track.track.external_urls.spotify }>
