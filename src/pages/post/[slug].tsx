@@ -13,6 +13,7 @@ import { Markdown } from "@/components/Markdown";
 import { Tags } from "@/components/Tags";
 import { SpotifyPlaylist, getPlaylist } from "@/utils/spotify/getPlaylist";
 import Playlist from "@/components/Playlist";
+import { Comments } from "@/components/Comments";
 
 
 const IMAGE_SIZE = 750;
@@ -85,6 +86,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist }) => {
             <Markdown>{ post.fields.body || "" }</Markdown>
             { playlist && <Playlist playlist={ playlist } /> }
           </article>
+          <Comments />
         </main>
       </Layout>
     </>
