@@ -1,6 +1,6 @@
 import { getBlogPosts, getTags } from "@/utils/contentfulUtils";
 import Home, { PAGE_SIZE } from "@/pages";
-import { getStaticProps as getStaticPropsBase } from "@/pages/tags/[tagId]";
+import { getStaticProps as getStaticPropsBase } from "@/pages";
 
 
 export const getStaticProps = getStaticPropsBase;
