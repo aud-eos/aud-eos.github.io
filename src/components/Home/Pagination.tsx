@@ -27,6 +27,13 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ){
   return (
     <nav>
       {
+        Boolean( page > 1 ) &&
+          <Link
+            href={ getPaginatorUrl( page - 1, tagId ) }
+            rel="prev"
+            >prev</Link>
+      }
+      {
         Array
           .from({ length: numPages }, ( _, idx ) => idx + 1 )
           .map( pageNumber => {
@@ -41,6 +48,13 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ){
               </Link>
             );
           })
+      }
+      {
+        Boolean( page < numPages ) &&
+          <Link
+            href={ getPaginatorUrl( page + 1, tagId ) }
+            rel="next"
+            >next</Link>
       }
     </nav>
   );
