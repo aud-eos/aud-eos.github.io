@@ -84,11 +84,16 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ){
 }
 
 export async function getStaticProps( context: GetStaticPropsContext ){
+  const tagId = context.params?.tagId || null;
   const page: number = Number( context.params?.page ) || 1;
   const tags = await getTags();
-  const posts = await getBlogPosts();
+  const posts = await getBlogPosts()
+    .then( posts => posts
+      .filter( post => tagId === null || post.metadata.tags
+        .find( tag => tag.sys.id == tagId ) ) );
   return {
     props: {
+      tagId,
       posts,
       tags,
       page,
