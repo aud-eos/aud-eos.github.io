@@ -5,22 +5,25 @@ import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import Picture from "@/components/Picture";
 import { Tags } from "@/components/Tags";
+import { PAGE_SIZE } from "@/pages";
 
 
 const IMAGE_HEIGHT = 350;
 
 
 export interface BlogPostListProps {
-  posts: TypeBlogPost[];
-  slug?: string;
+  posts: TypeBlogPost[]
+  page: number
+  tagId?: string
 }
 
-export default function BlogPostList({ posts, slug }: BlogPostListProps ){
+export default function BlogPostList({ posts, page, tagId }: BlogPostListProps ){
   return (
     <ul className={ styles.imageGallery } role="list">
       {
         posts
           .sort( sortBlogPostsByDate )
+          .slice( PAGE_SIZE * ( page - 1 ), PAGE_SIZE * page )
           .map( post => {
 
             const url = `/post/${post.fields.slug}`;
@@ -44,7 +47,10 @@ export default function BlogPostList({ posts, slug }: BlogPostListProps ){
                       timestamp={ timestamp }
                       />
                   </figcaption>
-                  <Tags tags={ post.metadata.tags } slug={ slug } />
+                  <Tags
+                    tags={ post.metadata.tags }
+                    tagId={ tagId }
+                    />
                 </figure>
               </li>
             );

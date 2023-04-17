@@ -23,10 +23,10 @@ const Tag: FC<TagProps> = ({ tagName, isTagged }) => {
 
 export interface TagsProps {
   tags: TagLink[];
-  slug?: string;
+  tagId?: string;
 }
 
-export const Tags: FC<TagsProps> = ({ tags, slug }) => {
+export const Tags: FC<TagsProps> = ({ tags, tagId }) => {
   return (
     <section className={ styles.tags }>
       {
@@ -36,7 +36,7 @@ export const Tags: FC<TagsProps> = ({ tags, slug }) => {
               <Tag
                 key={ tag.sys.id }
                 tagName={ tag.sys.id }
-                isTagged={ slug == tag.sys.id }
+                isTagged={ tagId == tag.sys.id }
                 />
                 )
       }
