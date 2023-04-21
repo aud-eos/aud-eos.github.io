@@ -33,6 +33,12 @@ export interface TypeBlogPostFields {
      */
     image?: Asset;
     /**
+     * Field type definition for field 'video' (Video)
+     * @name Video
+     * @localized false
+     */
+    video?: Asset;
+    /**
      * Field type definition for field 'date' (Date)
      * @name Date
      * @localized false
@@ -70,6 +76,6 @@ export interface TypeBlogPostFields {
  * @type {TypeBlogPost}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 15
+ * @version 17
  */
 export type TypeBlogPost = Entry<TypeBlogPostFields>;
