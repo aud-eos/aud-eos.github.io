@@ -14,6 +14,12 @@
     }
   }
 
+  > video {
+    width: 100%;
+    max-width: 100%;
+    border: .5rem solid white;
+  }
+
   > blockquote {
     border-left: 2rem solid #ccc;
     padding-left: 1rem;
