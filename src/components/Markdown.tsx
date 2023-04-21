@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import styles from "@/styles/Markdown.module.scss";
 import Picture from "@/components/Picture";
 
+
 export const VIDEO_FILE_FORMAT_EXTENSIONS = [
   "mp4",
   "mov",
@@ -21,6 +22,7 @@ const markdownComponents: object = {
     const { node } = paragraph;
 
     if( node.children[0].tagName === "img" ){
+
       const image = node.children[0];
       const { src, alt } = image.properties;
       const extension = src?.split( "." ).pop()?.toLowerCase();
@@ -29,9 +31,9 @@ const markdownComponents: object = {
       if( isVideo ){
         return (
           <>
-            <video controls>
+            <video controls preload="metadata">
               <source
-                src={ src }
+                src={ `${src}#t=0.001` }
                 type={ `video/${extension}` }
                 />
             </video>
@@ -54,6 +56,7 @@ const markdownComponents: object = {
         </figure>
       );
     }
+
     return <p>{ paragraph.children }</p>;
   },
 };
