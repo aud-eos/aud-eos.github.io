@@ -11,12 +11,21 @@ dev:
 
 # Generate TS declarations for content types
 # https://github.com/contentful-userland/cf-content-types-generator#usage
+# https://www.seancdavis.com/posts/generating-workable-typescript-types-from-contentful-content/
 types:
+	@yarn contentful space export \
+		--config contentful/export-config.json \
+		--management-token $(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN) \
+		--space-id $(CONTENTFUL_SPACE_ID)
 	@yarn cf-content-types-generator \
+		contentful/export.json \
 		-s $(CONTENTFUL_SPACE_ID) \
 		-t $(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN) \
 		-d \
-		-o src/types
+		-X \
+		-g \
+		-r \
+		-o src/types/contentful
 
 lint:
 	@yarn lint
@@ -36,3 +45,6 @@ upgrade-latest:
 
 check:
 	@yarn check
+
+typecheck:
+	@yarn typecheck

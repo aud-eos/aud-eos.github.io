@@ -8,7 +8,7 @@ export const getStaticProps = getStaticPropsBase;
 
 export async function getStaticPaths(){
   const tags = await getTags();
-  const paths = tags.map( tag => {
+  const paths = tags.items.map( tag => {
     const tagId = tag.sys.id;
     return { params: { tagId } };
   });

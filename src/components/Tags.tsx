@@ -10,7 +10,7 @@ export interface TagProps {
   isTagged?: boolean;
 }
 
-const Tag: FC<TagProps> = ({ tagName, isTagged }) => {
+const TagComponent: FC<TagProps> = ({ tagName, isTagged }) => {
   const className = isTagged ? styles.isTagged : undefined;
   const href = isTagged ? "/" : `/tags/${tagName}`;
   return (
@@ -22,7 +22,7 @@ const Tag: FC<TagProps> = ({ tagName, isTagged }) => {
 
 
 export interface TagsProps {
-  tags: TagLink[];
+  tags: { sys: TagLink; }[];
   tagId?: string;
 }
 
@@ -31,14 +31,12 @@ export const Tags: FC<TagsProps> = ({ tags, tagId }) => {
     <section className={ styles.tags }>
       {
         tags
-          .map(
-            tag =>
-              <Tag
+          .map( tag =>
+              <TagComponent
                 key={ tag.sys.id }
                 tagName={ tag.sys.id }
                 isTagged={ tagId == tag.sys.id }
-                />
-                )
+                /> )
       }
     </section>
   );

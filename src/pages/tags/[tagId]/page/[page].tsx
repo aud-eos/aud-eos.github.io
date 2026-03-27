@@ -11,9 +11,9 @@ export async function getStaticPaths(){
   const posts = await getBlogPosts();
   const paths: { params: { tagId: string, page: string }}[] = [];
 
-  tags.forEach( tag => {
+  tags.items.forEach( tag => {
     const tagId = tag.sys.id;
-    const filteredPosts = posts
+    const filteredPosts = posts.items
       .filter( post => post.metadata.tags
         .find( __tag => __tag.sys.id == tagId ) );
     const numPages = Math.ceil( filteredPosts.length / PAGE_SIZE );

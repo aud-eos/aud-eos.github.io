@@ -1,11 +1,10 @@
 import Head from "next/head";
 
 import styles from "@/styles/Home.module.scss";
-import { TypeBlogPost } from "@/types";
-import { getBlogPosts, getTags } from "@/utils/contentfulUtils";
+import { BlogPosts, getBlogPosts, getTags } from "@/utils/contentfulUtils";
 import BlogPostList from "@/components/Home/BlogPostList";
 import { Container } from "@/components/Layout/Layout";
-import { TagLink } from "contentful";
+import { TagCollection } from "contentful";
 import { sortTagsByName } from "@/utils/blogPostUtils";
 import Link from "next/link";
 import { GetStaticPropsContext } from "next";
@@ -19,8 +18,8 @@ export const PAGE_SIZE = 12;
 
 
 export interface HomeProps {
-  posts: TypeBlogPost[]
-  tags: TagLink[]
+  posts: BlogPosts
+  tags: TagCollection
   page: number
   tagId?: string
 }
@@ -52,7 +51,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ){
           </header>
           <nav>
             {
-              tags
+              tags.items
                 .sort( sortTagsByName )
                 .map( tag => {
                   const className = tag.sys.id == tagId ? styles.isTagged : "";
@@ -87,10 +86,7 @@ export async function getStaticProps( context: GetStaticPropsContext ){
   const tagId = context.params?.tagId || null;
   const page: number = Number( context.params?.page ) || 1;
   const tags = await getTags();
-  const posts = await getBlogPosts()
-    .then( posts => posts
-      .filter( post => tagId === null || post.metadata.tags
-        .find( tag => tag.sys.id == tagId ) ) );
+  const posts = await getBlogPosts();
   return {
     props: {
       tagId,

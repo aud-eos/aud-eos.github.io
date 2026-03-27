@@ -67,9 +67,11 @@ interface MarkdownProps {
 
 export const Markdown: FC<MarkdownProps> = ({ children }) => {
   return (
-    <ReactMarkdown className={ styles.reactMarkdown }
-      components={ markdownComponents }
-    >{ children || "" }</ReactMarkdown>
+    <div className={ styles.reactMarkdown }>
+      <ReactMarkdown
+        components={ markdownComponents }
+      >{ children || "" }</ReactMarkdown>
+    </div>
   );
 };
 

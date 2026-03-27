@@ -1,6 +1,6 @@
 import { strict as assert } from "assert";
-import { createClient, EntryFields } from "contentful";
-import { TypeBlogPost, TypeBlogPostFields } from "@/types";
+import { createClient, Entry, EntryCollection, EntryFields, TagCollection } from "contentful";
+import { TypeBlogPostSkeleton } from "@/types";
 import { CONTENT_TYPE_BLOG_POST } from "@/constants";
 
 const CONTENTFUL_SPACE_ID: string = process.env[
@@ -20,21 +20,23 @@ const client = createClient({
   accessToken: CONTENTFUL_ACCESS_TOKEN,
 });
 
+export type BlogPosts = EntryCollection<TypeBlogPostSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
+export type BlogPost = Entry<TypeBlogPostSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
 
 // Retrieve the list of blog posts from Contentful
-export const getBlogPosts = async (): Promise<TypeBlogPost[]> => {
-  const response = await client.getEntries<TypeBlogPostFields>({
+export const getBlogPosts = async (): Promise<BlogPosts> => {
+  const response = await client.withoutUnresolvableLinks.getEntries<TypeBlogPostSkeleton>({
     content_type: CONTENT_TYPE_BLOG_POST,
   });
-  return response.items;
+  return response;
 };
 
 
 export const getBlogPost = async (
-  slug: EntryFields.Text
-): Promise<TypeBlogPost|undefined> => {
+  slug: EntryFields.Text,
+): Promise<BlogPost | undefined> => {
   // Fetch all results where `fields.slug` is equal to the `slug` param
-  const response = await client.getEntries<TypeBlogPostFields>({
+  const response = await client.withoutUnresolvableLinks.getEntries<TypeBlogPostSkeleton>({
     content_type: CONTENT_TYPE_BLOG_POST,
     "fields.slug": slug,
   });
@@ -42,7 +44,7 @@ export const getBlogPost = async (
 };
 
 
-export const getTags = async () => {
+export const getTags = async (): Promise<TagCollection> => {
   const response = await client.getTags();
-  return response.items;
+  return response;
 };
