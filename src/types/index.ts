@@ -1,2 +1,2 @@
-export type { TypeAuthor, TypeAuthorFields } from "./TypeAuthor";
-export type { TypeBlogPost, TypeBlogPostFields } from "./TypeBlogPost";
+export type { TypeAuthor, TypeAuthorFields, TypeAuthorSkeleton } from "./contentful/TypeAuthor";
+export type { TypeBlogPost, TypeBlogPostFields, TypeBlogPostSkeleton } from "./contentful/TypeBlogPost";

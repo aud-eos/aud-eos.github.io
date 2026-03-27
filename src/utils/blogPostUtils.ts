@@ -1,5 +1,6 @@
-import { TypeBlogPost } from "@/types";
-import { TagLink } from "contentful";
+import { TypeBlogPostSkeleton } from "@/types";
+import { Entry, Tag } from "contentful";
+import { BlogPost } from "./contentfulUtils";
 
 
 /**
@@ -8,13 +9,16 @@ import { TagLink } from "contentful";
  * @param postB
  * @returns number
  */
-export const sortBlogPostsByDate = ( postA: TypeBlogPost, postB: TypeBlogPost ): number => {
+export const sortBlogPostsByDate = (
+  postA: BlogPost,
+  postB: BlogPost,
+): number => {
     const dateA = new Date( postA.fields.date || postA.sys.createdAt );
     const dateB = new Date( postB.fields.date || postB.sys.createdAt );
     return dateB.getTime() - dateA.getTime();
   };
 
 
-export const sortTagsByName = ( tagA: TagLink, tagB: TagLink ) => {
+export const sortTagsByName = ( tagA: Tag, tagB: Tag ) => {
   return tagA.sys.id.localeCompare( tagB.sys.id );
 };
