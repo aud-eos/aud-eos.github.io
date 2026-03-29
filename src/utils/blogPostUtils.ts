@@ -1,7 +1,5 @@
-import { TypeBlogPostSkeleton } from "@/types";
-import { Entry, Tag } from "contentful";
+import { Tag } from "contentful";
 import { BlogPost } from "./contentfulUtils";
-
 
 /**
  * Sort function for an array of TypeBlogPost

@@ -5,14 +5,14 @@ import styles from "@/styles/Home.module.scss";
 import Picture from "@/components/Picture";
 import { Tags } from "@/components/Tags";
 import { PAGE_SIZE } from "@/pages";
-import { BlogPosts } from "@/utils/contentfulUtils";
+import { BlogPost } from "@/utils/contentfulUtils";
 
 
 const IMAGE_HEIGHT = 350;
 
 
 export interface BlogPostListProps {
-  posts: BlogPosts
+  posts: BlogPost[]
   page: number
   tagId?: string
 }
@@ -21,9 +21,7 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
   return (
     <ul className={ styles.imageGallery } role="list">
       {
-        posts.items
-          .filter( post => tagId === null || post.metadata.tags
-            .find( tag => tag.sys.id == tagId ) )
+        posts
           .sort( sortBlogPostsByDate )
           .slice( PAGE_SIZE * ( page - 1 ), PAGE_SIZE * page )
           .map( post => {
