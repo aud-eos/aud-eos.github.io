@@ -25,6 +25,11 @@ export interface HomeProps {
 }
 
 export default function Home({ posts, page, tags, tagId }: HomeProps ){
+
+  const filteredBlogPosts = posts.items
+    .filter( post => tagId === null || post.metadata.tags
+      .find( tag => tag.sys.id == tagId ) );
+
   return (
     <>
       <Head>
@@ -67,12 +72,12 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ){
             }
           </nav>
           <BlogPostList
-            posts={ posts }
+            posts={ filteredBlogPosts }
             tagId={ tagId }
             page={ page }
             />
           <Pagination
-            posts={ posts }
+            posts={ filteredBlogPosts }
             page={ page }
             tagId={ tagId }
             />

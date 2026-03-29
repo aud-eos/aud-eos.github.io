@@ -1,12 +1,12 @@
 import { PAGE_SIZE } from "@/pages";
 import Link from "next/link";
 import styles from "@/styles/Home.module.scss";
-import { BlogPosts } from "@/utils/contentfulUtils";
+import { BlogPost } from "@/utils/contentfulUtils";
 
 
 
 interface PaginationProps {
-  posts: BlogPosts
+  posts: BlogPost[]
   page: number
   tagId?: string
 }
@@ -20,7 +20,7 @@ const getPaginatorUrl = ( pageNumber: number, tagId?: string ): string => {
 
 
 export default function Pagination({ posts, page, tagId }: PaginationProps ){
-  const numPages = Math.ceil( posts.items.length / PAGE_SIZE );
+  const numPages = Math.ceil( posts.length / PAGE_SIZE );
   if( numPages <= 1 ){
     return null;
   }
