@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FC } from "react";
-import { FaBandcamp, FaDropbox, FaGithub, FaInstagram, FaMixcloud, FaSoundcloud, FaSpotify, FaTiktok } from "react-icons/fa";
+import { FaBandcamp, FaDropbox, FaGithub, FaInstagram, FaMixcloud, FaSoundcloud, FaSpotify, FaTiktok, FaTwitter } from "react-icons/fa";
 import { FaSignalMessenger } from "react-icons/fa6";
 
 import styles from "@/styles/Layout.module.scss";
@@ -44,6 +44,11 @@ export const Footer: FC = () => {
         { /* Bandcamp */ }
         <Link href="https://audeos.bandcamp.com/" target="_blank">
           <FaBandcamp size={ 50 } title="Download music from DJ Audeos on Bandcamp" />
+        </Link>
+
+        { /* Twitter */ }
+        <Link href="https://x.com/audeos" target="_blank">
+          <FaTwitter size={ 50 } title="Audeos on Twitter/X" />
         </Link>
 
         { /* Github */ }
