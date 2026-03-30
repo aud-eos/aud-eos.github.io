@@ -24,4 +24,10 @@ nav.topnav {
 
 footer.footer {
     width: 100%;
+    text-align: center;
+
+    & * > svg {
+        margin: 1rem;
+    }
 }
+
