@@ -53,9 +53,11 @@ export const Footer: FC = () => {
 
       </div>
 
-      <p>
-        © { new Date().getFullYear() } Audeos, LLC | All Rights Reserved
-      </p>
+      <div>
+        <p>
+          © { new Date().getFullYear() } Audeos, LLC | All Rights Reserved
+        </p>
+      </div>
     </footer>
   );
 };
