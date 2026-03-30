@@ -47,7 +47,7 @@ export const Footer: FC = () => {
         </Link>
 
         { /* Github */ }
-        <Link href="" target="_blank">
+        <Link href="https://github.com/aud-eos" target="_blank">
           <FaGithub size={ 50 } title="Audeos on Github" />
         </Link>
 
