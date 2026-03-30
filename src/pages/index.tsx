@@ -9,6 +9,7 @@ import { sortTagsByName } from "@/utils/blogPostUtils";
 import Link from "next/link";
 import { GetStaticPropsContext } from "next";
 import Pagination from "@/components/Home/Pagination";
+import { Footer } from "@/components/Layout/Footer";
 
 
 const META_TITLE = "Audeos.com";
@@ -81,6 +82,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ){
             page={ page }
             tagId={ tagId }
             />
+            <Footer />
         </main>
       </Container>
     </>
