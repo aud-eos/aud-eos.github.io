@@ -26,6 +26,10 @@ footer.footer {
     width: 100%;
     text-align: center;
 
+    div {
+        margin: 2rem;
+    }
+
     & * > svg {
         margin: 1rem;
     }
