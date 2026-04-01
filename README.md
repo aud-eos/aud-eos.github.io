@@ -1,3 +1,7 @@
+[![Deploy Next.js site to Pages](https://github.com/aud-eos/aud-eos.github.io/actions/workflows/nextjs.yml/badge.svg)](https://github.com/aud-eos/aud-eos.github.io/actions/workflows/nextjs.yml)
+
+
+
 ### .env
 
 ```bash
