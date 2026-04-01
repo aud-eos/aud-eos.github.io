@@ -30,8 +30,12 @@ footer.footer {
         margin: 2rem;
     }
 
-    & * > svg {
+    svg {
         margin: 1rem;
+    }
+
+    svg:hover {
+      color: lightgreen;
     }
 }
 

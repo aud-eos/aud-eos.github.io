@@ -10,13 +10,13 @@ section.tags {
       background: rgb(33, 33, 33);
     }
   }
+  > a > code:hover {
+    color: darkgreen;
+    background: lightgreen!important;
+  }
 }
 
 code.isTagged {
-  background: rgb(0, 255, 0)!important;
+  background: lightgreen!important;
   color: darkgreen;
-  @media (prefers-color-scheme: dark) {
-    background: gold!important;
-    color: darkgreen;
-  }
 }
