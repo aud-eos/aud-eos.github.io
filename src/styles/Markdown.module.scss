@@ -2,6 +2,10 @@
 
   a {
     color: lightgreen;
+    @media (prefers-color-scheme: light) {
+      filter: drop-shadow(.1rem .1rem .1rem black);
+      text-shadow: -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
+    }
   }
 
   p, h1, h2, h3, h4, h5, h6, li {
