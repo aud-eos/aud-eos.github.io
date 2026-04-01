@@ -1,6 +1,16 @@
 import Link from "next/link";
 import { FC } from "react";
-import { FaBandcamp, FaDropbox, FaGithub, FaInstagram, FaMixcloud, FaSoundcloud, FaSpotify, FaTiktok, FaTwitter } from "react-icons/fa";
+import {
+  FaBandcamp,
+  FaDropbox,
+  FaGithub,
+  FaInstagram,
+  FaMixcloud,
+  FaSoundcloud,
+  FaSpotify,
+  FaTiktok,
+  FaTwitter,
+} from "react-icons/fa";
 import { FaSignalMessenger } from "react-icons/fa6";
 
 import styles from "@/styles/Layout.module.scss";
