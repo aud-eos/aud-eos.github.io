@@ -17,7 +17,7 @@ export interface BlogPostListProps {
   tagId?: string
 }
 
-export default function BlogPostList({ posts, page, tagId }: BlogPostListProps ){
+export default function BlogPostList({ posts, page, tagId }: BlogPostListProps ) {
   return (
     <ul className={ styles.imageGallery } role="list">
       {
@@ -39,22 +39,22 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
                       url={ pictureUrl }
                       maxHeight={ IMAGE_HEIGHT }
                       alt={ altText }
-                      />
+                    />
                   </Link>
                   <figcaption>
                     <Link href={ url }><h3>{ post.fields.title }</h3></Link>
                     <DateTimeFormat
                       timestamp={ timestamp }
-                      />
+                    />
                   </figcaption>
                   <Tags
                     tags={ post.metadata.tags }
                     tagId={ tagId }
-                    />
+                  />
                 </figure>
               </li>
             );
-        })
+          })
       }
     </ul>
   );

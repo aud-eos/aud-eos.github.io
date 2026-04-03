@@ -129,7 +129,7 @@ interface SpotifyUser {
 }
 
 
-export async function getPlaylist( playlist_id: string ){
+export async function getPlaylist( playlist_id: string ) {
   return getClientCredentials()
     .then( async response => {
       const { access_token } = response;

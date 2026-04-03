@@ -25,7 +25,7 @@ export interface HomeProps {
   tagId?: string
 }
 
-export default function Home({ posts, page, tags, tagId }: HomeProps ){
+export default function Home({ posts, page, tags, tagId }: HomeProps ) {
 
   const filteredBlogPosts = posts.items
     .filter( post => tagId === null || post.metadata.tags
@@ -69,27 +69,27 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ){
                       { tag.sys.id }
                     </Link>
                   );
-              })
+                })
             }
           </nav>
           <BlogPostList
             posts={ filteredBlogPosts }
             tagId={ tagId }
             page={ page }
-            />
+          />
           <Pagination
             posts={ filteredBlogPosts }
             page={ page }
             tagId={ tagId }
-            />
-            <Footer />
+          />
+          <Footer />
         </main>
       </Container>
     </>
   );
 }
 
-export async function getStaticProps( context: GetStaticPropsContext ){
+export async function getStaticProps( context: GetStaticPropsContext ) {
   const tagId = context.params?.tagId || null;
   const page: number = Number( context.params?.page ) || 1;
   const tags = await getTags();

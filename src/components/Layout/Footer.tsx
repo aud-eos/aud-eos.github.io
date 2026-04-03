@@ -23,12 +23,12 @@ export const Footer: FC = () => {
 
         { /* Instagram */ }
         <Link href="https://www.instagram.com/Audeos" target="_blank">
-            <FaInstagram size={ 50 } title="Follow DJ Audeos on Instagram" />
+          <FaInstagram size={ 50 } title="Follow DJ Audeos on Instagram" />
         </Link>
 
         { /* Soundcloud */ }
         <Link href="https://soundcloud.com/audeos" target="_blank">
-            <FaSoundcloud size={ 50 } title="Listen DJ Audeos' music streaming on Soundcloud" />
+          <FaSoundcloud size={ 50 } title="Listen DJ Audeos' music streaming on Soundcloud" />
         </Link>
 
         { /* TikTok */ }

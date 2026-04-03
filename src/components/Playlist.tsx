@@ -9,7 +9,7 @@ export interface SpotifyPlaylistProps {
   playlist: SpotifyPlaylist;
 }
 
-export function PlaylistHeader({ playlist }: SpotifyPlaylistProps ){
+export function PlaylistHeader({ playlist }: SpotifyPlaylistProps ) {
   return (
     <section className={ styles.playlistHeader }>
       <Link href={ playlist.external_urls.spotify }>
@@ -32,26 +32,26 @@ export function PlaylistHeader({ playlist }: SpotifyPlaylistProps ){
   );
 }
 
-export default function Playlist({ playlist }: SpotifyPlaylistProps ){
+export default function Playlist({ playlist }: SpotifyPlaylistProps ) {
   return (
     <>
-    <PlaylistHeader playlist={ playlist } />
-    <ul className={ styles.playlist }>
-      {
-        playlist.tracks.items
-          .map( track => {
+      <PlaylistHeader playlist={ playlist } />
+      <ul className={ styles.playlist }>
+        {
+          playlist.tracks.items
+            .map( track => {
 
-            const albumCover = track.track.album.images
-              .find( image => image.width == 300 );
+              const albumCover = track.track.album.images
+                .find( image => image.width == 300 );
 
-            const artists = track.track.artists
-              .map( artist => artist.name )
-              .join( ", " );
+              const artists = track.track.artists
+                .map( artist => artist.name )
+                .join( ", " );
 
-            return (
-              <li key={ track.track.id }>
-                {
-                  !!albumCover &&
+              return (
+                <li key={ track.track.id }>
+                  {
+                    !!albumCover &&
                   <>
                     <Link href={ track.track.external_urls.spotify }>
                       <Image
@@ -79,7 +79,7 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ){
                                 { /* Conditionally add comma delimiter to artist list */ }
                                 { ( track.track.artists?.[idx + 1] ) && `, ` }
                               </Fragment>,
-                              )
+                            )
                         }
                       </li>
                       <li>
@@ -95,17 +95,17 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ){
                         />
                       </li>
                     </ul>
-                    </>
-                }
-              </li>
+                  </>
+                  }
+                </li>
               );
             })
-      }
-    </ul>
-    <PlaylistHeader playlist={ playlist } />
-    <h3 className={ styles.totalTracks }>
+        }
+      </ul>
+      <PlaylistHeader playlist={ playlist } />
+      <h3 className={ styles.totalTracks }>
       [ { playlist.tracks.total } songs ... { playlist.followers.total } followers ]
-    </h3>
+      </h3>
     </>
   );
 }

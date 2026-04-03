@@ -6,7 +6,7 @@ import { getStaticProps as getStaticPropsBase } from "@/pages";
 export const getStaticProps = getStaticPropsBase;
 
 
-export async function getStaticPaths(){
+export async function getStaticPaths() {
   const tags = await getTags();
   const paths = tags.items.map( tag => {
     const tagId = tag.sys.id;

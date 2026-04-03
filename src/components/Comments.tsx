@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 
 
 
-export function Comments(){
+export function Comments() {
 
   const [ isHydrated, setIsHydrated ] = useState( false );
   useEffect( ()=> setIsHydrated( true ), [ setIsHydrated ] );
 
-  if( !isHydrated ){
+  if( !isHydrated ) {
     return null;
   }
 
@@ -17,7 +17,7 @@ export function Comments(){
    * changes. https://www.talkyard.io/ seems good and works with Gatsby but
    * doesn't obviously yet work with next.js. So no comments for now.
    */
-  if( isHydrated || true === true ){
+  if( isHydrated || true === true ) {
     return null;
   }
 

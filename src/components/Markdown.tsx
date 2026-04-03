@@ -1,63 +1,36 @@
 import { FC } from "react";
 import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
 import styles from "@/styles/Markdown.module.scss";
-import Picture from "@/components/Picture";
+import type { Element } from "hast";
+import { MediaFigure } from "./MediaFigure";
 
+function isElement( node: unknown ): node is Element {
+  return typeof node === "object" && node !== null && "tagName" in node;
+}
 
-export const VIDEO_FILE_FORMAT_EXTENSIONS = [
-  "mp4",
-  "mov",
-  "wmv",
-  "webm",
-  "mkv",
-  "ogg",
-  "flv",
-  "avi",
-  "avchd",
-];
+function stringProp( value: unknown ): string | undefined {
+  return typeof value === "string" ? value : undefined;
+}
 
+const markdownComponents: Components = {
+  p: ({ node, children }) => {
+    const firstChild = node?.children?.[0];
 
-const markdownComponents: object = {
-  p: ( paragraph: { children?: boolean; node?: any }) => {
-    const { node } = paragraph;
+    if(
+      node?.children?.length === 1 &&
+      isElement( firstChild ) &&
+      firstChild.tagName === "img"
+    ) {
+      const src = stringProp( firstChild.properties?.src );
+      const alt = stringProp( firstChild.properties?.alt );
 
-    if( node.children[0].tagName === "img" ){
-
-      const image = node.children[0];
-      const { src, alt } = image.properties;
-      const extension = src?.split( "." ).pop()?.toLowerCase();
-      const isVideo = VIDEO_FILE_FORMAT_EXTENSIONS.includes( extension );
-
-      if( isVideo ){
-        return (
-          <>
-            <video controls preload="metadata">
-              <source
-                src={ `${src}#t=0.001` }
-                type={ `video/${extension}` }
-                />
-            </video>
-            <p>
-              { alt }
-            </p>
-          </>
-        );
+      if( src ) {
+        return <MediaFigure src={ src } alt={ alt } />;
       }
-
-      return (
-        <figure>
-          <Picture
-            url={ src }
-            alt={ alt }
-            />
-          <figcaption>
-            { alt }
-          </figcaption>
-        </figure>
-      );
     }
 
-    return <p>{ paragraph.children }</p>;
+    return <p>{ children }</p>;
   },
 };
 
@@ -68,11 +41,9 @@ interface MarkdownProps {
 export const Markdown: FC<MarkdownProps> = ({ children }) => {
   return (
     <div className={ styles.reactMarkdown }>
-      <ReactMarkdown
-        components={ markdownComponents }
-      >{ children || "" }</ReactMarkdown>
+      <ReactMarkdown components={ markdownComponents }>
+        { children || "" }
+      </ReactMarkdown>
     </div>
   );
 };
-
-

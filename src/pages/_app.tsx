@@ -11,13 +11,13 @@ const fontMona_Sans = Mona_Sans({
   subsets:[ "latin" ],
 });
 
-export default function App({ Component, pageProps }: AppProps ){
+export default function App({ Component, pageProps }: AppProps ) {
 
   const router = useRouter();
 
   /** Google Analytics Effect */
   useEffect( () => {
-    const handleRouteChange = ( url: string ) => gtag.pageview( url );
+    const handleRouteChange = ( url: string ) => gtag.trackPageview( url );
     router.events.on( "routeChangeComplete", handleRouteChange );
     return () => router.events.off( "routeChangeComplete", handleRouteChange );
   }, [ router.events ] );

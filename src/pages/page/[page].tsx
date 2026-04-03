@@ -4,12 +4,12 @@ import Home, { PAGE_SIZE, getStaticProps as getStaticPropsHome } from "@/pages";
 
 export const getStaticProps = getStaticPropsHome;
 
-export async function getStaticPaths(){
+export async function getStaticPaths() {
   const posts = await getBlogPosts();
   const numPages = Math.ceil( posts.items.length / PAGE_SIZE );
   const paths: { params: { page: string } }[] = [];
 
-  for( let page = 2; page <= numPages; page++ ){
+  for( let page = 2; page <= numPages; page++ ) {
     paths.push({ params: { page: page.toString() } });
   }
 

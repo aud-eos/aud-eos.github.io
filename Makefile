@@ -30,6 +30,9 @@ types:
 lint:
 	@yarn lint
 
+format:
+	@yarn format
+
 # The caret (^) in a package.json file allows updates to minor and patch
 # versions, while the tilde (~) restricts updates to only patch versions.
 # Use caret for packages where you want new features and bug fixes, and tilde

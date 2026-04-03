@@ -97,9 +97,9 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist }) => {
 };
 
 
-export async function getStaticProps( context: GetStaticPropsContext ){
+export async function getStaticProps( context: GetStaticPropsContext ) {
   const slug = context.params?.slug;
-  if( typeof slug !== "string" ){
+  if( typeof slug !== "string" ) {
     return { props: {} };
   } else {
     const post = await getBlogPost( slug );
@@ -114,7 +114,7 @@ export async function getStaticProps( context: GetStaticPropsContext ){
   }
 }
 
-export async function getStaticPaths(){
+export async function getStaticPaths() {
   const posts = await getBlogPosts();
 
   // Map the result of that query to a list of slugs.
