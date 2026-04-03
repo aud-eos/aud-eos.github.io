@@ -6,7 +6,7 @@ import { getStaticProps as getStaticPropsBase } from "@/pages";
 export const getStaticProps = getStaticPropsBase;
 
 
-export async function getStaticPaths(){
+export async function getStaticPaths() {
   const tags = await getTags();
   const posts = await getBlogPosts();
   const paths: { params: { tagId: string, page: string }}[] = [];
@@ -17,7 +17,7 @@ export async function getStaticPaths(){
       .filter( post => post.metadata.tags
         .find( __tag => __tag.sys.id == tagId ) );
     const numPages = Math.ceil( filteredPosts.length / PAGE_SIZE );
-    for( let page = 2; page <= numPages; page++ ){
+    for( let page = 2; page <= numPages; page++ ) {
       paths.push({
         params: {
           tagId,

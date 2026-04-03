@@ -19,9 +19,9 @@ const getPaginatorUrl = ( pageNumber: number, tagId?: string ): string => {
 };
 
 
-export default function Pagination({ posts, page, tagId }: PaginationProps ){
+export default function Pagination({ posts, page, tagId }: PaginationProps ) {
   const numPages = Math.ceil( posts.length / PAGE_SIZE );
-  if( numPages <= 1 ){
+  if( numPages <= 1 ) {
     return null;
   }
   return (
@@ -31,7 +31,7 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ){
           <Link
             href={ getPaginatorUrl( page - 1, tagId ) }
             rel="prev"
-            >prev</Link>
+          >prev</Link>
       }
       {
         Array
@@ -44,7 +44,7 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ){
               <Link key={ pageNumber }
                 href={ href }
                 className={ className }
-                >{ pageNumber }
+              >{ pageNumber }
               </Link>
             );
           })
@@ -54,7 +54,7 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ){
           <Link
             href={ getPaginatorUrl( page + 1, tagId ) }
             rel="next"
-            >next</Link>
+          >next</Link>
       }
     </nav>
   );

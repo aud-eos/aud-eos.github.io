@@ -13,7 +13,7 @@ export default function Picture({
   maxHeight,
   alt,
   breakpoints = [ 749, 600, 350 ],
-}: PictureProps ){
+}: PictureProps ) {
   return (
     <picture>
       {
@@ -24,13 +24,13 @@ export default function Picture({
               media={ `(max-width: ${ breakpoint }px)` }
               srcSet={ getImgSrc( url, { width: breakpoint, format: "webp" }) }
               type={ "image/webp" }
-            /> : null
-            )
+            /> : null,
+          )
       }
       <source
         srcSet={ getImgSrc( url, { width: maxWidth, height: maxHeight, format: "webp" }) }
         type="image/webp"
-        />
+      />
       <img
         src={ getImgSrc( url, { width: maxWidth, height: maxHeight }) }
         alt={ alt }
@@ -63,21 +63,21 @@ const getImgSrc = ( src: string, {
   imageUrl.searchParams.set( "q", "100" );
 
   // Set "format"
-  if( format ){
+  if( format ) {
     imageUrl.searchParams.set( "fm", format );
   }
 
   // Progressive JPEGs
   // https://www.contentful.com/developers/docs/references/images-api/#/reference/changing-formats/progressive-jpegs/retrieve-an-image/console/curl
-  if( format === "jpg" ){
+  if( format === "jpg" ) {
     imageUrl.searchParams.set( "fl", "progressive" );
   }
 
-  if( width ){
+  if( width ) {
     imageUrl.searchParams.set( "w", width.toString() );
   }
 
-  if( height ){
+  if( height ) {
     imageUrl.searchParams.set( "h", height.toString() );
   }
 
@@ -89,7 +89,7 @@ const shouldRenderSourceSet = (
   breakpoint: number,
   maxWidth: number,
   maxHeight?: number,
-  ): boolean => {
-    const compareTo = ( maxHeight || maxWidth );
-    return breakpoint < ( compareTo );
+): boolean => {
+  const compareTo = ( maxHeight || maxWidth );
+  return breakpoint < ( compareTo );
 };

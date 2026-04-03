@@ -38,12 +38,12 @@ export default function DateTimeFormat({
   timestamp,
   withTime = true,
   withDayName = true,
-}: DateTimeFormatProps ){
+}: DateTimeFormatProps ) {
 
   const [ hydrated, setHydrated ] = useState( false );
-	useEffect( () => {
-		setHydrated( true );
-	}, [] );
+  useEffect( () => {
+    setHydrated( true );
+  }, [] );
 
   const date = new Date( timestamp );
 

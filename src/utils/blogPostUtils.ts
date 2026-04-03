@@ -11,10 +11,10 @@ export const sortBlogPostsByDate = (
   postA: BlogPost,
   postB: BlogPost,
 ): number => {
-    const dateA = new Date( postA.fields.date || postA.sys.createdAt );
-    const dateB = new Date( postB.fields.date || postB.sys.createdAt );
-    return dateB.getTime() - dateA.getTime();
-  };
+  const dateA = new Date( postA.fields.date || postA.sys.createdAt );
+  const dateB = new Date( postB.fields.date || postB.sys.createdAt );
+  return dateB.getTime() - dateA.getTime();
+};
 
 
 export const sortTagsByName = ( tagA: Tag, tagB: Tag ) => {

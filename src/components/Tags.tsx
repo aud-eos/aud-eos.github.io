@@ -32,11 +32,11 @@ export const Tags: FC<TagsProps> = ({ tags, tagId }) => {
       {
         tags
           .map( tag =>
-              <TagComponent
-                key={ tag.sys.id }
-                tagName={ tag.sys.id }
-                isTagged={ tagId == tag.sys.id }
-                /> )
+            <TagComponent
+              key={ tag.sys.id }
+              tagName={ tag.sys.id }
+              isTagged={ tagId == tag.sys.id }
+            /> )
       }
     </section>
   );
