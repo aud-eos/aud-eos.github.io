@@ -12,6 +12,8 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 import { FaSignalMessenger } from "react-icons/fa6";
+import { resetCookieConsent } from "@/components/CookieConsent";
+
 
 import styles from "@/styles/Layout.module.scss";
 
@@ -78,6 +80,13 @@ export const Footer: FC = () => {
           © { new Date().getFullYear() } Audeos, LLC | All Rights Reserved
         </p>
       </div>
+
+      <div>
+        <button onClick={ resetCookieConsent }>
+          Cookie Preferences
+        </button>
+      </div>
+
     </footer>
   );
 };
