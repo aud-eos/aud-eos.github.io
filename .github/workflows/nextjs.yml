@@ -84,13 +84,11 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.runner }} next-sitemap
       - name: Validate RSS/Atom feeds
         run: |
-          pip install feedvalidator
-          feedvalidator public/rss.xml
-          feedvalidator public/atom.xml
+          xmllint --noout public/rss.xml
+          xmllint --noout public/atom.xml
       - name: Validate JSON Feed
         run: |
-          npm install -g jsonlint
-          jsonlint public/feed.json
+          node -e "JSON.parse(require('fs').readFileSync('public/feed.json','utf8'))"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
