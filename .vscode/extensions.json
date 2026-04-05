@@ -2,6 +2,7 @@
     "recommendations": [
         "dbaeumer.vscode-eslint",
         "mikestead.dotenv",
-        "redhat.vscode-yaml"
+        "redhat.vscode-yaml",
+        "github.vscode-github-actions"
     ]
 }
