@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import * as gtag from "../lib/google-analytics";
 import { GoogleAnalyics } from "@/lib/GoogleAnalyics";
-
+import CookieConsent from "@/components/CookieConsent";
 
 const fontMona_Sans = Mona_Sans({
   subsets:[ "latin" ],
@@ -24,8 +24,12 @@ export default function App({ Component, pageProps }: AppProps ) {
 
   return (
     <>
+      <CookieConsent />
       <GoogleAnalyics />
-      <div className={ fontMona_Sans.className }>
+      <div className={
+        `
+          ${fontMona_Sans.className}
+        ` }>
         <Component { ...pageProps } />
       </div>
     </>

@@ -1,0 +1,91 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import styles from "@/styles/CookieConsent.module.scss";
+import { VT323 } from "next/font/google";
+import { COOKIE_CONSENT_KEY } from "@/constants";
+
+const fontVT323 = VT323({
+  weight: "400",
+});
+
+export function resetCookieConsent() {
+  localStorage.removeItem( COOKIE_CONSENT_KEY );
+  window.dispatchEvent( new Event( "cookie-consent-reset" ) );
+}
+
+export default function CookieConsent() {
+  const [ isVisible, setIsVisible ] = useState( () => {
+    if( typeof window === "undefined" ) return false;
+    return !localStorage.getItem( COOKIE_CONSENT_KEY );
+  });
+
+  useEffect( () => {
+    const handler = () => setIsVisible( true );
+    window.addEventListener( "cookie-consent-reset", handler );
+    return () =>
+      window.removeEventListener( "cookie-consent-reset", handler );
+  }, [] );
+
+  const accept = () => {
+    localStorage.setItem( COOKIE_CONSENT_KEY, "accepted" );
+    if( window.gtag ) {
+      window.gtag( "consent", "update", {
+        analytics_storage: "granted",
+      });
+    }
+    window.dispatchEvent( new Event( "cookie-consent-granted" ) );
+    setIsVisible( false );
+  };
+
+  const reject = () => {
+    localStorage.setItem( COOKIE_CONSENT_KEY, "rejected" );
+    if( window.gtag ) {
+      window.gtag( "consent", "update", {
+        analytics_storage: "denied",
+      });
+    }
+    setIsVisible( false );
+  };
+
+  /* keyboard shortcuts */
+  useEffect( () => {
+    if( !isVisible ) return;
+
+    const handler = ( e: KeyboardEvent ) => {
+      if( e.key === "y" || e.key === "Enter" ) accept();
+      if( e.key === "n" || e.key === "Escape" ) reject();
+    };
+
+    window.addEventListener( "keydown", handler );
+    return () => window.removeEventListener( "keydown", handler );
+  }, [ isVisible ] );
+
+  if( !isVisible ) return null;
+
+  return (
+    <div className={ `${styles.cookieModal} ${fontVT323.className}` }>
+      <div className={ styles.cookieBox }>
+
+        <div className={ styles.titleBar }>
+          <span className={ styles.title }>Cookie Preferences</span>
+          <div className={ styles.closeButton } onClick={ reject }>X</div>
+        </div>
+
+        <p className={ `${styles.message} ${styles.cursor}` }>
+          This site uses analytics cookies.
+        </p>
+
+        <div className={ styles.buttons }>
+          <button className={ styles.button } onClick={ accept }>
+            [ Y ] Accept
+          </button>
+          <button className={ styles.button } onClick={ reject }>
+            [ N ] Reject
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
