@@ -113,7 +113,7 @@ jobs:
     steps:
       - name: Validate feed links
         run: |
-          urls=$(grep -oP '(?<=<link>)[^<]+' public/rss.xml | grep '^http')
+          urls=$(grep -oP '(?<=<link>)[^<]+' https://www.audeos.com/rss.xml | grep '^http')
           for url in $urls; do
             status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
             if [ "$status" != "200" ]; then
