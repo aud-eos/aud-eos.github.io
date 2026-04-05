@@ -82,6 +82,15 @@ jobs:
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
       - name: Build sitemap and robots.txt
         run: ${{ steps.detect-package-manager.outputs.runner }} next-sitemap
+      - name: Validate RSS/Atom feeds
+        run: |
+          pip install feedvalidator
+          feedvalidator public/rss.xml
+          feedvalidator public/atom.xml
+      - name: Validate JSON Feed
+        run: |
+          npm install -g jsonlint
+          jsonlint public/feed.json
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
