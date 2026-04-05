@@ -26,10 +26,7 @@ export default function App({ Component, pageProps }: AppProps ) {
     <>
       <CookieConsent />
       <GoogleAnalyics />
-      <div className={
-        `
-          ${fontMona_Sans.className}
-        ` }>
+      <div className={ fontMona_Sans.className }>
         <Component { ...pageProps } />
       </div>
     </>
