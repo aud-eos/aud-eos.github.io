@@ -10,11 +10,9 @@ import Link from "next/link";
 import { GetStaticPropsContext } from "next";
 import Pagination from "@/components/Home/Pagination";
 import { Footer } from "@/components/Layout/Footer";
+import { generateFeeds } from "@/lib/generateFeeds";
+import { META_DESCRIPTION, META_IMAGE, META_TITLE } from "@/constants";
 
-
-const META_TITLE = "Audeos.com";
-const META_DESCRIPTION = "Official website of DJ Audeos";
-const META_IMAGE = "/images/audeos.jpg";
 export const PAGE_SIZE = 12;
 
 
@@ -35,18 +33,15 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
     <>
       <Head>
         <title>Audeos.com</title>
+        <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
+        <link rel="alternate" type="application/atom+xml" href="/atom.xml" />
+        <link rel="alternate" type="application/feed+json" href="/feed.json" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
         <meta name="description" content={ META_DESCRIPTION } key="desc" />
         <meta property="og:title" content={ META_TITLE } />
-        <meta
-          property="og:description"
-          content={ META_DESCRIPTION }
-        />
-        <meta
-          property="og:image"
-          content={ META_IMAGE }
-        />
+        <meta property="og:description" content={ META_DESCRIPTION } />
+        <meta property="og:image" content={ META_IMAGE } />
       </Head>
       <Container>
         <main className={ styles.main }>
@@ -94,6 +89,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const page: number = Number( context.params?.page ) || 1;
   const tags = await getTags();
   const posts = await getBlogPosts();
+  generateFeeds( posts.items );
   return {
     props: {
       tagId,

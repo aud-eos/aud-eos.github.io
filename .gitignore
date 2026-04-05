@@ -42,3 +42,7 @@ next-env.d.ts
 # generated static files
 public/robots.txt
 public/sitemap*
+public/rss.xml
+public/atom.xml
+public/feed.json
+
