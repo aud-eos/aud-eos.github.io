@@ -1,6 +1,6 @@
 [![Deploy Next.js site to Pages](https://github.com/aud-eos/aud-eos.github.io/actions/workflows/nextjs.yml/badge.svg)](https://github.com/aud-eos/aud-eos.github.io/actions/workflows/nextjs.yml)
 
-
+[![socket-security-workflow](https://github.com/aud-eos/aud-eos.github.io/actions/workflows/socket.yml/badge.svg)](https://github.com/aud-eos/aud-eos.github.io/actions/workflows/socket.yml)
 
 ### .env
 
