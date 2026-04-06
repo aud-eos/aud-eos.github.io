@@ -7,12 +7,12 @@ import styles from "@/styles/Layout.module.scss";
 export const TopNav: FC = () => {
   const router = useRouter();
   const initialQuery = typeof router.query.q === "string" ? router.query.q : "";
-  const [query, setQuery] = useState(initialQuery);
+  const [ query, setQuery ] = useState( initialQuery );
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = ( e: FormEvent ) => {
     e.preventDefault();
-    if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+    if( query.trim() ) {
+      router.push( `/search?q=${encodeURIComponent( query.trim() )}` );
     }
   };
 
@@ -24,7 +24,7 @@ export const TopNav: FC = () => {
           type="search"
           name="q"
           value={ query }
-          onChange={ (e) => setQuery(e.target.value) }
+          onChange={ e => setQuery( e.target.value ) }
           placeholder="Search posts…"
           aria-label="Search posts"
           className={ styles.searchInput }

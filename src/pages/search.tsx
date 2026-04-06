@@ -27,13 +27,13 @@ export interface SearchProps {
   posts: SearchPost[];
 }
 
-export default function Search({ posts }: SearchProps) {
+export default function Search({ posts }: SearchProps ) {
   const router = useRouter();
   const query = typeof router.query.q === "string" ? router.query.q : "";
 
   const fuse = useMemo(
     () =>
-      new Fuse(posts, {
+      new Fuse( posts, {
         keys: [
           { name: "title", weight: 3 },
           { name: "description", weight: 2 },
@@ -43,11 +43,11 @@ export default function Search({ posts }: SearchProps) {
         threshold: 0.4,
         includeScore: true,
       }),
-    [posts]
+    [ posts ],
   );
 
   const results = query
-    ? fuse.search(query).map((r) => r.item)
+    ? fuse.search( query ).map( r => r.item )
     : [];
 
   return (
@@ -80,7 +80,7 @@ export default function Search({ posts }: SearchProps) {
             ) }
 
             <ul className={ searchStyles.resultList } role="list">
-              { results.map((post) => (
+              { results.map( post => (
                 <li key={ post.slug }>
                   <Link href={ `/post/${post.slug}` }>
                     <h3>{ post.title }</h3>
@@ -90,10 +90,10 @@ export default function Search({ posts }: SearchProps) {
                     <p>{ post.description }</p>
                   ) }
                   <Tags
-                    tags={ post.tags.map((id) => ({ sys: { id, type: "Link" as const, linkType: "Tag" as const } })) }
+                    tags={ post.tags.map( id => ({ sys: { id, type: "Link" as const, linkType: "Tag" as const } }) ) }
                   />
                 </li>
-              )) }
+              ) ) }
             </ul>
           </section>
 
@@ -107,15 +107,15 @@ export default function Search({ posts }: SearchProps) {
 export async function getStaticProps() {
   const blogPosts = await getBlogPosts();
 
-  const posts: SearchPost[] = blogPosts.items.map((post) => ({
+  const posts: SearchPost[] = blogPosts.items.map( post => ({
     title: post.fields.title ?? "",
     slug: post.fields.slug ?? "",
     description: post.fields.description ?? "",
     body: post.fields.body ?? "",
-    tags: post.metadata.tags.map((t) => t.sys.id),
+    tags: post.metadata.tags.map( t => t.sys.id ),
     date: post.fields.date ?? post.sys.createdAt,
     imageUrl: post.fields.image?.fields.file?.url ?? "",
-  }));
+  }) );
 
   return { props: { posts } };
 }
