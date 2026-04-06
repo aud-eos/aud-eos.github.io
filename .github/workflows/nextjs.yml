@@ -42,6 +42,13 @@ jobs:
           node-version-file: '.nvmrc'
           cache: yarn
           cache-dependency-path: yarn.lock
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libxml2-utils \
+            brotli \
+            gzip
       - name: Setup Pages
         uses: actions/configure-pages@v6
         with:
@@ -108,10 +115,6 @@ jobs:
             exit 1
           fi
           echo "✅ sitemap.xml contains $count URLs"
-      - name: Install XML tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libxml2-utils
       - name: Validate RSS/Atom feeds
         run: |
           xmllint --noout public/rss.xml
@@ -120,6 +123,25 @@ jobs:
       - name: Validate JSON Feed
         run: |
           node -e "JSON.parse(require('fs').readFileSync('public/feed.json','utf8'))"
+      - name: Precompress static assets
+        run: |
+          echo "Compressing assets with Brotli and Gzip..."
+
+          find dist -type f \( \
+            -name "*.html" -o \
+            -name "*.js" -o \
+            -name "*.css" -o \
+            -name "*.json" -o \
+            -name "*.xml" -o \
+            -name "*.svg" \
+          \) -print0 | while IFS= read -r -d '' file; do
+            brotli -f -k -q 11 "$file"
+            gzip -f -k -9 "$file"
+          done
+      - name: Verify compression
+        run: |
+          echo "Compressed files:"
+          find dist -name "*.br" | head
       - name: Generate build summary
         run: |
           size=$(du -sh dist | cut -f1)
@@ -264,8 +286,8 @@ jobs:
             --max-redirects 3
             --accept 200,429
             --exclude-mail
-            --exclude 'https://soundcloud.com/*'
-            --exclude 'https://*.bandcamp.com/*'
+            --exclude 'bandcamp.com'
+            --exclude 'soundcloud.com'
             --user-agent "Mozilla/5.0 (compatible; LinkChecker/1.0)"
             --base https://www.audeos.com
             --format markdown
