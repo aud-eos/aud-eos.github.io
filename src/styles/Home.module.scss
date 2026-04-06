@@ -109,11 +109,12 @@
 ul.imageGallery {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   align-items: start; /* cards sit at their natural height — no row stretching */
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 1300px;
+  gap: 4px;
+  /* full-bleed breakout from the 750px wrapper; 1rem accounts for container padding */
+  width: calc(100vw - 2rem);
+  margin-left: calc(-50vw + 50% + 1rem);
 
   li {
     display: flex;
@@ -122,14 +123,13 @@ ul.imageGallery {
       display: flex;
       flex-direction: column;
       width: 100%;
-      border: 2px solid white;
-      box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       transition: border-color 0.1s ease, box-shadow 0.1s ease;
 
       &:hover,
       &:focus-within {
         border-color: lightgreen;
-        box-shadow: 4px 4px 0 lightgreen;
+        box-shadow: 0 0 0 1px lightgreen;
 
         .titleBar {
           background: #0000aa;
