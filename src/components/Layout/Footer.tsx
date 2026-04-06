@@ -13,9 +13,10 @@ import {
 } from "react-icons/fa";
 import { FaSignalMessenger } from "react-icons/fa6";
 import { resetCookieConsent } from "@/components/CookieConsent";
-
-
 import styles from "@/styles/Layout.module.scss";
+import { OldSchoolButton } from "../OldSchoolButton";
+
+
 
 export const Footer: FC = () => {
   return (
@@ -82,9 +83,9 @@ export const Footer: FC = () => {
       </div>
 
       <div>
-        <button onClick={ resetCookieConsent }>
-          Cookie Preferences
-        </button>
+        <OldSchoolButton onClick={ resetCookieConsent }
+          label="Update Cookie Preferences"
+        />
       </div>
 
     </footer>

@@ -28,7 +28,6 @@
     font-size: 1rem;
     margin-top: 1rem;
     margin-bottom: 2rem;
-    text-decoration: underline;
     > a {
       min-height: 3rem;
       min-width: 3rem;
@@ -47,15 +46,13 @@
   }
 }
 
+.navButtonWrapper {
+  margin: .5rem;
+}
+
 .isTagged, a:hover > h3, nav a:hover {
-  color: lightgreen;
-  @media (prefers-color-scheme: light) {
-    filter: drop-shadow(.1rem .1rem .1rem black);
-    text-shadow: -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
-  }
-  @media (prefers-color-scheme: dark) {
-    color: lightgreen!important;
-  }
+  color: lightgreen!important;
+  background: #555555!important;
 }
 
 ul.imageGallery {
