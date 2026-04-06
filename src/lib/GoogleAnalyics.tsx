@@ -21,7 +21,7 @@ export const GoogleAnalyics: FC = () => {
                   analytics_storage: 'denied'
                 });
 
-                const consent = localStorage.getItem("${COOKIE_CONSENT_KEY}}");
+                const consent = localStorage.getItem("${COOKIE_CONSENT_KEY}");
                 if (consent === "accepted") {
                   gtag('consent', 'update', {
                     analytics_storage: 'granted'
