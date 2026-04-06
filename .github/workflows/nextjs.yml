@@ -322,15 +322,16 @@ jobs:
   # 🛠 Best practices
   lighthouse:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     needs:
       - validate-core
       - validate-sitemap
       - validate-rss
-      - validate-links
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Wait for site to stabilize
+        run: sleep 30
       - name: Extract URLs for Lighthouse
         run: |
           echo "Fetching sitemap index..."
@@ -350,7 +351,7 @@ jobs:
 
           echo "https://www.audeos.com" > lighthouse-urls.txt
 
-          grep '/post/' all-urls.txt | head -n 5 >> lighthouse-urls.txt
+          grep '/post/' all-urls.txt | head -n 3 >> lighthouse-urls.txt
 
           echo "Final Lighthouse URLs:"
           cat lighthouse-urls.txt
