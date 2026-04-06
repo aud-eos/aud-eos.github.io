@@ -74,8 +74,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
       - name: Validate RSS/Atom feeds
         run: |
-          xmllint --noout public/rss.xml
-          xmllint --noout public/atom.xml
+          npx xmllint --noout public/rss.xml
+          npx xmllint --noout public/atom.xml
       - name: Validate JSON Feed
         run: |
           node -e "JSON.parse(require('fs').readFileSync('public/feed.json','utf8'))"
