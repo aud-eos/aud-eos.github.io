@@ -31,6 +31,7 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -53,6 +54,7 @@ jobs:
         with:
           path: |
             .next/cache
+            .next/cache/fetch-cache
             .next/server
             .next/static
           key: |
@@ -84,6 +86,14 @@ jobs:
           [ -f "dist/sitemap.xml" ] || { echo "❌ sitemap.xml missing"; missing=1; }
           [ -f "dist/robots.txt" ] || { echo "❌ robots.txt missing"; missing=1; }
           [ "$missing" -eq 0 ] || exit 1
+      - name: Verify sitemap has URLs
+        run: |
+          count=$(grep -c "<loc>" dist/sitemap.xml || true)
+          if [ "$count" -eq 0 ]; then
+            echo "❌ sitemap.xml contains no URLs"
+            exit 1
+          fi
+          echo "✅ sitemap.xml contains $count URLs"
       - name: Install XML tools
         run: |
           sudo apt-get update
@@ -112,8 +122,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  # Validate deployment
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     needs: deploy
     steps:
       - name: Validate sitemap and robots
