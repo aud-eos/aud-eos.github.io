@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 
 export interface DateTimeFormatProps {
@@ -40,10 +40,7 @@ export default function DateTimeFormat({
   withDayName = true,
 }: DateTimeFormatProps ) {
 
-  const [ hydrated, setHydrated ] = useState( false );
-  useEffect( () => {
-    setHydrated( true );
-  }, [] );
+  const hydrated = useSyncExternalStore( () => () => {}, () => true, () => false );
 
   const date = new Date( timestamp );
 
