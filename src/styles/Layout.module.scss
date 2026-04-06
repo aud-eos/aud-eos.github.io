@@ -25,13 +25,19 @@ nav.topnav {
     gap: 1rem;
 }
 
-form.searchForm {
+div.searchWrapper {
     flex: 1;
+    position: relative;
+    max-width: 400px;
+}
+
+form.searchForm {
     display: flex;
 }
 
 input.searchInput {
     flex: 1;
+    width: 100%;
     padding: 0.35rem 0.75rem;
     border: 1px solid rgba(128, 128, 128, 0.5);
     border-radius: 1rem;
@@ -39,7 +45,6 @@ input.searchInput {
     color: inherit;
     font-size: 0.9rem;
     outline: none;
-    max-width: 400px;
 
     &:focus {
         border-color: lightgreen;
@@ -48,6 +53,67 @@ input.searchInput {
     &::placeholder {
         opacity: 0.5;
     }
+}
+
+ul.searchPreview {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    list-style: none;
+    padding: 0.25rem 0;
+    margin: 0;
+    background: rgb(var(--background-start-rgb));
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    border-radius: 0.5rem;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    li {
+        a {
+            display: flex;
+            flex-direction: column;
+            padding: 0.5rem 0.75rem;
+            text-decoration: none;
+            gap: 0.15rem;
+
+            &:hover {
+                background: rgba(128, 128, 128, 0.1);
+            }
+        }
+    }
+}
+
+li.previewMore {
+    border-top: 1px solid rgba(128, 128, 128, 0.3);
+    margin-top: 0.25rem;
+    padding-top: 0.25rem;
+
+    a {
+        display: block;
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+        opacity: 0.7;
+        text-decoration: none;
+
+        &:hover {
+            opacity: 1;
+            background: rgba(128, 128, 128, 0.1);
+        }
+    }
+}
+
+span.previewTitle {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+span.previewDescription {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 footer.footer {

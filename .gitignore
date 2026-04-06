@@ -45,4 +45,5 @@ public/sitemap*
 public/rss.xml
 public/atom.xml
 public/feed.json
+public/search-index.json
 

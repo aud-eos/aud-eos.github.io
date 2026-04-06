@@ -1,20 +1,15 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { FormEvent, useState } from "react";
-
 import styles from "@/styles/Home.module.scss";
 import { BlogPosts, getBlogPosts, getTags } from "@/utils/contentfulUtils";
 import BlogPostList from "@/components/Home/BlogPostList";
-import { Container } from "@/components/Layout/Layout";
+import { Layout } from "@/components/Layout/Layout";
 import { TagCollection } from "contentful";
 import { sortTagsByName } from "@/utils/blogPostUtils";
 import Link from "next/link";
 import { GetStaticPropsContext } from "next";
 import Pagination from "@/components/Home/Pagination";
-import { Footer } from "@/components/Layout/Footer";
 import { generateFeeds } from "@/lib/generateFeeds";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE } from "@/constants";
-import layoutStyles from "@/styles/Layout.module.scss";
 
 export const PAGE_SIZE = 12;
 
@@ -27,16 +22,6 @@ export interface HomeProps {
 }
 
 export default function Home({ posts, page, tags, tagId }: HomeProps ) {
-  const router = useRouter();
-  const [ query, setQuery ] = useState( "" );
-
-  const handleSearch = ( event: FormEvent ) => {
-    event.preventDefault();
-    if( query.trim() ) {
-      router.push( `/search?q=${encodeURIComponent( query.trim() )}` );
-    }
-  };
-
   const filteredBlogPosts = posts.items
     .filter( post => tagId === null || post.metadata.tags
       .find( tag => tag.sys.id == tagId ) );
@@ -55,23 +40,8 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
         <meta property="og:description" content={ META_DESCRIPTION } />
         <meta property="og:image" content={ META_IMAGE } />
       </Head>
-      <Container>
+      <Layout>
         <main className={ styles.main }>
-          <header>
-            <Link href="/">
-              <h1 className={ tagId ? "" : styles.isTagged }>Audeos.com</h1>
-            </Link>
-            <form onSubmit={ handleSearch } className={ layoutStyles.searchForm } role="search">
-              <input
-                type="search"
-                value={ query }
-                onChange={ event => setQuery( event.target.value ) }
-                placeholder="Search posts…"
-                aria-label="Search posts"
-                className={ layoutStyles.searchInput }
-              />
-            </form>
-          </header>
           <nav>
             {
               tags.items
@@ -99,9 +69,8 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
             page={ page }
             tagId={ tagId }
           />
-          <Footer />
         </main>
-      </Container>
+      </Layout>
     </>
   );
 }

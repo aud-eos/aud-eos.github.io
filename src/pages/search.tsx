@@ -6,24 +6,14 @@ import Fuse from "fuse.js";
 
 import { getBlogPosts } from "@/utils/contentfulUtils";
 import { getPlaylist } from "@/utils/spotify/getPlaylist";
+import { generateSearchIndex } from "@/lib/generateSearchIndex";
+import { SearchPost } from "@/lib/searchTypes";
 import { Layout } from "@/components/Layout/Layout";
 import { Tags } from "@/components/Tags";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import searchStyles from "@/styles/Search.module.scss";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE } from "@/constants";
-
-export interface SearchPost {
-  title: string;
-  slug: string;
-  description: string;
-  body: string;
-  author: string;
-  spotifyText: string;
-  tags: string[];
-  date: string;
-  imageUrl: string;
-}
 
 export interface SearchProps {
   posts: SearchPost[];
@@ -147,5 +137,6 @@ export async function getStaticProps() {
     }),
   );
 
+  generateSearchIndex( posts );
   return { props: { posts } };
 }
