@@ -247,12 +247,26 @@ jobs:
             --no-progress
             --max-concurrency 20
             --max-retries 3
-            --retry-wait-time 2
+            --retry-wait-time 1
             --timeout 10
-            --max-redirects 5
+            --max-redirects 3
             --accept 200,429
             --exclude-mail
+            --user-agent "Mozilla/5.0 (compatible; LinkChecker/1.0)"
+            --base https://www.audeos.com
+            --format markdown
+            --output lychee-report.md
             https://www.audeos.com
+      - name: Add Lychee report to workflow summary
+        if: always()
+        run: |
+          if [ -f lychee-report.md ]; then
+            echo "## 🔗 Broken Link Report" >> $GITHUB_STEP_SUMMARY
+            cat lychee-report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## 🔗 Broken Link Report" >> $GITHUB_STEP_SUMMARY
+            echo "No report generated." >> $GITHUB_STEP_SUMMARY
+          fi
       - name: Deployment summary
         run: |
           echo "## 🌍 Deployment Validation" >> $GITHUB_STEP_SUMMARY
