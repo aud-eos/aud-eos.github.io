@@ -72,10 +72,14 @@ jobs:
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
       - name: Build sitemap and robots.txt
         run: yarn next-sitemap
+      - name: Install XML tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils
       - name: Validate RSS/Atom feeds
         run: |
-          npx xmllint --noout public/rss.xml
-          npx xmllint --noout public/atom.xml
+          xmllint --noout public/rss.xml
+          xmllint --noout public/atom.xml
       - name: Validate JSON Feed
         run: |
           node -e "JSON.parse(require('fs').readFileSync('public/feed.json','utf8'))"
