@@ -41,7 +41,7 @@ export function generateFeeds( posts: BlogPost[] ) {
         description: escapeXml( post.fields.description ?? "" ),
         body: escapeXml( post.fields.body ?? "" ),
         date: escapeXml( new Date( post.fields.date! ).toISOString() ),
-        url: escapeXml( `${SITE_URL}/blog/${post.fields.slug}` ),
+        url: escapeXml( `${SITE_URL}/post/${post.fields.slug}` ),
         image: escapeXml( rawImage ?? "" ),
         rssImage: rawImage
           ? escapeXml( `${rawImage}?w=1200&fit=thumb&fm=jpg&q=75` )
