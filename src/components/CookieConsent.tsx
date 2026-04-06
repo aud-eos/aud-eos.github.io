@@ -16,12 +16,12 @@ export function resetCookieConsent() {
 
 export default function CookieConsent() {
   const isClient = useSyncExternalStore( () => () => {}, () => true, () => false );
-  const [ hasConsented, setHasConsented ] = useState( false );
+  const [ isOpen, setIsOpen ] = useState( false );
 
-  const isVisible = isClient && !hasConsented && localStorage.getItem( COOKIE_CONSENT_KEY ) === null;
+  const isVisible = isClient && ( isOpen || localStorage.getItem( COOKIE_CONSENT_KEY ) === null );
 
   useEffect( () => {
-    const handler = () => setHasConsented( false );
+    const handler = () => setIsOpen( true );
     window.addEventListener( "cookie-consent-reset", handler );
     return () =>
       window.removeEventListener( "cookie-consent-reset", handler );
@@ -35,7 +35,7 @@ export default function CookieConsent() {
       });
     }
     window.dispatchEvent( new Event( "cookie-consent-granted" ) );
-    setHasConsented( true );
+    setIsOpen( false );
   };
 
   const reject = () => {
@@ -45,7 +45,7 @@ export default function CookieConsent() {
         analytics_storage: "denied",
       });
     }
-    setHasConsented( true );
+    setIsOpen( false );
   };
 
   /* keyboard shortcuts */
@@ -64,8 +64,8 @@ export default function CookieConsent() {
   if( !isVisible ) return null;
 
   return (
-    <div className={ `${styles.cookieModal} ${fontVT323.className}` }>
-      <div className={ styles.cookieBox }>
+    <div className={ `${styles.cookieModal} ${fontVT323.className}` } onClick={ reject }>
+      <div className={ styles.cookieBox } onClick={ event => event.stopPropagation() }>
 
         <div className={ styles.titleBar }>
           <span className={ styles.title }>Cookie Preferences</span>
