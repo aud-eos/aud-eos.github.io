@@ -52,9 +52,9 @@ export default function CookieConsent() {
   useEffect( () => {
     if( !isVisible ) return;
 
-    const handler = ( e: KeyboardEvent ) => {
-      if( e.key === "y" || e.key === "Enter" ) accept();
-      if( e.key === "n" || e.key === "Escape" ) reject();
+    const handler = ( event: KeyboardEvent ) => {
+      if( event.key === "y" || event.key === "Enter" ) accept();
+      if( event.key === "n" || event.key === "Escape" ) reject();
     };
 
     window.addEventListener( "keydown", handler );
