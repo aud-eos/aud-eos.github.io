@@ -13,6 +13,8 @@
     "export": "next export",
     "postbuild": "next-sitemap",
     "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "yarn typecheck && eslint .",
     "format": "eslint --fix ."
@@ -35,9 +37,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitejs/plugin-react": "^6.0.1",
     "cf-content-types-generator": "^3.0.1",
     "contentful-cli": "^3.10.4",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.1"
+    "eslint-config-next": "^16.2.1",
+    "jsdom": "^29.0.1",
+    "vitest": "^4.1.2"
   }
 }

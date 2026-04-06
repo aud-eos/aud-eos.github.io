@@ -16,9 +16,15 @@ export function resetCookieConsent() {
 
 export default function CookieConsent() {
   const isClient = useSyncExternalStore( () => () => {}, () => true, () => false );
-  const [ isOpen, setIsOpen ] = useState( false );
+  // null  = uninitialized (defer to localStorage)
+  // true  = explicitly opened (e.g. after reset)
+  // false = explicitly closed (after accept or reject)
+  const [ isOpen, setIsOpen ] = useState<boolean | null>( null );
 
-  const isVisible = isClient && ( isOpen || localStorage.getItem( COOKIE_CONSENT_KEY ) === null );
+  const isVisible = isClient && (
+    isOpen === true ||
+    ( isOpen === null && localStorage.getItem( COOKIE_CONSENT_KEY ) === null )
+  );
 
   useEffect( () => {
     const handler = () => setIsOpen( true );
