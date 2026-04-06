@@ -50,47 +50,90 @@
   margin: .5rem;
 }
 
-.isTagged, a:hover > h3, nav a:hover {
-  color: lightgreen!important;
-  background: #555555!important;
+.isTagged, nav a:hover {
+  color: lightgreen !important;
+  background: #555555 !important;
 }
+
+/* ── DOS window card ─────────────────────────────────────────────────────── */
+
+.titleBar {
+  background: #000080;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+
+  h3 {
+    color: white;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    /* clamp to 2 lines so cards stay uniform */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* reserve space for 2 lines so short titles don't collapse the bar */
+    min-height: calc(0.875rem * 1.4 * 2);
+  }
+}
+
+.cardLink {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+
+  picture > img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.statusBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.8rem;
+  margin-top: auto;
+
+  @media (prefers-color-scheme: dark) {
+    background: rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* ── Gallery grid ────────────────────────────────────────────────────────── */
 
 ul.imageGallery {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
   width: 100%;
   max-width: 1300px;
 
   li {
-    min-width: 300px;
-    max-width: 300px;
-    padding-left: .5rem;
-    padding-right: .5rem;
+    display: flex;
 
     figure {
-      picture {
-        filter: drop-shadow(.25rem .25rem 10rem rgba(255, 255, 255, 0.25));
-        > img {
-          margin-bottom: .25rem;
-        }
-        > img {
-          display: block;
-          width: 100%;
-          object-fit: cover;
-          aspect-ratio: 1/1;
-          border: .25rem solid white;
-          filter: drop-shadow(.25rem .25rem 0 lightgreen);
-        }
-      }
-      > figcaption, section {
-        padding-right: .5rem;
-        padding-left: .5rem;
-        padding-top: .5rem;
-        > a {
-          text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border: 2px solid white;
+      box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.2);
+      transition: border-color 0.1s ease, box-shadow 0.1s ease;
+
+      &:hover,
+      &:focus-within {
+        border-color: lightgreen;
+        box-shadow: 4px 4px 0 lightgreen;
+
+        .titleBar {
+          background: #0000aa;
         }
       }
     }

@@ -8,9 +8,6 @@ import { PAGE_SIZE } from "@/pages";
 import { BlogPost } from "@/utils/contentfulUtils";
 
 
-const IMAGE_HEIGHT = 350;
-
-
 export interface BlogPostListProps {
   posts: BlogPost[]
   page: number
@@ -34,23 +31,27 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
             return (
               <li key={ post.sys.id }>
                 <figure>
-                  <Link href={ url } aria-label={ post.fields.title }>
+                  <Link href={ url } className={ styles.cardLink }>
+                    <div className={ styles.titleBar }>
+                      <h3>{ post.fields.title }</h3>
+                    </div>
                     <Picture
                       url={ pictureUrl }
-                      maxHeight={ IMAGE_HEIGHT }
+                      maxWidth={ 600 }
                       alt={ altText }
                     />
                   </Link>
-                  <figcaption>
-                    <Link href={ url }><h3>{ post.fields.title }</h3></Link>
+                  <figcaption className={ styles.statusBar }>
                     <DateTimeFormat
                       timestamp={ timestamp }
+                      withDayName={ false }
+                      withTime={ false }
+                    />
+                    <Tags
+                      tags={ post.metadata.tags }
+                      tagId={ tagId }
                     />
                   </figcaption>
-                  <Tags
-                    tags={ post.metadata.tags }
-                    tagId={ tagId }
-                  />
                 </figure>
               </li>
             );
