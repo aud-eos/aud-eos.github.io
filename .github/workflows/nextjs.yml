@@ -123,10 +123,12 @@ jobs:
           echo "$urls"
 
           # Check each URL
+          failed=0
           for url in $urls; do
             status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
             if [ "$status" != "200" ]; then
               echo "Broken link: $url (status $status)"
-              exit 1
+              failed=1
             fi
           done
+          exit $failed
