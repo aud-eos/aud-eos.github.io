@@ -46,9 +46,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            libxml2-utils \
-            brotli \
-            gzip
+            libxml2-utils
       - name: Setup Pages
         uses: actions/configure-pages@v6
         with:
@@ -123,25 +121,6 @@ jobs:
       - name: Validate JSON Feed
         run: |
           node -e "JSON.parse(require('fs').readFileSync('public/feed.json','utf8'))"
-      - name: Precompress static assets
-        run: |
-          echo "Compressing assets with Brotli and Gzip..."
-
-          find dist -type f \( \
-            -name "*.html" -o \
-            -name "*.js" -o \
-            -name "*.css" -o \
-            -name "*.json" -o \
-            -name "*.xml" -o \
-            -name "*.svg" \
-          \) -print0 | while IFS= read -r -d '' file; do
-            brotli -f -k -q 11 "$file"
-            gzip -f -k -9 "$file"
-          done
-      - name: Verify compression
-        run: |
-          echo "Compressed files:"
-          find dist -name "*.br" | head
       - name: Generate build summary
         run: |
           size=$(du -sh dist | cut -f1)
@@ -194,7 +173,7 @@ jobs:
             echo "Checking $name..."
 
             for i in {1..6}; do
-              if curl --max-time 10 --fail-with-body -s "$url" > /dev/null; then
+              if curl --connect-timeout 5 --max-time 10 --fail-with-body -s "$url" > /dev/null; then
                 echo "✅ $name reachable"
                 return 0
               fi
@@ -216,25 +195,42 @@ jobs:
     steps:
       - name: Validate sitemap URLs
         run: |
-          echo "Fetching sitemap..."
-          sitemap=$(curl -s https://www.audeos.com/sitemap.xml)
+          echo "Fetching sitemap index..."
+          curl -s https://www.audeos.com/sitemap.xml -o sitemap.xml
 
-          if [ -z "$sitemap" ]; then
-            echo "❌ Failed to fetch sitemap"
-            exit 1
+          echo "Detecting sitemap type..."
+
+          # Extract child sitemaps if this is a sitemap index
+          child_sitemaps=$(grep -oP '(?<=<loc>)[^<]+' sitemap.xml | grep '/sitemap')
+
+          > all_urls.txt
+
+          if [ -z "$child_sitemaps" ]; then
+            echo "Single sitemap detected"
+            grep -oP '(?<=<loc>)[^<]+' sitemap.xml >> all_urls.txt
+          else
+            echo "Sitemap index detected"
+            echo "$child_sitemaps"
+
+            while IFS= read -r sitemap; do
+              echo "Fetching $sitemap"
+              curl -s "$sitemap" | grep -oP '(?<=<loc>)[^<]+' >> all_urls.txt
+            done <<< "$child_sitemaps"
           fi
 
-          urls=$(echo "$sitemap" | sed -n 's:.*<loc>\(.*\)</loc>.*:\1:p')
+          urls=$(sed '/^\s*$/d' all_urls.txt | grep 'audeos.com')
 
           if [ -z "$urls" ]; then
             echo "❌ No URLs found in sitemap"
             exit 1
           fi
 
+          echo "Found $(echo "$urls" | wc -l) URLs"
+
           failed=0
 
-          echo "$urls" | xargs -n1 -P8 -I{} bash -c '
-            status=$(curl -L --max-time 10 -o /dev/null -s -w "%{http_code}" "{}")
+          echo "$urls" | xargs -r -n1 -P8 -I{} bash -c '
+            status=$(curl -L --connect-timeout 5 --max-time 10 --retry 2 --retry-delay 2 -o /dev/null -s -w "%{http_code}" "{}")
             if [[ "$status" != "200" && "$status" != "301" && "$status" != "302" ]]; then
               echo "Broken sitemap URL: {} (status $status)"
               exit 1
@@ -257,11 +253,16 @@ jobs:
             exit 1
           fi
 
-          urls=$(echo "$feed" | grep -oP '(?<=<link>)[^<]+' | grep '^https' | sort -u)
+          urls=$(echo "$feed" | grep -oP '(?<=<link>)[^<]+' | grep '^https' | sort -u || true)
+
+          if [ -z "$urls" ]; then
+            echo "❌ No URLs extracted from RSS"
+            exit 1
+          fi
 
           failed=0
-          echo "$urls" | xargs -n1 -P8 -I{} bash -c '
-          status=$(curl -L --max-time 10 -o /dev/null -s -w "%{http_code}" "{}")
+          echo "$urls" | xargs -r -n1 -P8 -I{} bash -c '
+          status=$(curl -L --connect-timeout 5 --max-time 10 --retry 2 --retry-delay 2 -o /dev/null -s -w "%{http_code}" "{}")
           if [[ "$status" != "200" && "$status" != "301" && "$status" != "302" ]]; then
             echo "Broken link: {} (status $status)"
             exit 1
@@ -272,7 +273,10 @@ jobs:
 
   validate-links:
     runs-on: ubuntu-latest
-    needs: deploy
+    needs:
+      - validate-core
+      - validate-sitemap
+      - validate-rss
     steps:
       - name: Check entire site for broken links
         uses: lycheeverse/lychee-action@v2.0.2
@@ -329,37 +333,49 @@ jobs:
       - validate-rss
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Wait for site to stabilize
         run: sleep 30
       - name: Extract URLs for Lighthouse
+        id: lighthouse_urls
         run: |
           echo "Fetching sitemap index..."
           curl -s https://www.audeos.com/sitemap.xml -o sitemap.xml
 
-          echo "Collecting child sitemaps..."
-          sed -n 's:.*<loc>\(.*\)</loc>.*:\1:p' sitemap.xml > sitemap-list.txt
+          sitemap_child=$(grep -oP '(?<=<loc>)[^<]+' sitemap.xml | head -n 1)
 
-          > all-urls.txt
+          echo "Fetching $sitemap_child"
+          if [ -z "$sitemap_child" ]; then
+            cp sitemap.xml sitemap-child.xml
+          else
+            curl -s "$sitemap_child" -o sitemap-child.xml
+          fi
 
-          while read sitemap; do
-            echo "Fetching $sitemap"
-            curl -s "$sitemap" | sed -n 's:.*<loc>\(.*\)</loc>.*:\1:p' >> all-urls.txt
-          done < sitemap-list.txt
+          echo "Collecting URLs..."
 
-          echo "Selecting URLs for Lighthouse..."
+          urls="https://www.audeos.com"
+          posts=$(grep -oP '(?<=<loc>)[^<]+' sitemap-child.xml \
+            | grep '/post/' \
+            | head -n 3)
+          urls=$(printf "%s\n%s" "$urls" "$posts")
+          echo "URLs selected:"
+          echo "$urls"
 
-          echo "https://www.audeos.com" > lighthouse-urls.txt
-
-          grep '/post/' all-urls.txt | head -n 3 >> lighthouse-urls.txt
-
-          echo "Final Lighthouse URLs:"
-          cat lighthouse-urls.txt
+          {
+            echo "urls<<EOF"
+            echo "$urls"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+      - name: Validate Lighthouse URLs
+        run: |
+          if [ -z "${{ steps.lighthouse_urls.outputs.urls }}" ]; then
+            echo "❌ No URLs extracted for Lighthouse"
+            exit 1
+          fi
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v11
         with:
-          urls: |
-            $(cat lighthouse-urls.txt)
+          urls: ${{ steps.lighthouse_urls.outputs.urls }}
           uploadArtifacts: true
           temporaryPublicStorage: true
           configPath: ./lighthouserc.json
