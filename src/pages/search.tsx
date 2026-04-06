@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import Fuse from "fuse.js";
 
 import { getBlogPosts } from "@/utils/contentfulUtils";
+import { getPlaylist } from "@/utils/spotify/getPlaylist";
 import { Container } from "@/components/Layout/Layout";
 import { Footer } from "@/components/Layout/Footer";
 import { Tags } from "@/components/Tags";
@@ -19,6 +20,7 @@ export interface SearchPost {
   description: string;
   body: string;
   author: string;
+  spotifyText: string;
   tags: string[];
   date: string;
   imageUrl: string;
@@ -39,6 +41,7 @@ export default function Search({ posts }: SearchProps ) {
           { name: "title", weight: 3 },
           { name: "description", weight: 2 },
           { name: "author", weight: 2 },
+          { name: "spotifyText", weight: 1 },
           { name: "tags", weight: 1 },
           { name: "body", weight: 1 },
         ],
@@ -120,19 +123,38 @@ function stripMarkdown( text: string ): string {
     .trim();
 }
 
+function buildSpotifyText( playlist: Awaited<ReturnType<typeof getPlaylist>> ): string {
+  const trackNames = playlist.tracks.items.map( item => item.track.name );
+  const artistNames = playlist.tracks.items.flatMap( item => item.track.artists.map( artist => artist.name ) );
+  return [ playlist.name, playlist.description ?? "", ...trackNames, ...artistNames ]
+    .filter( Boolean )
+    .join( " " );
+}
+
 export async function getStaticProps() {
   const blogPosts = await getBlogPosts();
 
-  const posts: SearchPost[] = blogPosts.items.map( post => ({
-    title: post.fields.title ?? "",
-    slug: post.fields.slug ?? "",
-    description: post.fields.description ?? "",
-    body: stripMarkdown( post.fields.body ?? "" ),
-    author: post.fields.author?.fields?.name ?? "",
-    tags: post.metadata.tags.map( tag => tag.sys.id ),
-    date: post.fields.date ?? post.sys.createdAt,
-    imageUrl: post.fields.image?.fields.file?.url ?? "",
-  }) );
+  const posts: SearchPost[] = await Promise.all(
+    blogPosts.items.map( async post => {
+      const spotifyText = post.fields.spotifyPlaylistId
+        ? await getPlaylist( post.fields.spotifyPlaylistId )
+          .then( buildSpotifyText )
+          .catch( () => "" )
+        : "";
+
+      return {
+        title: post.fields.title ?? "",
+        slug: post.fields.slug ?? "",
+        description: post.fields.description ?? "",
+        body: stripMarkdown( post.fields.body ?? "" ),
+        author: post.fields.author?.fields?.name ?? "",
+        spotifyText,
+        tags: post.metadata.tags.map( tag => tag.sys.id ),
+        date: post.fields.date ?? post.sys.createdAt,
+        imageUrl: post.fields.image?.fields.file?.url ?? "",
+      };
+    }),
+  );
 
   return { props: { posts } };
 }
