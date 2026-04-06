@@ -80,6 +80,7 @@ jobs:
         run: |
           xmllint --noout public/rss.xml
           xmllint --noout public/atom.xml
+          xmllint --noout public/sitemap.xml
       - name: Validate JSON Feed
         run: |
           node -e "JSON.parse(require('fs').readFileSync('public/feed.json','utf8'))"
