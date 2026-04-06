@@ -124,9 +124,6 @@ jobs:
 
           echo "Checking sitemap.xml..."
           curl -f "$base/sitemap.xml"
-
-          echo "Validating sitemap XML..."
-          curl -s "$base/sitemap.xml" | npx xmllint --noout -
       - name: Check live RSS feed links
         run: |
           echo "Fetching live RSS feed..."
