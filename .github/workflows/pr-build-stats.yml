@@ -1,0 +1,71 @@
+name: PR Build Stats
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build-stats:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build Next.js
+        run: |
+          start=$(date +%s)
+          yarn next build --turbo
+          end=$(date +%s)
+          echo "BUILD_TIME=$((end-start))" >> $GITHUB_ENV
+
+      - name: Build sitemap
+        run: yarn next-sitemap
+
+      - name: Collect stats
+        run: |
+          pages=$(grep -r "<loc>" public/sitemap.xml | wc -l)
+          size=$(du -sm dist | cut -f1)
+
+          echo "PAGES=$pages" >> $GITHUB_ENV
+          echo "SIZE=$size" >> $GITHUB_ENV
+
+      - name: Comment PR with stats
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `
+            ## 🚀 Next.js Build Stats
+
+            | Metric | Value |
+            |------|------|
+            | Build Time | ${process.env.BUILD_TIME}s |
+            | Static Pages | ${process.env.PAGES} |
+            | Export Size | ${process.env.SIZE} MB |
+
+            _Generated automatically by CI._
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            })

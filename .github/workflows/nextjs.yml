@@ -26,6 +26,7 @@ concurrency:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  NEXT_TELEMETRY_DISABLED: 1
 
 jobs:
   # Build job
@@ -55,10 +56,10 @@ jobs:
           path: |
             .next/cache
             .next/cache/fetch-cache
-            .next/server
-            .next/static
+            .next/build-manifest.json
+            .next/prerender-manifest.json
           key: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('yarn.lock') }}-${{ hashFiles('next.config.*') }}
+            ${{ runner.os }}-nextjs-${{ hashFiles('yarn.lock') }}-${{ hashFiles('next.config.*') }}-${{ hashFiles('package.json') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('yarn.lock') }}-
       - name: Enable Corepack
@@ -68,7 +69,7 @@ jobs:
       - name: Build with Next.js
         run: |
           echo "::group::Next.js build"
-          yarn next build
+          yarn next build --turbo
           echo "::endgroup::"
         env:
           CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
@@ -105,9 +106,7 @@ jobs:
           fi
           echo "✅ sitemap.xml contains $count URLs"
       - name: Install XML tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libxml2-utils
+        run: sudo apt-get install -y libxml2-utils
       - name: Validate RSS/Atom feeds
         run: |
           xmllint --noout public/rss.xml
@@ -116,6 +115,20 @@ jobs:
       - name: Validate JSON Feed
         run: |
           node -e "JSON.parse(require('fs').readFileSync('public/feed.json','utf8'))"
+      - name: Generate build summary
+        run: |
+          size=$(du -sh dist | cut -f1)
+          pages=$(grep -c "<loc>" dist/sitemap.xml || true)
+
+          echo "## 🚀 Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Export Size | $size |" >> $GITHUB_STEP_SUMMARY
+          echo "| Sitemap URLs | $pages |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build Commit | $GITHUB_SHA |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Static export successfully built and validated." >> $GITHUB_STEP_SUMMARY
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
@@ -144,16 +157,21 @@ jobs:
           base="https://www.audeos.com"
 
           echo "Checking robots.txt..."
-          curl --max-time 10 -f "$base/robots.txt"
+          curl --max-time 10 --fail-with-body "$base/robots.txt"
 
           echo "Checking sitemap.xml..."
-          curl --max-time 10 -f "$base/sitemap.xml"
+          curl --max-time 10 --fail-with-body "$base/sitemap.xml"
       - name: Check live RSS feed links
         run: |
           echo "Fetching live RSS feed..."
           feed=$(curl -s https://www.audeos.com/rss.xml)
 
-          urls=$(echo "$feed" | grep -oP '(?<=<link>)[^<]+' | grep '^https')
+          if [ -z "$feed" ]; then
+            echo "RSS feed empty or failed to download"
+            exit 1
+          fi
+
+          urls=$(echo "$feed" | grep -oP '(?<=<link>)[^<]+' | grep '^https' | sort -u)
 
           failed=0
           echo "$urls" | xargs -n1 -P8 -I{} bash -c '
@@ -165,3 +183,13 @@ jobs:
           ' || failed=1
 
           exit $failed
+      - name: Deployment summary
+        run: |
+          echo "## 🌍 Deployment Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Site URL: https://www.audeos.com" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Checks performed:" >> $GITHUB_STEP_SUMMARY
+          echo "- robots.txt reachable" >> $GITHUB_STEP_SUMMARY
+          echo "- sitemap.xml reachable" >> $GITHUB_STEP_SUMMARY
+          echo "- RSS links return HTTP 200" >> $GITHUB_STEP_SUMMARY
