@@ -84,8 +84,7 @@
   picture > img {
     display: block;
     width: 100%;
-    object-fit: cover;
-    aspect-ratio: 16 / 9;
+    height: auto; /* natural image proportions — no cropping */
   }
 }
 
@@ -99,7 +98,6 @@
   background: rgba(0, 0, 0, 0.35);
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 0.8rem;
-  margin-top: auto;
 
   @media (prefers-color-scheme: dark) {
     background: rgba(0, 0, 0, 0.6);
@@ -112,6 +110,7 @@ ul.imageGallery {
   list-style: none;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  align-items: start; /* cards sit at their natural height — no row stretching */
   gap: 1.5rem;
   width: 100%;
   max-width: 1300px;
