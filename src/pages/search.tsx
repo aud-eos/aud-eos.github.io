@@ -6,8 +6,7 @@ import Fuse from "fuse.js";
 
 import { getBlogPosts } from "@/utils/contentfulUtils";
 import { getPlaylist } from "@/utils/spotify/getPlaylist";
-import { Container } from "@/components/Layout/Layout";
-import { Footer } from "@/components/Layout/Footer";
+import { Layout } from "@/components/Layout/Layout";
 import { Tags } from "@/components/Tags";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
@@ -68,14 +67,8 @@ export default function Search({ posts }: SearchProps ) {
         <meta property="og:description" content={ META_DESCRIPTION } />
         <meta property="og:image" content={ META_IMAGE } />
       </Head>
-      <Container>
+      <Layout>
         <main className={ styles.main }>
-          <header>
-            <Link href="/">
-              <h1>Audeos.com</h1>
-            </Link>
-          </header>
-
           <section className={ searchStyles.searchResults }>
             { query && (
               <p className={ searchStyles.resultCount }>
@@ -103,10 +96,8 @@ export default function Search({ posts }: SearchProps ) {
               ) ) }
             </ul>
           </section>
-
-          <Footer />
         </main>
-      </Container>
+      </Layout>
     </>
   );
 }
