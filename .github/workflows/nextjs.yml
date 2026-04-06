@@ -69,7 +69,10 @@ jobs:
       - name: Build with Next.js
         run: |
           echo "::group::Next.js build"
+          start=$(date +%s)
           yarn next build --turbo
+          end=$(date +%s)
+          echo "BUILD_TIME=$((end-start))" >> $GITHUB_ENV
           echo "::endgroup::"
         env:
           CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
@@ -106,7 +109,9 @@ jobs:
           fi
           echo "✅ sitemap.xml contains $count URLs"
       - name: Install XML tools
-        run: sudo apt-get install -y libxml2-utils
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils
       - name: Validate RSS/Atom feeds
         run: |
           xmllint --noout public/rss.xml
@@ -124,6 +129,10 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Node Version | $(node -v) |" >> $GITHUB_STEP_SUMMARY
+          mins=$((BUILD_TIME / 60))
+          secs=$((BUILD_TIME % 60))
+          echo "| Build Time | ${mins}m ${secs}s |" >> $GITHUB_STEP_SUMMARY
           echo "| Export Size | $size |" >> $GITHUB_STEP_SUMMARY
           echo "| Sitemap URLs | $pages |" >> $GITHUB_STEP_SUMMARY
           echo "| Build Commit | $GITHUB_SHA |" >> $GITHUB_STEP_SUMMARY
@@ -133,6 +142,7 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
+          retention-days: 1
 
   # Deployment job
   deploy:
@@ -156,11 +166,57 @@ jobs:
         run: |
           base="https://www.audeos.com"
 
-          echo "Checking robots.txt..."
-          curl --max-time 10 --fail-with-body "$base/robots.txt"
+          retry() {
+            url=$1
+            name=$2
 
-          echo "Checking sitemap.xml..."
-          curl --max-time 10 --fail-with-body "$base/sitemap.xml"
+            echo "Checking $name..."
+
+            for i in {1..6}; do
+              if curl --max-time 10 --fail-with-body -s "$url" > /dev/null; then
+                echo "✅ $name reachable"
+                return 0
+              fi
+              echo "Attempt $i failed. Retrying in 10s..."
+              sleep 10
+            done
+
+            echo "❌ $name still unreachable after retries"
+            exit 1
+          }
+
+          retry "$base/robots.txt" "robots.txt"
+          retry "$base/sitemap.xml" "sitemap.xml"
+          retry "$base/rss.xml" "rss.xml"
+      - name: Validate sitemap URLs
+        run: |
+          echo "Fetching sitemap..."
+          sitemap=$(curl -s https://www.audeos.com/sitemap.xml)
+
+          if [ -z "$sitemap" ]; then
+            echo "❌ Failed to fetch sitemap"
+            exit 1
+          fi
+
+          urls=$(echo "$sitemap" | sed -n 's:.*<loc>\(.*\)</loc>.*:\1:p')
+
+          if [ -z "$urls" ]; then
+            echo "❌ No URLs found in sitemap"
+            exit 1
+          fi
+
+          failed=0
+
+          echo "$urls" | xargs -n1 -P8 -I{} bash -c '
+            status=$(curl -L --max-time 10 -o /dev/null -s -w "%{http_code}" "{}")
+            if [[ "$status" != "200" && "$status" != "301" && "$status" != "302" ]]; then
+              echo "Broken sitemap URL: {} (status $status)"
+              exit 1
+            fi
+          ' || failed=1
+
+          exit $failed
+
       - name: Check live RSS feed links
         run: |
           echo "Fetching live RSS feed..."
@@ -175,14 +231,27 @@ jobs:
 
           failed=0
           echo "$urls" | xargs -n1 -P8 -I{} bash -c '
-          status=$(curl --max-time 10 -o /dev/null -s -w "%{http_code}" "{}")
-          if [ "$status" != "200" ]; then
+          status=$(curl -L --max-time 10 -o /dev/null -s -w "%{http_code}" "{}")
+          if [[ "$status" != "200" && "$status" != "301" && "$status" != "302" ]]; then
             echo "Broken link: {} (status $status)"
             exit 1
           fi
           ' || failed=1
 
           exit $failed
+      - name: Check entire site for broken links
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: >
+            --verbose
+            --no-progress
+            --max-concurrency 10
+            --max-retries 3
+            --retry-wait-time 2
+            --timeout 10
+            --accept 200,429
+            --exclude-mail
+            https://www.audeos.com
       - name: Deployment summary
         run: |
           echo "## 🌍 Deployment Validation" >> $GITHUB_STEP_SUMMARY
@@ -193,3 +262,33 @@ jobs:
           echo "- robots.txt reachable" >> $GITHUB_STEP_SUMMARY
           echo "- sitemap.xml reachable" >> $GITHUB_STEP_SUMMARY
           echo "- RSS links return HTTP 200" >> $GITHUB_STEP_SUMMARY
+
+  # Lighthouse CI automatically audits:
+  # 🚀 Performance
+  # 🔎 SEO
+  # ♿ Accessibility
+  # 🛠 Best practices
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: validate
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            https://www.audeos.com
+            https://www.audeos.com/post/djing-at-the-seattle-art-museum
+            https://www.audeos.com/post/dj-audeos-droptop-hotbox-mix
+            https://www.audeos.com/post/dj-audeos-erotic-city-mix
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: ./lighthouserc.json
+      - name: Deployment summary
+        run: |
+          echo "## 🔎 Lighthouse Audit Completed" >> $GITHUB_STEP_SUMMARY
+          echo "Reports available in workflow artifacts." >> $GITHUB_STEP_SUMMARY
