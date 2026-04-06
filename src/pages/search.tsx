@@ -18,6 +18,7 @@ export interface SearchPost {
   slug: string;
   description: string;
   body: string;
+  author: string;
   tags: string[];
   date: string;
   imageUrl: string;
@@ -37,10 +38,13 @@ export default function Search({ posts }: SearchProps ) {
         keys: [
           { name: "title", weight: 3 },
           { name: "description", weight: 2 },
+          { name: "author", weight: 2 },
           { name: "tags", weight: 1 },
           { name: "body", weight: 1 },
         ],
-        threshold: 0.4,
+        threshold: 0.3,
+        ignoreLocation: true,
+        minMatchCharLength: 2,
         includeScore: true,
       }),
     [ posts ],
@@ -104,6 +108,18 @@ export default function Search({ posts }: SearchProps ) {
   );
 }
 
+function stripMarkdown( text: string ): string {
+  return text
+    .replace( /```[\s\S]*?```/g, "" ) // fenced code blocks
+    .replace( /`[^`]*`/g, "" ) // inline code
+    .replace( /#{1,6}\s/g, "" ) // headings
+    .replace( /\*\*|__|\*|_/g, "" ) // bold / italic markers
+    .replace( /\[([^\]]+)\]\([^)]+\)/g, "$1" ) // links → link text only
+    .replace( /^\s*[-*+>]\s/gm, "" ) // list items and blockquotes
+    .replace( /\n{2,}/g, " " ) // collapse extra newlines
+    .trim();
+}
+
 export async function getStaticProps() {
   const blogPosts = await getBlogPosts();
 
@@ -111,7 +127,8 @@ export async function getStaticProps() {
     title: post.fields.title ?? "",
     slug: post.fields.slug ?? "",
     description: post.fields.description ?? "",
-    body: post.fields.body ?? "",
+    body: stripMarkdown( post.fields.body ?? "" ),
+    author: post.fields.author?.fields?.name ?? "",
     tags: post.metadata.tags.map( tag => tag.sys.id ),
     date: post.fields.date ?? post.sys.createdAt,
     imageUrl: post.fields.image?.fields.file?.url ?? "",
