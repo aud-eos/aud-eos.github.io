@@ -134,10 +134,10 @@ jobs:
           base="https://www.audeos.com"
 
           echo "Checking robots.txt..."
-          curl -f "$base/robots.txt"
+          curl --max-time 10 -f "$base/robots.txt"
 
           echo "Checking sitemap.xml..."
-          curl -f "$base/sitemap.xml"
+          curl --max-time 10 -f "$base/sitemap.xml"
       - name: Check live RSS feed links
         run: |
           echo "Fetching live RSS feed..."
@@ -147,7 +147,7 @@ jobs:
 
           failed=0
           echo "$urls" | xargs -n1 -P8 -I{} bash -c '
-          status=$(curl -o /dev/null -s -w "%{http_code}" "{}")
+          status=$(curl --max-time 10 -o /dev/null -s -w "%{http_code}" "{}")
           if [ "$status" != "200" ]; then
             echo "Broken link: {} (status $status)"
             exit 1
