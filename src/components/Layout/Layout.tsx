@@ -6,6 +6,7 @@ import { Footer } from "@/components/Layout/Footer";
 
 interface LayoutProps {
   children?: ReactNode
+  isFullwidth?: boolean
 }
 
 export const Container: FC<LayoutProps> = ({ children }) =>
@@ -17,13 +18,18 @@ export const Wrapper: FC<LayoutProps> = ({ children }) =>
 /**
  * Layout component
  */
-export const Layout: FC<LayoutProps> = ({ children }) => {
+export const Layout: FC<LayoutProps> = ({
+  children,
+  isFullwidth,
+}) => {
   return (
     <Container>
       <TopNav />
-      <Wrapper>
-        { children }
-      </Wrapper>
+      {
+        isFullwidth
+          ? children
+          : <Wrapper>{ children }</Wrapper>
+      }
       <Footer />
     </Container>
   );

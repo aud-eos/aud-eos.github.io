@@ -40,7 +40,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
         <meta property="og:description" content={ META_DESCRIPTION } />
         <meta property="og:image" content={ META_IMAGE } />
       </Head>
-      <Layout>
+      <Layout isFullwidth>
         <main className={ styles.main }>
           <nav>
             {
