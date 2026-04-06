@@ -1,0 +1,54 @@
+.button {
+  display: inline-block;
+
+  font-size: 32px;
+  line-height: 1;
+  padding: 14px 36px;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  border: none;
+  border-radius: 0;
+
+  letter-spacing: 2px;
+
+  transition: none;
+
+}
+
+
+/* LIGHT MODE */
+@media (prefers-color-scheme: light) {
+
+  .button {
+    background: #c0c0c0;
+    color: #000000;
+
+    box-shadow: 12px 12px 0 #000000;
+  }
+
+  .button:active {
+    transform: translate(12px, 12px);
+    box-shadow: none;
+  }
+
+}
+
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+
+  .button {
+    background: #c0c0c0; /* grey button */
+    color: #000000;      /* black text */
+
+    box-shadow: 12px 12px 0 #0000aa; /* blue shadow */
+  }
+
+  .button:active {
+    transform: translate(12px, 12px);
+    box-shadow: none;
+  }
+
+}

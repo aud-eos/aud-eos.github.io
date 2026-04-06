@@ -5,11 +5,11 @@ import BlogPostList from "@/components/Home/BlogPostList";
 import { Layout } from "@/components/Layout/Layout";
 import { TagCollection } from "contentful";
 import { sortTagsByName } from "@/utils/blogPostUtils";
-import Link from "next/link";
 import { GetStaticPropsContext } from "next";
 import Pagination from "@/components/Home/Pagination";
 import { generateFeeds } from "@/lib/generateFeeds";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE } from "@/constants";
+import { OldSchoolButton } from "@/components/OldSchoolButton";
 
 export const PAGE_SIZE = 12;
 
@@ -50,11 +50,13 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
                   const className = tag.sys.id == tagId ? styles.isTagged : "";
                   const href = tag.sys.id == tagId ? "/" : `/tags/${tag.sys.id}`;
                   return (
-                    <Link key={ tag.sys.id }
-                      className={ className }
-                      href={ href }>
-                      { tag.sys.id }
-                    </Link>
+                    <div key={ tag.sys.id } className={ styles.navButtonWrapper }>
+                      <OldSchoolButton
+                        className={ className }
+                        href={ href }
+                        label={ tag.sys.id }
+                      />
+                    </div>
                   );
                 })
             }
