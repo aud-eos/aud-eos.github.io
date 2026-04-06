@@ -47,7 +47,7 @@ export default function Search({ posts }: SearchProps ) {
   );
 
   const results = query
-    ? fuse.search( query ).map( r => r.item )
+    ? fuse.search( query ).map( result => result.item )
     : [];
 
   return (
@@ -112,7 +112,7 @@ export async function getStaticProps() {
     slug: post.fields.slug ?? "",
     description: post.fields.description ?? "",
     body: post.fields.body ?? "",
-    tags: post.metadata.tags.map( t => t.sys.id ),
+    tags: post.metadata.tags.map( tag => tag.sys.id ),
     date: post.fields.date ?? post.sys.createdAt,
     imageUrl: post.fields.image?.fields.file?.url ?? "",
   }) );
