@@ -2,4 +2,5 @@
 module.exports = {
   siteUrl: "https://www.audeos.com",
   generateRobotsTxt: true,
+  outDir: "dist",
 };
