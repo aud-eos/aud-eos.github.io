@@ -255,8 +255,8 @@ jobs:
             --user-agent "Mozilla/5.0 (compatible; LinkChecker/1.0)"
             --base https://www.audeos.com
             --format markdown
-            --output lychee-report.md
             https://www.audeos.com
+          output: lychee-report.md
       - name: Add Lychee report to workflow summary
         if: always()
         run: |
