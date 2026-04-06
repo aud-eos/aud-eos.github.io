@@ -19,6 +19,7 @@ The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are gener
 
 - Run `yarn format` after every file change to keep code conformant with the ESLint styleguide.
 - Do not use single-character variable names — use descriptive names even for short-lived variables (e.g., `post` not `p`, `index` not `i`).
+- Never use `eslint-disable` or `eslint-disable-next-line` comments to suppress ESLint errors — fix the underlying code instead.
 
 ## Architecture
 

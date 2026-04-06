@@ -9,8 +9,8 @@ export const TopNav: FC = () => {
   const initialQuery = typeof router.query.q === "string" ? router.query.q : "";
   const [ query, setQuery ] = useState( initialQuery );
 
-  const handleSubmit = ( e: FormEvent ) => {
-    e.preventDefault();
+  const handleSubmit = ( event: FormEvent ) => {
+    event.preventDefault();
     if( query.trim() ) {
       router.push( `/search?q=${encodeURIComponent( query.trim() )}` );
     }
@@ -24,7 +24,7 @@ export const TopNav: FC = () => {
           type="search"
           name="q"
           value={ query }
-          onChange={ e => setQuery( e.target.value ) }
+          onChange={ event => setQuery( event.target.value ) }
           placeholder="Search posts…"
           aria-label="Search posts"
           className={ styles.searchInput }

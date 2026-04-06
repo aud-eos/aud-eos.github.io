@@ -30,8 +30,8 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
   const router = useRouter();
   const [ query, setQuery ] = useState( "" );
 
-  const handleSearch = ( e: FormEvent ) => {
-    e.preventDefault();
+  const handleSearch = ( event: FormEvent ) => {
+    event.preventDefault();
     if( query.trim() ) {
       router.push( `/search?q=${encodeURIComponent( query.trim() )}` );
     }
@@ -65,7 +65,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
               <input
                 type="search"
                 value={ query }
-                onChange={ e => setQuery( e.target.value ) }
+                onChange={ event => setQuery( event.target.value ) }
                 placeholder="Search posts…"
                 aria-label="Search posts"
                 className={ layoutStyles.searchInput }
