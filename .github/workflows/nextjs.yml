@@ -34,28 +34,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Detect package manager
-        id: detect-package-manager
-        run: |
-          if [ -f "${{ github.workspace }}/yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=yarn" >> $GITHUB_OUTPUT
-            exit 0
-          elif [ -f "${{ github.workspace }}/package.json" ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "command=ci" >> $GITHUB_OUTPUT
-            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
-            exit 0
-          else
-            echo "Unable to determine package manager"
-            exit 1
-          fi
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache: yarn
+          cache-dependency-path: yarn.lock
       - name: Setup Pages
         uses: actions/configure-pages@v6
         with:
@@ -72,20 +56,20 @@ jobs:
             .next/server
             .next/static
           key: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('next.config.*') }}
+            ${{ runner.os }}-nextjs-${{ hashFiles('yarn.lock') }}-${{ hashFiles('next.config.*') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('yarn.lock') }}-
       - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+        run: yarn install --immutable
       - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        run: yarn next build
         env:
           CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
           CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
       - name: Build sitemap and robots.txt
-        run: ${{ steps.detect-package-manager.outputs.runner }} next-sitemap
+        run: yarn next-sitemap
       - name: Install XML tools
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
       - name: Validate RSS/Atom feeds
