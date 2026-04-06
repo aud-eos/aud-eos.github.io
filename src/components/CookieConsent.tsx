@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore, useState } from "react";
 import styles from "@/styles/CookieConsent.module.scss";
 import { VT323 } from "next/font/google";
 import { COOKIE_CONSENT_KEY } from "@/constants";
@@ -15,13 +15,13 @@ export function resetCookieConsent() {
 }
 
 export default function CookieConsent() {
-  const [ isVisible, setIsVisible ] = useState( () => {
-    if( typeof window === "undefined" ) return false;
-    return !localStorage.getItem( COOKIE_CONSENT_KEY );
-  });
+  const isClient = useSyncExternalStore( () => () => {}, () => true, () => false );
+  const [ hasConsented, setHasConsented ] = useState( false );
+
+  const isVisible = isClient && !hasConsented && localStorage.getItem( COOKIE_CONSENT_KEY ) === null;
 
   useEffect( () => {
-    const handler = () => setIsVisible( true );
+    const handler = () => setHasConsented( false );
     window.addEventListener( "cookie-consent-reset", handler );
     return () =>
       window.removeEventListener( "cookie-consent-reset", handler );
@@ -35,7 +35,7 @@ export default function CookieConsent() {
       });
     }
     window.dispatchEvent( new Event( "cookie-consent-granted" ) );
-    setIsVisible( false );
+    setHasConsented( true );
   };
 
   const reject = () => {
@@ -45,7 +45,7 @@ export default function CookieConsent() {
         analytics_storage: "denied",
       });
     }
-    setIsVisible( false );
+    setHasConsented( true );
   };
 
   /* keyboard shortcuts */
