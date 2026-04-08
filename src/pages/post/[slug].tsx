@@ -17,13 +17,20 @@ import Playlist from "@/components/Playlist";
 const IMAGE_SIZE = 750;
 
 
+export interface PostNavLink {
+  slug: string
+  title: string
+}
+
 export interface BlogPostViewProps {
   post: BlogPost
   playlist?: SpotifyPlaylist|null
+  prevPost?: PostNavLink|null
+  nextPost?: PostNavLink|null
 }
 
 
-export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist }) => {
+export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, nextPost }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${IMAGE_SIZE}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
@@ -87,6 +94,22 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist }) => {
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
             { playlist && <Playlist playlist={ playlist } /> }
+            { ( prevPost || nextPost ) && (
+              <nav className={ styles.postNav }>
+                { nextPost && (
+                  <Link href={ `/post/${nextPost.slug}` } className={ styles.nextPost }>
+                    <span>← Newer</span>
+                    <span>{ nextPost.title }</span>
+                  </Link>
+                ) }
+                { prevPost && (
+                  <Link href={ `/post/${prevPost.slug}` } className={ styles.prevPost }>
+                    <span>Older →</span>
+                    <span>{ prevPost.title }</span>
+                  </Link>
+                ) }
+              </nav>
+            ) }
           </article>
         </main>
       </Layout>
@@ -100,13 +123,41 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   if( typeof slug !== "string" ) {
     return { props: {} };
   } else {
-    const post = await getBlogPost( slug );
+    const [ post, allPosts ] = await Promise.all( [
+      getBlogPost( slug ),
+      getBlogPosts(),
+    ] );
     const playlist = post?.fields.spotifyPlaylistId
       ? await getPlaylist( post.fields.spotifyPlaylistId ) : null;
+
+    const sortedPosts = allPosts.items
+      .slice()
+      .sort( ( postA, postB ) => {
+        const dateA = new Date( postA.fields.date || postA.sys.createdAt ).getTime();
+        const dateB = new Date( postB.fields.date || postB.sys.createdAt ).getTime();
+        return dateA - dateB;
+      });
+
+    const currentIndex = sortedPosts.findIndex(
+      sortedPost => sortedPost.fields.slug === slug,
+    );
+
+    const prevPostEntry = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+    const nextPostEntry = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+
+    const prevPost: PostNavLink | null = prevPostEntry
+      ? { slug: prevPostEntry.fields.slug as string, title: prevPostEntry.fields.title as string }
+      : null;
+    const nextPost: PostNavLink | null = nextPostEntry
+      ? { slug: nextPostEntry.fields.slug as string, title: nextPostEntry.fields.title as string }
+      : null;
+
     return {
       props: {
         post,
         playlist,
+        prevPost,
+        nextPost,
       },
     };
   }
