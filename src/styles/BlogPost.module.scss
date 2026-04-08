@@ -11,6 +11,45 @@
     }
   }
 
+  .postNav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+    @media (prefers-color-scheme: light) {
+      border-top-color: rgba(0, 0, 0, 0.15);
+    }
+
+    a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      max-width: 45%;
+      text-decoration: none;
+
+      > span:first-child {
+        font-size: small;
+        opacity: 0.7;
+      }
+
+      > span:last-child {
+        font-weight: bold;
+      }
+    }
+
+    .nextPost {
+      align-items: flex-start;
+    }
+
+    .prevPost {
+      align-items: flex-end;
+      margin-left: auto;
+    }
+  }
+
   > article {
 
     // Article Header
