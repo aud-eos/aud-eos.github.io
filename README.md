@@ -11,6 +11,7 @@ This site is automatically deployed to **GitHub Pages** using GitHub Actions.
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![Node](https://img.shields.io/badge/Node-v25.8.1-339933?logo=node.js&logoColor=white)
 ![Tested with Vitest](https://img.shields.io/badge/tested%20with-vitest-6E9F18?logo=vitest&logoColor=white)
+[![codecov](https://codecov.io/gh/aud-eos/aud-eos.github.io/branch/main/graph/badge.svg)](https://codecov.io/gh/aud-eos/aud-eos.github.io)
 
 ![Last Commit](https://img.shields.io/github/last-commit/aud-eos/aud-eos.github.io/main)
 ![Repo Size](https://img.shields.io/github/repo-size/aud-eos/aud-eos.github.io)

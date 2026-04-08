@@ -24,8 +24,13 @@ jobs:
         run: corepack enable
       - name: Install dependencies
         run: yarn install --immutable
-      - name: Run unit tests
-        run: yarn test
+      - name: Run unit tests with coverage
+        run: yarn test:coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
 
   build-stats:
     runs-on: ubuntu-latest
