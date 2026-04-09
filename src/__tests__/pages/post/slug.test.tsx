@@ -39,7 +39,7 @@ function makePost( overrides: {
   title?: string;
   date?: string;
   createdAt?: string;
-} = {} ) {
+} = {}) {
   return {
     sys: {
       createdAt: overrides.createdAt ?? "2024-01-01T00:00:00.000Z",
@@ -64,14 +64,14 @@ describe( "BlogPostView — post navigation", () => {
 
   it( "renders a newer link when nextPost is provided", () => {
     render(
-      <BlogPostView post={ post } nextPost={{ slug: "newer-post", title: "Newer Post" }} />,
+      <BlogPostView post={ post } nextPost={ { slug: "newer-post", title: "Newer Post" } } />,
     );
     expect( screen.getByText( "← Newer" ).closest( "a" ) ).toHaveAttribute( "href", "/post/newer-post" );
   });
 
   it( "renders an older link when prevPost is provided", () => {
     render(
-      <BlogPostView post={ post } prevPost={{ slug: "older-post", title: "Older Post" }} />,
+      <BlogPostView post={ post } prevPost={ { slug: "older-post", title: "Older Post" } } />,
     );
     expect( screen.getByText( "Older →" ).closest( "a" ) ).toHaveAttribute( "href", "/post/older-post" );
   });
@@ -80,8 +80,8 @@ describe( "BlogPostView — post navigation", () => {
     render(
       <BlogPostView
         post={ post }
-        nextPost={{ slug: "newer-post", title: "A Newer Post Title" }}
-        prevPost={{ slug: "older-post", title: "An Older Post Title" }}
+        nextPost={ { slug: "newer-post", title: "A Newer Post Title" } }
+        prevPost={ { slug: "older-post", title: "An Older Post Title" } }
       />,
     );
     expect( screen.getByText( "A Newer Post Title" ) ).toBeInTheDocument();
@@ -94,12 +94,12 @@ describe( "BlogPostView — post navigation", () => {
   });
 
   it( "omits the newer link when nextPost is null", () => {
-    render( <BlogPostView post={ post } prevPost={{ slug: "older-post", title: "Older Post" }} /> );
+    render( <BlogPostView post={ post } prevPost={ { slug: "older-post", title: "Older Post" } } /> );
     expect( screen.queryByText( "← Newer" ) ).not.toBeInTheDocument();
   });
 
   it( "omits the older link when prevPost is null", () => {
-    render( <BlogPostView post={ post } nextPost={{ slug: "newer-post", title: "Newer Post" }} /> );
+    render( <BlogPostView post={ post } nextPost={ { slug: "newer-post", title: "Newer Post" } } /> );
     expect( screen.queryByText( "Older →" ) ).not.toBeInTheDocument();
   });
 });
