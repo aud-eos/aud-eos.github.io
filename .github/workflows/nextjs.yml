@@ -359,7 +359,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Wait for site to stabilize
-        run: sleep 30
+        run: sleep 5
       - name: Extract URLs for Lighthouse
         id: lighthouse_urls
         run: |
