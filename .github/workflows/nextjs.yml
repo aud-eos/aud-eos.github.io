@@ -45,12 +45,8 @@ jobs:
         run: corepack enable
       - name: Install dependencies
         run: yarn install --immutable
-      - name: Run unit tests with coverage
-        run: yarn test:coverage
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Run unit tests
+        run: yarn test
 
   # Build job
   build:
