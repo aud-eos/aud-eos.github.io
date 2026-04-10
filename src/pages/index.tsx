@@ -28,17 +28,18 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
 
   const isTagPage = Boolean( tagId );
   const isPaginated = page > 1;
+  const tagLabel = tagId ? tagId.charAt( 0 ).toUpperCase() + tagId.slice( 1 ) : "";
 
   const pageTitle = isTagPage && isPaginated
-    ? `${tagId} — Page ${page} | Audeos.com`
+    ? `${tagLabel} — Page ${page} | Audeos.com`
     : isTagPage
-      ? `${tagId} | Audeos.com`
+      ? `${tagLabel} | Audeos.com`
       : isPaginated
         ? `Blog — Page ${page} | ${META_TITLE}`
         : META_TITLE;
 
   const pageDescription = isTagPage
-    ? `Browse all ${tagId} posts on Audeos.com`
+    ? `Browse all ${tagLabel} posts on Audeos.com`
     : META_DESCRIPTION;
 
   const canonicalUrl = isTagPage && isPaginated
