@@ -8,7 +8,7 @@ import { sortTagsByName } from "@/utils/blogPostUtils";
 import { GetStaticPropsContext } from "next";
 import Pagination from "@/components/Home/Pagination";
 import { generateFeeds } from "@/lib/generateFeeds";
-import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
+import { META_DESCRIPTION, META_IMAGE, META_TITLE, POSTS_ANCHOR, SITE_URL } from "@/constants";
 import { capitalize } from "@/utils/stringUtils";
 import { OldSchoolButton } from "@/components/OldSchoolButton";
 
@@ -80,7 +80,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
                 .sort( sortTagsByName )
                 .map( tag => {
                   const className = tag.sys.id == tagId ? styles.isTagged : "";
-                  const href = tag.sys.id == tagId ? "/" : `/tags/${tag.sys.id}`;
+                  const href = tag.sys.id == tagId ? `/#${POSTS_ANCHOR}` : `/tags/${tag.sys.id}#${POSTS_ANCHOR}`;
                   return (
                     <div key={ tag.sys.id } className={ styles.navButtonWrapper }>
                       <OldSchoolButton
