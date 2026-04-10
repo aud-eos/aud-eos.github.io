@@ -13,6 +13,7 @@ import { Markdown } from "@/components/Markdown";
 import { Tags } from "@/components/Tags";
 import { SpotifyPlaylist, getPlaylist } from "@/utils/spotify/getPlaylist";
 import Playlist from "@/components/Playlist";
+import Gallery, { resolveGalleryItems } from "@/components/Gallery";
 
 
 const IMAGE_SIZE = 750;
@@ -124,6 +125,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
               </p>
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
+            <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
             { playlist && <Playlist playlist={ playlist } /> }
             { ( prevPost || nextPost ) && (
               <nav className={ styles.postNav }>
