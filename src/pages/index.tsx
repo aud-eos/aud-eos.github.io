@@ -9,6 +9,7 @@ import { GetStaticPropsContext } from "next";
 import Pagination from "@/components/Home/Pagination";
 import { generateFeeds } from "@/lib/generateFeeds";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
+import { capitalize } from "@/utils/stringUtils";
 import { OldSchoolButton } from "@/components/OldSchoolButton";
 
 export const PAGE_SIZE = 12;
@@ -28,7 +29,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
 
   const isTagPage = Boolean( tagId );
   const isPaginated = page > 1;
-  const tagLabel = tagId ? tagId.charAt( 0 ).toUpperCase() + tagId.slice( 1 ) : "";
+  const tagLabel = tagId ? capitalize( tagId ) : "";
 
   const pageTitle = isTagPage && isPaginated
     ? `${tagLabel} — Page ${page} | Audeos.com`
