@@ -13,7 +13,7 @@ import { Tags } from "@/components/Tags";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import searchStyles from "@/styles/Search.module.scss";
-import { META_DESCRIPTION, META_IMAGE, META_TITLE } from "@/constants";
+import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
 
 export interface SearchProps {
   posts: SearchPost[];
@@ -50,12 +50,19 @@ export default function Search({ posts }: SearchProps ) {
     <>
       <Head>
         <title>Search — Audeos.com</title>
+        <link rel="canonical" href={ `${SITE_URL}/search` } />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
         <meta name="description" content={ META_DESCRIPTION } key="desc" />
-        <meta property="og:title" content={ META_TITLE } />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={ `${SITE_URL}/search` } />
+        <meta property="og:title" content={ `Search | ${META_TITLE}` } />
         <meta property="og:description" content={ META_DESCRIPTION } />
         <meta property="og:image" content={ META_IMAGE } />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={ `Search | ${META_TITLE}` } />
+        <meta name="twitter:description" content={ META_DESCRIPTION } />
+        <meta name="twitter:image" content={ META_IMAGE } />
       </Head>
       <Layout>
         <main className={ styles.main }>

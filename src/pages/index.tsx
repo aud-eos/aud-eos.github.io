@@ -8,7 +8,8 @@ import { sortTagsByName } from "@/utils/blogPostUtils";
 import { GetStaticPropsContext } from "next";
 import Pagination from "@/components/Home/Pagination";
 import { generateFeeds } from "@/lib/generateFeeds";
-import { META_DESCRIPTION, META_IMAGE, META_TITLE } from "@/constants";
+import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
+import { capitalize } from "@/utils/stringUtils";
 import { OldSchoolButton } from "@/components/OldSchoolButton";
 
 export const PAGE_SIZE = 12;
@@ -26,19 +27,50 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
     .filter( post => tagId === null || post.metadata.tags
       .find( tag => tag.sys.id == tagId ) );
 
+  const isTagPage = Boolean( tagId );
+  const isPaginated = page > 1;
+  const tagLabel = tagId ? capitalize( tagId ) : "";
+
+  const pageTitle = isTagPage && isPaginated
+    ? `${tagLabel} — Page ${page} | Audeos.com`
+    : isTagPage
+      ? `${tagLabel} | Audeos.com`
+      : isPaginated
+        ? `Blog — Page ${page} | ${META_TITLE}`
+        : META_TITLE;
+
+  const pageDescription = isTagPage
+    ? `Browse all ${tagLabel} posts on Audeos.com`
+    : META_DESCRIPTION;
+
+  const canonicalUrl = isTagPage && isPaginated
+    ? `${SITE_URL}/tags/${tagId}/page/${page}`
+    : isTagPage
+      ? `${SITE_URL}/tags/${tagId}`
+      : isPaginated
+        ? `${SITE_URL}/page/${page}`
+        : SITE_URL;
+
   return (
     <>
       <Head>
-        <title>Audeos.com</title>
+        <title>{ pageTitle }</title>
+        <link rel="canonical" href={ canonicalUrl } />
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
         <link rel="alternate" type="application/atom+xml" href="/atom.xml" />
         <link rel="alternate" type="application/feed+json" href="/feed.json" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
-        <meta name="description" content={ META_DESCRIPTION } key="desc" />
-        <meta property="og:title" content={ META_TITLE } />
-        <meta property="og:description" content={ META_DESCRIPTION } />
+        <meta name="description" content={ pageDescription } key="desc" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={ canonicalUrl } />
+        <meta property="og:title" content={ pageTitle } />
+        <meta property="og:description" content={ pageDescription } />
         <meta property="og:image" content={ META_IMAGE } />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={ pageTitle } />
+        <meta name="twitter:description" content={ pageDescription } />
+        <meta name="twitter:image" content={ META_IMAGE } />
       </Head>
       <Layout isFullwidth>
         <main className={ styles.main }>
