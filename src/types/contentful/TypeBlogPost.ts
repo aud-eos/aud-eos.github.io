@@ -68,6 +68,12 @@ export interface TypeBlogPostFields {
      * @localized false
      */
     author: EntryFieldTypes.EntryLink<TypeAuthorSkeleton>;
+    /**
+     * Field type definition for field 'gallery' (Gallery)
+     * @name Gallery
+     * @localized false
+     */
+    gallery?: EntryFieldTypes.Array<EntryFieldTypes.AssetLink>;
 }
 
 /**
