@@ -6,6 +6,7 @@ import Picture from "@/components/Picture";
 import { Tags } from "@/components/Tags";
 import { PAGE_SIZE } from "@/pages";
 import { BlogPost } from "@/utils/contentfulUtils";
+import { POSTS_ANCHOR } from "@/constants";
 
 
 const IMAGE_HEIGHT = 350;
@@ -19,7 +20,7 @@ export interface BlogPostListProps {
 
 export default function BlogPostList({ posts, page, tagId }: BlogPostListProps ) {
   return (
-    <ul className={ styles.imageGallery } role="list">
+    <ul id={ POSTS_ANCHOR } className={ styles.imageGallery } role="list">
       {
         posts
           .sort( sortBlogPostsByDate )
