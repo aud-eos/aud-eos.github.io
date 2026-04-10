@@ -112,7 +112,7 @@ const Gallery: FC<GalleryProps> = ({ items }) => {
           </div>
         </div>
         <figcaption className={ styles.captionArea }>
-          { singleItem.description }
+          { singleItem.description || singleItem.title }
         </figcaption>
       </figure>
     );
@@ -166,7 +166,7 @@ const Gallery: FC<GalleryProps> = ({ items }) => {
 
       { /* Always rendered — min-height prevents layout shift when caption is empty */ }
       <figcaption className={ styles.captionArea }>
-        { activeItem.description }
+        { activeItem.description || activeItem.title }
       </figcaption>
 
       <div className={ styles.dots } aria-label="Gallery navigation" role="group">
