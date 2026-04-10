@@ -30,15 +30,15 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
   const isPaginated = page > 1;
 
   const pageTitle = isTagPage && isPaginated
-    ? `Posts tagged: ${tagId} — Page ${page} | Audeos.com`
+    ? `${tagId} — Page ${page} | Audeos.com`
     : isTagPage
-      ? `Posts tagged: ${tagId} | Audeos.com`
+      ? `${tagId} | Audeos.com`
       : isPaginated
         ? `Blog — Page ${page} | ${META_TITLE}`
         : META_TITLE;
 
   const pageDescription = isTagPage
-    ? `Browse all posts tagged "${tagId}" on Audeos.com`
+    ? `Browse all ${tagId} posts on Audeos.com`
     : META_DESCRIPTION;
 
   const canonicalUrl = isTagPage && isPaginated
