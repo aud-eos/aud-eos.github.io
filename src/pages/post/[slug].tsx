@@ -54,7 +54,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
     "author": {
       "@type": "Person",
       "name": authorName,
-      "url": SITE_URL,
+      "url": authorSlug ? `${SITE_URL}/author/${authorSlug}` : SITE_URL,
     },
     "publisher": {
       "@type": "Organization",

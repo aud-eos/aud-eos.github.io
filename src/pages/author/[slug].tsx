@@ -28,22 +28,35 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
   const metaDescription = bioPlainText.slice( 0, 160 ) || `Posts by ${authorName} on Audeos.com`;
   const metaTitle = `${authorName} | Audeos.com`;
   const canonicalUrl = `${SITE_URL}/author/${author.fields.slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": authorName,
+    "url": canonicalUrl,
+    ...( avatarSrc && { "image": avatarSrc }),
+  };
 
   return (
     <>
       <Head>
         <title>{ metaTitle }</title>
         <link rel="canonical" href={ canonicalUrl } />
+        <link rel="icon" href="/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={ metaDescription } key="desc" />
         <meta property="og:type" content="profile" />
         <meta property="og:url" content={ canonicalUrl } />
         <meta property="og:title" content={ metaTitle } />
         <meta property="og:description" content={ metaDescription } />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content={ avatarSrc ? "summary_large_image" : "summary" } />
         <meta name="twitter:title" content={ metaTitle } />
         <meta name="twitter:description" content={ metaDescription } />
         { avatarSrc && <meta property="og:image" content={ avatarSrc } /> }
         { avatarSrc && <meta name="twitter:image" content={ avatarSrc } /> }
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={ { __html: JSON.stringify( jsonLd ) } }
+        />
       </Head>
       <Layout>
         <main className={ styles.main }>
