@@ -101,13 +101,24 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
               </figure>
               <h1>{ post.fields.title }</h1>
               <address>
-                <Image
-                  src={ authorProfileImageSrc }
-                  alt={ authorName || "" }
-                  width="50"
-                  height="50"
-                  priority
-                />
+                { authorSlug
+                  ? <Link href={ `/author/${authorSlug}` }>
+                    <Image
+                      src={ authorProfileImageSrc }
+                      alt={ authorName || "" }
+                      width="50"
+                      height="50"
+                      priority
+                    />
+                  </Link>
+                  : <Image
+                    src={ authorProfileImageSrc }
+                    alt={ authorName || "" }
+                    width="50"
+                    height="50"
+                    priority
+                  />
+                }
                 <span>
                   Last updated: <DateTimeFormat timestamp={ post.sys.updatedAt } withDayName={ false } />
                   <br />
