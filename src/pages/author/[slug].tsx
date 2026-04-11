@@ -4,6 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Author, getAuthor, getAuthors } from "@/utils/contentfulUtils";
 import { SITE_URL } from "@/constants";
+import { stripMarkdown } from "@/utils/stringUtils";
 import styles from "@/styles/Author.module.scss";
 import { Layout } from "@/components/Layout/Layout";
 import { Markdown } from "@/components/Markdown";
@@ -19,13 +20,7 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
   const avatarUrl = author.fields.image?.fields.file?.url;
   const avatarSrc = avatarUrl ? `https:${avatarUrl}?w=${AVATAR_SIZE}` : null;
   const bio = author.fields.bio || "";
-  const bioPlainText = bio
-    .replace( /!\[.*?\]\(.*?\)/g, "" ) // remove images
-    .replace( /\[([^\]]+)\]\([^)]+\)/g, "$1" ) // links → link text
-    .replace( /[#*_`>~]/g, "" ) // remove markdown symbols
-    .replace( /\s+/g, " " ) // normalise whitespace
-    .trim();
-  const metaDescription = bioPlainText.slice( 0, 160 ) || `Posts by ${authorName} on Audeos.com`;
+  const metaDescription = stripMarkdown( bio ).slice( 0, 160 ) || `Posts by ${authorName} on Audeos.com`;
   const metaTitle = `${authorName} | Audeos.com`;
   const canonicalUrl = `${SITE_URL}/author/${author.fields.slug}`;
   const jsonLd = {
