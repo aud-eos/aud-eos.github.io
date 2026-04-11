@@ -19,7 +19,13 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
   const avatarUrl = author.fields.image?.fields.file?.url;
   const avatarSrc = avatarUrl ? `https:${avatarUrl}?w=${AVATAR_SIZE}` : null;
   const bio = author.fields.bio || "";
-  const metaDescription = bio.slice( 0, 160 ) || `Posts by ${authorName} on Audeos.com`;
+  const bioPlainText = bio
+    .replace( /!\[.*?\]\(.*?\)/g, "" ) // remove images
+    .replace( /\[([^\]]+)\]\([^)]+\)/g, "$1" ) // links → link text
+    .replace( /[#*_`>~]/g, "" ) // remove markdown symbols
+    .replace( /\s+/g, " " ) // normalise whitespace
+    .trim();
+  const metaDescription = bioPlainText.slice( 0, 160 ) || `Posts by ${authorName} on Audeos.com`;
   const metaTitle = `${authorName} | Audeos.com`;
   const canonicalUrl = `${SITE_URL}/author/${author.fields.slug}`;
 
@@ -36,6 +42,8 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={ metaTitle } />
         <meta name="twitter:description" content={ metaDescription } />
+        { avatarSrc && <meta property="og:image" content={ avatarSrc } /> }
+        { avatarSrc && <meta name="twitter:image" content={ avatarSrc } /> }
       </Head>
       <Layout>
         <main className={ styles.main }>
@@ -44,7 +52,7 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
               { avatarSrc && (
                 <Image
                   src={ avatarSrc }
-                  alt={ authorName }
+                  alt={ `Profile photo of ${authorName}` }
                   width={ AVATAR_SIZE }
                   height={ AVATAR_SIZE }
                   priority
