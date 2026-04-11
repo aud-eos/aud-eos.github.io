@@ -4,6 +4,7 @@ import fs from "fs";
 
 vi.mock( "fs", () => ({
   default: {
+    mkdirSync: vi.fn(),
     writeFileSync: vi.fn(),
   },
 }) );

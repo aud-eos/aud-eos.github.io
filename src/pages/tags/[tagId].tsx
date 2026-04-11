@@ -1,6 +1,5 @@
 import { getTags } from "@/utils/contentfulUtils";
-import Home from "@/pages";
-import { getStaticProps as getStaticPropsBase } from "@/pages";
+import Home, { getStaticProps as getStaticPropsBase } from "@/pages";
 
 
 export const getStaticProps = getStaticPropsBase;

@@ -20,6 +20,8 @@ The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are gener
 - Run `yarn format` after every file change to keep code conformant with the ESLint styleguide, then run `yarn test` to confirm nothing is broken.
 - Do not use single-character variable names — use descriptive names even for short-lived variables (e.g., `post` not `p`, `index` not `i`).
 - Never use `eslint-disable` or `eslint-disable-next-line` comments to suppress ESLint errors — fix the underlying code instead.
+- Enforce required environment variables at module scope using `import { strict as assert } from "assert"` followed by `assert( !!VAR )`. This ensures the build fails immediately if a variable is missing. See `src/utils/contentfulUtils.ts` for the canonical example. Never defer these checks to function-level.
+- Never use TypeScript `as` type assertions — they bypass the type checker and hide bugs. Use type guards, narrowing, or `satisfies` instead. See [why `as` is harmful](https://dev.to/alexanderop/the-problem-with-as-in-typescript-why-its-a-shortcut-we-should-avoid-2km4).
 
 ## Architecture
 

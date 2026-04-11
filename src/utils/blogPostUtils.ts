@@ -2,21 +2,25 @@ import { Tag } from "contentful";
 import { BlogPost } from "./contentfulUtils";
 
 /**
- * Sort function for an array of TypeBlogPost
- * @param postA
- * @param postB
- * @returns number
+ * Returns the effective publish date for a blog post,
+ * falling back to the Contentful createdAt timestamp.
+ */
+export const resolvePostDate = ( post: BlogPost ): string =>
+  post.fields.date || post.sys.createdAt;
+
+/**
+ * Sort function for an array of TypeBlogPost (newest first)
  */
 export const sortBlogPostsByDate = (
   postA: BlogPost,
   postB: BlogPost,
 ): number => {
-  const dateA = new Date( postA.fields.date || postA.sys.createdAt );
-  const dateB = new Date( postB.fields.date || postB.sys.createdAt );
+  const dateA = new Date( resolvePostDate( postA ) );
+  const dateB = new Date( resolvePostDate( postB ) );
   return dateB.getTime() - dateA.getTime();
 };
 
 
-export const sortTagsByName = ( tagA: Tag, tagB: Tag ) => {
+export const sortTagsById = ( tagA: Tag, tagB: Tag ) => {
   return tagA.sys.id.localeCompare( tagB.sys.id );
 };

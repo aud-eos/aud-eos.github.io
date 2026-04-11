@@ -1,11 +1,12 @@
 import { FC } from "react";
 import { GetStaticPropsContext } from "next";
-import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 
 import { BlogPost, getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
+import { resolvePostDate, sortBlogPostsByDate } from "@/utils/blogPostUtils";
 import { SITE_URL } from "@/constants";
+import { SeoHead } from "@/components/SeoHead";
 import styles from "@/styles/BlogPost.module.scss";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import { Layout } from "@/components/Layout/Layout";
@@ -41,7 +42,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
   const authorName = post.fields.author?.fields.name;
   const authorSlug = post.fields.author?.fields.slug;
   const canonicalUrl = `${SITE_URL}/post/${post.fields.slug}`;
-  const publishedTime = post.fields.date || post.sys.createdAt;
+  const publishedTime = resolvePostDate( post );
   const modifiedTime = post.sys.updatedAt;
   const jsonLd = {
     "@context": "https://schema.org",
@@ -65,26 +66,20 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
   };
   return (
     <>
-      <Head>
-        <title>{ metaTitle }</title>
-        <link rel="canonical" href={ canonicalUrl } />
-        <meta name="description" content={ post.fields.description } key="desc" />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={ canonicalUrl } />
-        <meta property="og:title" content={ metaTitle } />
-        <meta property="og:description" content={ post.fields.description } />
-        <meta property="og:image" content={ metaImage } />
+      <SeoHead
+        title={ metaTitle }
+        canonicalUrl={ canonicalUrl }
+        description={ post.fields.description ?? "" }
+        ogType="article"
+        ogImage={ metaImage }
+      >
         <meta property="article:published_time" content={ publishedTime } />
         <meta property="article:modified_time" content={ modifiedTime } />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={ metaTitle } />
-        <meta name="twitter:description" content={ post.fields.description } />
-        <meta name="twitter:image" content={ metaImage } />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={ { __html: JSON.stringify( jsonLd ) } }
         />
-      </Head>
+      </SeoHead>
       <Layout>
         <main className={ styles.main }>
           <article>
@@ -131,7 +126,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
                           ? <Link rel="author" href={ `/author/${authorSlug}` }>{ authorName }</Link>
                           : authorName
                         }
-                        { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
+                        { ` on ` } <DateTimeFormat timestamp={ resolvePostDate( post ) } />
                       </b>
                   }
                 </span>
@@ -171,46 +166,48 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
 export async function getStaticProps( context: GetStaticPropsContext ) {
   const slug = context.params?.slug;
   if( typeof slug !== "string" ) {
-    return { props: {} };
-  } else {
-    const [ post, allPosts ] = await Promise.all( [
-      getBlogPost( slug ),
-      getBlogPosts(),
-    ] );
-    const playlist = post?.fields.spotifyPlaylistId
-      ? await getPlaylist( post.fields.spotifyPlaylistId ) : null;
-
-    const sortedPosts = allPosts.items
-      .slice()
-      .sort( ( postA, postB ) => {
-        const dateA = new Date( postA.fields.date || postA.sys.createdAt ).getTime();
-        const dateB = new Date( postB.fields.date || postB.sys.createdAt ).getTime();
-        return dateA - dateB;
-      });
-
-    const currentIndex = sortedPosts.findIndex(
-      sortedPost => sortedPost.fields.slug === slug,
-    );
-
-    const prevPostEntry = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
-    const nextPostEntry = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
-
-    const prevPost: PostNavLink | null = prevPostEntry
-      ? { slug: prevPostEntry.fields.slug as string, title: prevPostEntry.fields.title as string }
-      : null;
-    const nextPost: PostNavLink | null = nextPostEntry
-      ? { slug: nextPostEntry.fields.slug as string, title: nextPostEntry.fields.title as string }
-      : null;
-
-    return {
-      props: {
-        post,
-        playlist,
-        prevPost,
-        nextPost,
-      },
-    };
+    return { notFound: true };
   }
+
+  const [ post, allPosts ] = await Promise.all( [
+    getBlogPost( slug ),
+    getBlogPosts(),
+  ] );
+
+  if( !post ) {
+    return { notFound: true };
+  }
+
+  const playlist = post.fields.spotifyPlaylistId
+    ? await getPlaylist( post.fields.spotifyPlaylistId ) : null;
+
+  const sortedPosts = allPosts.items
+    .slice()
+    .sort( sortBlogPostsByDate )
+    .reverse();
+
+  const currentIndex = sortedPosts.findIndex(
+    sortedPost => sortedPost.fields.slug === slug,
+  );
+
+  const prevPostEntry = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+  const nextPostEntry = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+
+  const prevPost: PostNavLink | null = prevPostEntry
+    ? { slug: prevPostEntry.fields.slug, title: prevPostEntry.fields.title }
+    : null;
+  const nextPost: PostNavLink | null = nextPostEntry
+    ? { slug: nextPostEntry.fields.slug, title: nextPostEntry.fields.title }
+    : null;
+
+  return {
+    props: {
+      post,
+      playlist,
+      prevPost,
+      nextPost,
+    },
+  };
 }
 
 export async function getStaticPaths() {

@@ -1,13 +1,7 @@
-"use client";
-
-import { useEffect, useSyncExternalStore, useState } from "react";
+import { useCallback, useEffect, useSyncExternalStore, useState } from "react";
 import styles from "@/styles/CookieConsent.module.scss";
-import { VT323 } from "next/font/google";
 import { COOKIE_CONSENT_KEY } from "@/constants";
-
-const fontVT323 = VT323({
-  weight: "400",
-});
+import { fontVT323 } from "@/styles/fonts";
 
 export function resetCookieConsent() {
   localStorage.removeItem( COOKIE_CONSENT_KEY );
@@ -33,7 +27,7 @@ export default function CookieConsent() {
       window.removeEventListener( "cookie-consent-reset", handler );
   }, [] );
 
-  const accept = () => {
+  const accept = useCallback( () => {
     localStorage.setItem( COOKIE_CONSENT_KEY, "accepted" );
     if( window.gtag ) {
       window.gtag( "consent", "update", {
@@ -42,9 +36,9 @@ export default function CookieConsent() {
     }
     window.dispatchEvent( new Event( "cookie-consent-granted" ) );
     setIsOpen( false );
-  };
+  }, [] );
 
-  const reject = () => {
+  const reject = useCallback( () => {
     localStorage.setItem( COOKIE_CONSENT_KEY, "rejected" );
     if( window.gtag ) {
       window.gtag( "consent", "update", {
@@ -52,7 +46,7 @@ export default function CookieConsent() {
       });
     }
     setIsOpen( false );
-  };
+  }, [] );
 
   /* keyboard shortcuts */
   useEffect( () => {
@@ -65,7 +59,7 @@ export default function CookieConsent() {
 
     window.addEventListener( "keydown", handler );
     return () => window.removeEventListener( "keydown", handler );
-  }, [ isVisible ] );
+  }, [ isVisible, accept, reject ] );
 
   if( !isVisible ) return null;
 

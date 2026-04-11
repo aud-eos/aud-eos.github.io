@@ -2,7 +2,7 @@ import { COOKIE_CONSENT_KEY, GOOGLE_ANALYTICS_ID } from "@/constants";
 import Script from "next/script";
 import { FC } from "react";
 
-export const GoogleAnalyics: FC = () => {
+export const GoogleAnalytics: FC = () => {
   return (
     <>
       <Script

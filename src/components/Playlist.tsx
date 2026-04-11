@@ -42,7 +42,7 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ) {
             .map( track => {
 
               const albumCover = track.track.album.images
-                .find( image => image.width == 300 );
+                .find( image => image.width === 300 );
 
               const artists = track.track.artists
                 .map( artist => artist.name )

@@ -1,10 +1,10 @@
-import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import Fuse from "fuse.js";
 
 import { getBlogPosts } from "@/utils/contentfulUtils";
+import { resolvePostDate } from "@/utils/blogPostUtils";
 import { getPlaylist } from "@/utils/spotify/getPlaylist";
 import { generateSearchIndex } from "@/lib/generateSearchIndex";
 import { SearchPost } from "@/lib/searchTypes";
@@ -14,6 +14,7 @@ import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import searchStyles from "@/styles/Search.module.scss";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
+import { SeoHead } from "@/components/SeoHead";
 import { stripMarkdown } from "@/utils/stringUtils";
 
 export interface SearchProps {
@@ -49,22 +50,12 @@ export default function Search({ posts }: SearchProps ) {
 
   return (
     <>
-      <Head>
-        <title>Search — Audeos.com</title>
-        <link rel="canonical" href={ `${SITE_URL}/search` } />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
-        <meta name="description" content={ META_DESCRIPTION } key="desc" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={ `${SITE_URL}/search` } />
-        <meta property="og:title" content={ `Search | ${META_TITLE}` } />
-        <meta property="og:description" content={ META_DESCRIPTION } />
-        <meta property="og:image" content={ META_IMAGE } />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={ `Search | ${META_TITLE}` } />
-        <meta name="twitter:description" content={ META_DESCRIPTION } />
-        <meta name="twitter:image" content={ META_IMAGE } />
-      </Head>
+      <SeoHead
+        title={ `Search | ${META_TITLE}` }
+        canonicalUrl={ `${SITE_URL}/search` }
+        description={ META_DESCRIPTION }
+        ogImage={ META_IMAGE }
+      />
       <Layout>
         <main className={ styles.main }>
           <section className={ searchStyles.searchResults }>
@@ -128,7 +119,7 @@ export async function getStaticProps() {
         author: post.fields.author?.fields?.name ?? "",
         spotifyText,
         tags: post.metadata.tags.map( tag => tag.sys.id ),
-        date: post.fields.date ?? post.sys.createdAt,
+        date: resolvePostDate( post ),
         imageUrl: post.fields.image?.fields.file?.url ?? "",
       };
     }),

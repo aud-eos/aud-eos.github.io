@@ -60,7 +60,7 @@ export default function DateTimeFormat({
   const timeString = `${ doubleDigit( twelveHourFormat ) }:${ doubleDigit( minutes ) } ${ ampm }`;
 
   return (
-    <time>
+    <time dateTime={ timestamp }>
       { withDayName && `${dayName},` } { monthName } { day }, { year } { withTime && timeString }
     </time>
   );

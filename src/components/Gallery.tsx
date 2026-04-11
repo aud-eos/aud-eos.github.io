@@ -142,7 +142,7 @@ const Gallery: FC<GalleryProps> = ({ items }) => {
         >
           { items.map( ( item, index ) => (
             <div
-              key={ index }
+              key={ item.url }
               className={ styles.slideItem }
               role="group"
               aria-roledescription="slide"
@@ -172,7 +172,7 @@ const Gallery: FC<GalleryProps> = ({ items }) => {
       <div className={ styles.dots } aria-label="Gallery navigation" role="group">
         { items.map( ( item, dotIndex ) => (
           <button
-            key={ dotIndex }
+            key={ item.url }
             className={ `${ styles.dot } ${ dotIndex === activeIndex ? styles.dotActive : "" }` }
             onClick={ () => setActiveIndex( dotIndex ) }
             aria-label={ `${ item.type === "video" ? "Video" : "Image" } ${ dotIndex + 1 }${ item.description ? `: ${ item.description }` : "" }` }

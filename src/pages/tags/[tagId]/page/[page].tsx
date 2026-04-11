@@ -1,5 +1,6 @@
 import { getBlogPosts, getTags } from "@/utils/contentfulUtils";
-import Home, { PAGE_SIZE } from "@/pages";
+import Home from "@/pages";
+import { PAGE_SIZE } from "@/constants";
 import { getStaticProps as getStaticPropsBase } from "@/pages";
 
 
@@ -15,7 +16,7 @@ export async function getStaticPaths() {
     const tagId = tag.sys.id;
     const filteredPosts = posts.items
       .filter( post => post.metadata.tags
-        .find( __tag => __tag.sys.id == tagId ) );
+        .find( postTag => postTag.sys.id === tagId ) );
     const numPages = Math.ceil( filteredPosts.length / PAGE_SIZE );
     for( let page = 2; page <= numPages; page++ ) {
       paths.push({

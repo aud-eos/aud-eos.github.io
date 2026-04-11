@@ -1,4 +1,4 @@
-import { PAGE_SIZE } from "@/pages";
+import { PAGE_SIZE } from "@/constants";
 import Link from "next/link";
 import styles from "@/styles/Home.module.scss";
 import { BlogPost } from "@/utils/contentfulUtils";
@@ -39,7 +39,7 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ) {
           .map( pageNumber => {
             const isCurrentPage: boolean = pageNumber === page;
             const href: string = getPaginatorUrl( pageNumber, tagId );
-            const className: string|undefined = isCurrentPage ? styles.isTagged : undefined;
+            const className: string|undefined = isCurrentPage ? styles.isCurrentPage : undefined;
             return (
               <Link key={ pageNumber }
                 href={ href }
