@@ -2426,7 +2426,7 @@ contentful-management@^11.39.0, contentful-management@^11.48.1, contentful-manag
     fast-copy "^3.0.0"
     globals "^15.15.0"
 
-contentful-management@^12.0.0:
+contentful-management@^12.0.0, contentful-management@^12.3.0:
   version "12.3.0"
   resolved "https://registry.yarnpkg.com/contentful-management/-/contentful-management-12.3.0.tgz#c8ee716b6175a9995d1d6f17a78ea364456dce92"
   integrity sha512-5R66RFL8cWFhLeqU4QilgFBet5+6STNHW0loTtK8kZdVTlQ6v2SCMKGZKlk9LZZEVF6GXS8EVqRRoqqkoY5WNA==

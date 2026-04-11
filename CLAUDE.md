@@ -22,6 +22,15 @@ make upgrade         # yarn outdated + upgrade to latest minor/patch (~)
 make upgrade-latest  # yarn outdated + upgrade to latest including majors
 ```
 
+Contentful asset management (Makefile):
+
+```bash
+make upload-images DIR="/path/to/dir"         # Upload all images in a directory to Contentful
+make upload-images DIR="/path/to/image.jpg"   # Upload a single image to Contentful
+```
+
+Outputs a JSON array of `{ filename, assetId, url }` to stdout. Reads credentials from `.env` automatically. Always rename images to descriptive filenames before uploading (see Blog Post Workflow below).
+
 The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are generated at build time into `public/`.
 
 ## Code style
