@@ -8,7 +8,7 @@ This site is automatically deployed to **GitHub Pages** using GitHub Actions.
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.audeos.com)](https://www.audeos.com)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
 ![Node](https://img.shields.io/badge/Node-v25.8.1-339933?logo=node.js&logoColor=white)
 ![Tested with Vitest](https://img.shields.io/badge/tested%20with-vitest-6E9F18?logo=vitest&logoColor=white)
 
