@@ -113,7 +113,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
                   {
                     !!authorName &&
                       <b>
-                        By <Link rel="author" href="/">{ authorName }</Link>
+                        By <Link rel="author" href={ `/author/${post.fields.author?.fields.slug}` }>{ authorName }</Link>
                         { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
                       </b>
                   }
