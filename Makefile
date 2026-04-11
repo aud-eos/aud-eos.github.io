@@ -1,17 +1,25 @@
 -include .env
 
+# Install dependencies
 install:
 	@yarn
 
+# Build for production — postbuild hook runs next-sitemap automatically
 build:
 	@yarn build
 
+# Start the Next.js development server with hot reload
 dev:
 	@yarn dev
 
-# Generate TS declarations for content types
+# Generate TypeScript declarations from Contentful content models.
+# Two-step process:
+#   1. Export the full Contentful space to contentful/export.json (gitignored)
+#   2. Run cf-content-types-generator to produce typed interfaces, JSDoc,
+#      type guards (-g), and response variants (-r) in src/types/contentful/
+# Always use this target — never run cf-content-types-generator directly,
+# as it skips the export step and produces a stripped-down format.
 # https://github.com/contentful-userland/cf-content-types-generator#usage
-# https://www.seancdavis.com/posts/generating-workable-typescript-types-from-contentful-content/
 types:
 	@yarn contentful space export \
 		--config contentful/export-config.json \
@@ -27,27 +35,33 @@ types:
 		-o src/types/contentful
 	$(MAKE) format
 
+# Run ESLint + TypeScript typecheck
 lint:
 	@yarn lint
 
+# Run ESLint with auto-fix
 format:
 	@yarn format
 
-# The caret (^) in a package.json file allows updates to minor and patch
-# versions, while the tilde (~) restricts updates to only patch versions.
-# Use caret for packages where you want new features and bug fixes, and tilde
-# for maximum stability in critical systems.
+# Upgrade dependencies to their latest minor/patch versions, respecting the
+# tilde (~) ranges in package.json. Safe for routine maintenance — will not
+# introduce breaking major-version changes.
 upgrade:
-	@yarn outdated
+	-@yarn outdated
 	@yarn upgrade --tilde
 
+# Upgrade dependencies to their absolute latest versions, ignoring semver
+# ranges in package.json entirely. Use when intentionally adopting major
+# version bumps. Review the `yarn outdated` output before and after carefully.
 upgrade-latest:
-	@yarn outdated
-	@yarn upgrade --latest --tilde
-	@yarn outdated
+	-@yarn outdated
+	@yarn upgrade --latest
+	-@yarn outdated
 
+# Verify package.json dependency integrity
 check:
 	@yarn check
 
+# TypeScript-only type check (no ESLint)
 typecheck:
 	@yarn typecheck
