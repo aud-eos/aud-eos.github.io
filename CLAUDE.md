@@ -6,11 +6,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 yarn dev          # Start development server
-yarn build        # Build + generate sitemap (next build --turbo && next-sitemap)
-yarn export       # Static export (runs after build)
+yarn build        # Build for production (postbuild runs next-sitemap automatically)
+yarn export       # Static export
+yarn test         # Run tests (Vitest)
+yarn test:watch   # Vitest in watch mode
 yarn lint         # ESLint + TypeScript typecheck
 yarn typecheck    # TypeScript only
 yarn format       # ESLint with auto-fix
+```
+
+Dependency management (Makefile):
+
+```bash
+make upgrade         # yarn outdated + upgrade to latest minor/patch (~)
+make upgrade-latest  # yarn outdated + upgrade to latest including majors
 ```
 
 The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are generated at build time into `public/`.
@@ -44,6 +53,7 @@ The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are gener
 | `/post/[slug]` | `pages/post/[slug].tsx` | Individual blog post |
 | `/page/[page]` | `pages/page/[page].tsx` | Pagination |
 | `/tags/[tagId]` | `pages/tags/[tagId].tsx` | Tag-filtered listing |
+| `/tags/[tagId]/page/[page]` | `pages/tags/[tagId]/page/[page].tsx` | Paginated tag listing |
 | `/author/[slug]` | `pages/author/[slug].tsx` | Author profile page |
 
 ### Styling
