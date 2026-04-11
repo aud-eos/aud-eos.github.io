@@ -11,6 +11,7 @@ import { generateFeeds } from "@/lib/generateFeeds";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE, POSTS_ANCHOR, SITE_URL } from "@/constants";
 import { capitalize } from "@/utils/stringUtils";
 import { OldSchoolButton } from "@/components/OldSchoolButton";
+import { useEffect } from "react";
 
 export const PAGE_SIZE = 12;
 
@@ -29,6 +30,14 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
 
   const isTagPage = Boolean( tagId );
   const isPaginated = page > 1;
+
+  useEffect( () => {
+    if( !tagId ) return;
+    const isMobile = window.innerWidth <= 768;
+    if( !isMobile ) return;
+    const postsElement = document.getElementById( POSTS_ANCHOR );
+    postsElement?.scrollIntoView({ behavior: "smooth" });
+  }, [ tagId ] );
   const tagLabel = tagId ? capitalize( tagId ) : "";
 
   const pageTitle = isTagPage && isPaginated
@@ -80,7 +89,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
                 .sort( sortTagsByName )
                 .map( tag => {
                   const className = tag.sys.id == tagId ? styles.isTagged : "";
-                  const href = tag.sys.id == tagId ? `/#${POSTS_ANCHOR}` : `/tags/${tag.sys.id}#${POSTS_ANCHOR}`;
+                  const href = tag.sys.id == tagId ? "/" : `/tags/${tag.sys.id}`;
                   return (
                     <div key={ tag.sys.id } className={ styles.navButtonWrapper }>
                       <OldSchoolButton
