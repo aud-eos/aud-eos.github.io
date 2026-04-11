@@ -74,7 +74,12 @@
       > address {
         display: flex;
         align-items: center;
-        > img {
+        > a {
+          display: block;
+          line-height: 0;
+        }
+        > img,
+        > a > img {
           vertical-align: middle;
           border-radius: 100%;
           border: .2rem solid gold;

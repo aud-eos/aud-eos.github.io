@@ -27,7 +27,7 @@ The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are gener
 
 ### Data flow
 
-- `src/utils/contentfulUtils.ts` wraps the Contentful SDK — all CMS access goes through `getBlogPosts()`, `getBlogPost(slug)`, and `getTags()`.
+- `src/utils/contentfulUtils.ts` wraps the Contentful SDK — all CMS access goes through `getBlogPosts()`, `getBlogPost(slug)`, `getTags()`, `getAuthors()`, and `getAuthor(slug)`.
 - Pages use `getStaticProps` to fetch content at build time. No client-side data fetching from Contentful.
 - Search (`src/pages/search.tsx`) is fully client-side using Fuse.js — all posts are embedded in the page as props and searched in-browser.
 - Spotify integration (`src/utils/spotify/`) fetches data at build time and is embedded statically.
@@ -42,6 +42,7 @@ The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are gener
 | `/post/[slug]` | `pages/post/[slug].tsx` | Individual blog post |
 | `/page/[page]` | `pages/page/[page].tsx` | Pagination |
 | `/tags/[tagId]` | `pages/tags/[tagId].tsx` | Tag-filtered listing |
+| `/author/[slug]` | `pages/author/[slug].tsx` | Author profile page |
 
 ### Styling
 
@@ -55,8 +56,9 @@ SCSS modules in `src/styles/`. Each page/component has a corresponding `.module.
 
 TypeScript types for Contentful content models live in `src/types/contentful/`. Regenerate with:
 ```bash
-yarn cf-content-types-generator --spaceId $CONTENTFUL_SPACE_ID --token $CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN --out src/types/contentful
+make types
 ```
+This first exports the full space to `contentful/export.json` (intermediate file, gitignored), then generates types with JSDoc, type guards, and response variants. Do not use `yarn cf-content-types-generator` directly — it skips the export step and produces a stripped-down format.
 
 ## Environment variables
 

@@ -22,10 +22,10 @@ types:
 		-s $(CONTENTFUL_SPACE_ID) \
 		-t $(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN) \
 		-d \
-		-X \
 		-g \
 		-r \
 		-o src/types/contentful
+	$(MAKE) format
 
 lint:
 	@yarn lint

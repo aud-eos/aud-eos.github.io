@@ -14,6 +14,7 @@ import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import searchStyles from "@/styles/Search.module.scss";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
+import { stripMarkdown } from "@/utils/stringUtils";
 
 export interface SearchProps {
   posts: SearchPost[];
@@ -99,17 +100,6 @@ export default function Search({ posts }: SearchProps ) {
   );
 }
 
-function stripMarkdown( text: string ): string {
-  return text
-    .replace( /```[\s\S]*?```/g, "" ) // fenced code blocks
-    .replace( /`[^`]*`/g, "" ) // inline code
-    .replace( /#{1,6}\s/g, "" ) // headings
-    .replace( /\*\*|__|\*|_/g, "" ) // bold / italic markers
-    .replace( /\[([^\]]+)\]\([^)]+\)/g, "$1" ) // links → link text only
-    .replace( /^\s*[-*+>]\s/gm, "" ) // list items and blockquotes
-    .replace( /\n{2,}/g, " " ) // collapse extra newlines
-    .trim();
-}
 
 function buildSpotifyText( playlist: Awaited<ReturnType<typeof getPlaylist>> ): string {
   const trackNames = playlist.tracks.items.map( item => item.track.name );

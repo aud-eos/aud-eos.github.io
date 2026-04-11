@@ -82,7 +82,7 @@ export interface TypeBlogPostFields {
  * @type {TypeBlogPostSkeleton}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 17
+ * @version 21
  */
 export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPost">;
 /**
@@ -91,12 +91,13 @@ export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPo
  * @type {TypeBlogPost}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 17
+ * @version 21
  */
 export type TypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode = LocaleCode> = Entry<TypeBlogPostSkeleton, Modifiers, Locales>;
 
-export function isTypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode>( entry: Entry<EntrySkeletonType, Modifiers, Locales> ): entry is TypeBlogPost<Modifiers, Locales> {
-  return entry.sys.contentType.sys.id === "blogPost";
+export function isTypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode>( entry: unknown ): entry is TypeBlogPost<Modifiers, Locales> {
+  const candidate = entry as { sys?: { contentType?: { sys?: { id?: string } } } };
+  return candidate.sys?.contentType?.sys?.id === "blogPost";
 }
 
 export type TypeBlogPostWithoutLinkResolutionResponse = TypeBlogPost<"WITHOUT_LINK_RESOLUTION">;
