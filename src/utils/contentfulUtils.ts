@@ -42,7 +42,7 @@ export const getBlogPost = async (
     content_type: CONTENT_TYPE_BLOG_POST,
     "fields.slug": slug,
   });
-  return response.items.pop();
+  return response.items[0];
 };
 
 
@@ -63,5 +63,5 @@ export const getAuthor = async ( slug: EntryFields.Text ): Promise<Author | unde
     content_type: CONTENT_TYPE_AUTHOR,
     "fields.slug": slug,
   });
-  return response.items.pop();
+  return response.items[0];
 };

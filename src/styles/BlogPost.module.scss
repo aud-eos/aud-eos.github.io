@@ -74,6 +74,10 @@
       > address {
         display: flex;
         align-items: center;
+        > a {
+          display: block;
+          line-height: 0;
+        }
         > img,
         > a > img {
           vertical-align: middle;

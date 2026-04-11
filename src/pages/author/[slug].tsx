@@ -3,7 +3,7 @@ import { GetStaticPropsContext } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { Author, getAuthor, getAuthors } from "@/utils/contentfulUtils";
-import { SITE_URL } from "@/constants";
+import { META_TITLE, SITE_URL } from "@/constants";
 import { stripMarkdown } from "@/utils/stringUtils";
 import styles from "@/styles/Author.module.scss";
 import { Layout } from "@/components/Layout/Layout";
@@ -22,8 +22,8 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
   const avatarSrc = avatarUrl ? `https:${avatarUrl}?w=${AVATAR_SIZE}` : null;
   const ogImageSrc = avatarUrl ? `https:${avatarUrl}?w=${OG_IMAGE_SIZE}` : null;
   const bio = author.fields.bio || "";
-  const metaDescription = stripMarkdown( bio ).slice( 0, 160 ) || `Posts by ${authorName} on Audeos.com`;
-  const metaTitle = `${authorName} | Audeos.com`;
+  const metaDescription = stripMarkdown( bio ).slice( 0, 160 ) || `Posts by ${authorName} on ${META_TITLE}`;
+  const metaTitle = `${authorName} | ${META_TITLE}`;
   const canonicalUrl = `${SITE_URL}/author/${author.fields.slug}`;
   const jsonLd = {
     "@context": "https://schema.org",
@@ -49,6 +49,7 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
         <meta name="twitter:title" content={ metaTitle } />
         <meta name="twitter:description" content={ metaDescription } />
         { ogImageSrc && <meta property="og:image" content={ ogImageSrc } /> }
+        { ogImageSrc && <meta property="og:image:alt" content={ `Profile photo of ${authorName}` } /> }
         { ogImageSrc && <meta name="twitter:image" content={ ogImageSrc } /> }
         <script
           type="application/ld+json"
@@ -95,7 +96,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
 export async function getStaticPaths() {
   const authors = await getAuthors();
   const paths = authors.items.map( author => ({
-    params: { slug: author.fields.slug as string },
+    params: { slug: author.fields.slug },
   }) );
   return {
     paths,
