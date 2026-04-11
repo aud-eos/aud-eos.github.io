@@ -38,6 +38,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
   const metaImageDesc = post.fields.image?.fields.description || "";
   const authorProfileImageSrc = `https:${post.fields.author?.fields.image?.fields.file?.url}?w=50`;
   const authorName = post.fields.author?.fields.name;
+  const authorSlug = post.fields.author?.fields.slug;
   const canonicalUrl = `${SITE_URL}/post/${post.fields.slug}`;
   const publishedTime = post.fields.date || post.sys.createdAt;
   const modifiedTime = post.sys.updatedAt;
@@ -111,9 +112,9 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
                   Last updated: <DateTimeFormat timestamp={ post.sys.updatedAt } withDayName={ false } />
                   <br />
                   {
-                    !!authorName &&
+                    !!authorName && !!authorSlug &&
                       <b>
-                        By <Link rel="author" href={ `/author/${post.fields.author?.fields.slug}` }>{ authorName }</Link>
+                        By <Link rel="author" href={ `/author/${authorSlug}` }>{ authorName }</Link>
                         { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
                       </b>
                   }
