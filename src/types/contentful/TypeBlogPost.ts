@@ -95,9 +95,9 @@ export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPo
  */
 export type TypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode = LocaleCode> = Entry<TypeBlogPostSkeleton, Modifiers, Locales>;
 
-export function isTypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode>(entry: unknown): entry is TypeBlogPost<Modifiers, Locales> {
-    const candidate = entry as { sys?: { contentType?: { sys?: { id?: string } } } };
-    return candidate.sys?.contentType?.sys?.id === 'blogPost'
+export function isTypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode>( entry: unknown ): entry is TypeBlogPost<Modifiers, Locales> {
+  const candidate = entry as { sys?: { contentType?: { sys?: { id?: string } } } };
+  return candidate.sys?.contentType?.sys?.id === "blogPost";
 }
 
 export type TypeBlogPostWithoutLinkResolutionResponse = TypeBlogPost<"WITHOUT_LINK_RESOLUTION">;

@@ -58,9 +58,9 @@ export type TypeAuthorSkeleton = EntrySkeletonType<TypeAuthorFields, "author">;
  */
 export type TypeAuthor<Modifiers extends ChainModifiers, Locales extends LocaleCode = LocaleCode> = Entry<TypeAuthorSkeleton, Modifiers, Locales>;
 
-export function isTypeAuthor<Modifiers extends ChainModifiers, Locales extends LocaleCode>(entry: unknown): entry is TypeAuthor<Modifiers, Locales> {
-    const candidate = entry as { sys?: { contentType?: { sys?: { id?: string } } } };
-    return candidate.sys?.contentType?.sys?.id === 'author'
+export function isTypeAuthor<Modifiers extends ChainModifiers, Locales extends LocaleCode>( entry: unknown ): entry is TypeAuthor<Modifiers, Locales> {
+  const candidate = entry as { sys?: { contentType?: { sys?: { id?: string } } } };
+  return candidate.sys?.contentType?.sys?.id === "author";
 }
 
 export type TypeAuthorWithoutLinkResolutionResponse = TypeAuthor<"WITHOUT_LINK_RESOLUTION">;

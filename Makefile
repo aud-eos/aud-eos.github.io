@@ -25,6 +25,7 @@ types:
 		-g \
 		-r \
 		-o src/types/contentful
+	$(MAKE) format
 
 lint:
 	@yarn lint

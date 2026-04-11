@@ -36,7 +36,8 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${IMAGE_SIZE}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
-  const authorProfileImageSrc = `https:${post.fields.author?.fields.image?.fields.file?.url}?w=50`;
+  const authorImageUrl = post.fields.author?.fields.image?.fields.file?.url;
+  const authorProfileImageSrc = authorImageUrl ? `https:${authorImageUrl}?w=50` : null;
   const authorName = post.fields.author?.fields.name;
   const authorSlug = post.fields.author?.fields.slug;
   const canonicalUrl = `${SITE_URL}/post/${post.fields.slug}`;
@@ -101,31 +102,35 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
               </figure>
               <h1>{ post.fields.title }</h1>
               <address>
-                { authorSlug
-                  ? <Link href={ `/author/${authorSlug}` }>
-                    <Image
+                { authorProfileImageSrc && (
+                  authorSlug
+                    ? <Link href={ `/author/${authorSlug}` }>
+                      <Image
+                        src={ authorProfileImageSrc }
+                        alt={ authorName || "" }
+                        width="50"
+                        height="50"
+                        priority
+                      />
+                    </Link>
+                    : <Image
                       src={ authorProfileImageSrc }
                       alt={ authorName || "" }
                       width="50"
                       height="50"
                       priority
                     />
-                  </Link>
-                  : <Image
-                    src={ authorProfileImageSrc }
-                    alt={ authorName || "" }
-                    width="50"
-                    height="50"
-                    priority
-                  />
-                }
+                ) }
                 <span>
                   Last updated: <DateTimeFormat timestamp={ post.sys.updatedAt } withDayName={ false } />
                   <br />
                   {
-                    !!authorName && !!authorSlug &&
+                    !!authorName &&
                       <b>
-                        By <Link rel="author" href={ `/author/${authorSlug}` }>{ authorName }</Link>
+                        By { authorSlug
+                          ? <Link rel="author" href={ `/author/${authorSlug}` }>{ authorName }</Link>
+                          : authorName
+                        }
                         { ` on ` } <DateTimeFormat timestamp={ post.fields.date || post.sys.createdAt } />
                       </b>
                   }
