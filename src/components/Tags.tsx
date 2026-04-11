@@ -3,7 +3,6 @@ import { FC } from "react";
 
 import styles from "@/styles/Tags.module.scss";
 import Link from "next/link";
-import { POSTS_ANCHOR } from "@/constants";
 
 
 export interface TagProps {
@@ -13,7 +12,7 @@ export interface TagProps {
 
 const TagComponent: FC<TagProps> = ({ tagName, isTagged }) => {
   const className = isTagged ? styles.isTagged : undefined;
-  const href = isTagged ? `/#${POSTS_ANCHOR}` : `/tags/${tagName}#${POSTS_ANCHOR}`;
+  const href = isTagged ? "/" : `/tags/${tagName}`;
   return (
     <Link href={ href }>
       <code className={ className }>#{ tagName }</code>
