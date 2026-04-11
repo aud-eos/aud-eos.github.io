@@ -58,10 +58,10 @@ export const getAuthors = async (): Promise<AuthorCollection> => {
   return response;
 };
 
-export const getAuthor = async ( slug: string ): Promise<Author | undefined> => {
+export const getAuthor = async ( slug: EntryFields.Text ): Promise<Author | undefined> => {
   const response = await client.withoutUnresolvableLinks.getEntries<TypeAuthorSkeleton>({
     content_type: CONTENT_TYPE_AUTHOR,
     "fields.slug": slug,
   });
-  return response.items[0];
+  return response.items.pop();
 };
