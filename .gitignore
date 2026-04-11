@@ -19,6 +19,7 @@
 # misc
 .DS_Store
 .superpowers/
+contentful/export.json
 *.pem
 
 # debug
