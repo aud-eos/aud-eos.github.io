@@ -10,6 +10,7 @@ import { Layout } from "@/components/Layout/Layout";
 import { Markdown } from "@/components/Markdown";
 
 const AVATAR_SIZE = 80;
+const OG_IMAGE_SIZE = 1200;
 
 export interface AuthorPageProps {
   author: Author
@@ -19,6 +20,7 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
   const authorName = author.fields.name;
   const avatarUrl = author.fields.image?.fields.file?.url;
   const avatarSrc = avatarUrl ? `https:${avatarUrl}?w=${AVATAR_SIZE}` : null;
+  const ogImageSrc = avatarUrl ? `https:${avatarUrl}?w=${OG_IMAGE_SIZE}` : null;
   const bio = author.fields.bio || "";
   const metaDescription = stripMarkdown( bio ).slice( 0, 160 ) || `Posts by ${authorName} on Audeos.com`;
   const metaTitle = `${authorName} | Audeos.com`;
@@ -28,7 +30,7 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
     "@type": "Person",
     "name": authorName,
     "url": canonicalUrl,
-    ...( avatarSrc && { "image": avatarSrc }),
+    ...( ogImageSrc && { "image": ogImageSrc }),
   };
 
   return (
@@ -43,11 +45,11 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
         <meta property="og:url" content={ canonicalUrl } />
         <meta property="og:title" content={ metaTitle } />
         <meta property="og:description" content={ metaDescription } />
-        <meta name="twitter:card" content={ avatarSrc ? "summary_large_image" : "summary" } />
+        <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={ metaTitle } />
         <meta name="twitter:description" content={ metaDescription } />
-        { avatarSrc && <meta property="og:image" content={ avatarSrc } /> }
-        { avatarSrc && <meta name="twitter:image" content={ avatarSrc } /> }
+        { ogImageSrc && <meta property="og:image" content={ ogImageSrc } /> }
+        { ogImageSrc && <meta name="twitter:image" content={ ogImageSrc } /> }
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={ { __html: JSON.stringify( jsonLd ) } }
