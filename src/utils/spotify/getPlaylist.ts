@@ -38,7 +38,7 @@ interface SpotifyPlaylistTracks {
   limit: number
   next: string|null
   offset: number
-  previous: string
+  previous: string|null
   total: number
   items: SpotifyPlaylistTrackObject[]
 }
@@ -129,11 +129,11 @@ interface SpotifyUser {
 }
 
 
-export async function getPlaylist( playlist_id: string ) {
+export async function getPlaylist( playlistId: string ) {
   return getClientCredentials()
     .then( async response => {
       const { access_token } = response;
-      const url = `https://api.spotify.com/v1/playlists/${playlist_id}`;
+      const url = `https://api.spotify.com/v1/playlists/${playlistId}`;
       const headers = {
         "Accept": "application/json",
         "Authorization": `Bearer ${access_token}`,

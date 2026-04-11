@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { GetStaticPropsContext } from "next";
-import Head from "next/head";
 import Image from "next/image";
 import { Author, getAuthor, getAuthors } from "@/utils/contentfulUtils";
 import { META_TITLE, SITE_URL } from "@/constants";
@@ -8,6 +7,7 @@ import { stripMarkdown } from "@/utils/stringUtils";
 import styles from "@/styles/Author.module.scss";
 import { Layout } from "@/components/Layout/Layout";
 import { Markdown } from "@/components/Markdown";
+import { SeoHead } from "@/components/SeoHead";
 
 const AVATAR_SIZE = 80;
 const OG_IMAGE_SIZE = 1200;
@@ -35,27 +35,21 @@ export const AuthorPage: FC<AuthorPageProps> = ({ author }) => {
 
   return (
     <>
-      <Head>
-        <title>{ metaTitle }</title>
-        <link rel="canonical" href={ canonicalUrl } />
-        <link rel="icon" href="/favicon.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content={ metaDescription } key="desc" />
-        <meta property="og:type" content="profile" />
-        <meta property="og:url" content={ canonicalUrl } />
-        <meta property="og:title" content={ metaTitle } />
-        <meta property="og:description" content={ metaDescription } />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={ metaTitle } />
-        <meta name="twitter:description" content={ metaDescription } />
-        { ogImageSrc && <meta property="og:image" content={ ogImageSrc } /> }
+      <SeoHead
+        title={ metaTitle }
+        canonicalUrl={ canonicalUrl }
+        description={ metaDescription }
+        ogType="profile"
+        ogImage={ ogImageSrc || undefined }
+        twitterCard="summary"
+      >
         { ogImageSrc && <meta property="og:image:alt" content={ `Profile photo of ${authorName}` } /> }
-        { ogImageSrc && <meta name="twitter:image" content={ ogImageSrc } /> }
+        { /* JSON-LD uses trusted CMS data only — safe for static rendering */ }
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={ { __html: JSON.stringify( jsonLd ) } }
         />
-      </Head>
+      </SeoHead>
       <Layout>
         <main className={ styles.main }>
           <article>

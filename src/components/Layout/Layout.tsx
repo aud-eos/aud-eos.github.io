@@ -9,10 +9,10 @@ interface LayoutProps {
   isFullwidth?: boolean
 }
 
-export const Container: FC<LayoutProps> = ({ children }) =>
+export const Container: FC<{ children?: ReactNode }> = ({ children }) =>
   <div className={ styles.container }>{ children }</div>;
 
-export const Wrapper: FC<LayoutProps> = ({ children }) =>
+export const Wrapper: FC<{ children?: ReactNode }> = ({ children }) =>
   <section className={ styles.wrapper }>{ children }</section>;
 
 /**

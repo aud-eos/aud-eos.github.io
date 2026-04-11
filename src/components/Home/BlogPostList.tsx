@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { sortBlogPostsByDate } from "@/utils/blogPostUtils";
+import { resolvePostDate, sortBlogPostsByDate } from "@/utils/blogPostUtils";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import Picture from "@/components/Picture";
 import { Tags } from "@/components/Tags";
-import { PAGE_SIZE } from "@/pages";
+import { PAGE_SIZE } from "@/constants";
 import { BlogPost } from "@/utils/contentfulUtils";
 import { POSTS_ANCHOR } from "@/constants";
 
@@ -22,7 +22,7 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
   return (
     <ul id={ POSTS_ANCHOR } className={ styles.imageGallery } role="list">
       {
-        posts
+        [ ...posts ]
           .sort( sortBlogPostsByDate )
           .slice( PAGE_SIZE * ( page - 1 ), PAGE_SIZE * page )
           .map( post => {
@@ -30,7 +30,7 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
             const url = `/post/${post.fields.slug}`;
             const pictureUrl = post.fields.image?.fields.file?.url || "";
             const altText = post.fields.image?.fields.description || "";
-            const timestamp = post.fields.date || post.sys.createdAt;
+            const timestamp = resolvePostDate( post );
 
             return (
               <li key={ post.sys.id }>

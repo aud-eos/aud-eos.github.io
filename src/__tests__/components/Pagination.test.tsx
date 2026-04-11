@@ -2,7 +2,10 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
-vi.mock( "@/pages", () => ({ PAGE_SIZE: 3 }) );
+vi.mock( "@/constants", async importOriginal => ({
+  ...( await importOriginal<typeof import( "@/constants" )>() ),
+  PAGE_SIZE: 3,
+}) );
 vi.mock( "@/utils/contentfulUtils", () => ({}) );
 vi.mock( "next/link", () => ({
   default: ({ children, href, ...props }: React.ComponentProps<"a"> ) => (

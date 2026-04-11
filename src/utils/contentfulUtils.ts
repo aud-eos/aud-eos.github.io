@@ -29,6 +29,7 @@ export type Author = Entry<TypeAuthorSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", str
 export const getBlogPosts = async (): Promise<BlogPosts> => {
   const response = await client.withoutUnresolvableLinks.getEntries<TypeBlogPostSkeleton>({
     content_type: CONTENT_TYPE_BLOG_POST,
+    limit: 1000,
   });
   return response;
 };
@@ -54,6 +55,7 @@ export const getTags = async (): Promise<TagCollection> => {
 export const getAuthors = async (): Promise<AuthorCollection> => {
   const response = await client.withoutUnresolvableLinks.getEntries<TypeAuthorSkeleton>({
     content_type: CONTENT_TYPE_AUTHOR,
+    limit: 1000,
   });
   return response;
 };

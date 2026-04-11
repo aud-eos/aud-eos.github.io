@@ -1,12 +1,8 @@
 import styles from "@/styles/OldSchoolButton.module.scss";
 import { Url } from "next/dist/shared/lib/router/router";
-import { VT323 } from "next/font/google";
 import Link from "next/link";
 import { FC } from "react";
-
-const fontVT323 = VT323({
-  weight: "400",
-});
+import { fontVT323 } from "@/styles/fonts";
 
 interface OldSchoolButtonProps {
   label: string
@@ -20,14 +16,14 @@ export const OldSchoolButton: FC<OldSchoolButtonProps> = ({
   href,
   label,
   onClick,
-  className,
+  className = "",
 }) => {
 
-  const _className = `${styles.button} ${fontVT323.className} ${className}`;
+  const combinedClassName = `${styles.button} ${fontVT323.className} ${className}`.trim();
 
-  if( !!href ) {
+  if( href ) {
     return (
-      <Link className={ _className }
+      <Link className={ combinedClassName }
         href={ href }
       >
         { label }
@@ -35,13 +31,11 @@ export const OldSchoolButton: FC<OldSchoolButtonProps> = ({
     );
   }
 
-  if( !!onClick ) {
-    return (
-      <button className={ _className }
-        onClick={ onClick }
-      >
-        { label }
-      </button>
-    );
-  }
+  return (
+    <button className={ combinedClassName }
+      onClick={ onClick }
+    >
+      { label }
+    </button>
+  );
 };

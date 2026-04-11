@@ -97,7 +97,7 @@ ${rssItems}
 <title>${item.title}</title>
 <link href="${item.url}"/>
 <id>${item.url}</id>
-<updated>${new Date( lastBuildDate ).toISOString()}</updated>
+<updated>${new Date( item.date ).toISOString()}</updated>
 </entry>` ).join( "" );
 
   const atomFeed: string = `<?xml version="1.0" encoding="utf-8"?>

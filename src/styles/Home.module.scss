@@ -51,7 +51,7 @@
   margin: .5rem;
 }
 
-.isTagged, a:hover > h3, nav a:hover {
+.isTagged, .isCurrentPage, a:hover > h3, nav a:hover {
   color: lightgreen!important;
   background: #555555!important;
 }

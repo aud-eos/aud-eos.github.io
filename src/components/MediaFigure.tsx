@@ -35,7 +35,7 @@ export const MediaFigure: FC<MediaFigureProps> = ({ src, alt }) => {
   if( extension && VIDEO_FILE_FORMAT_EXTENSIONS.includes( extension ) ) {
     return (
       <>
-        <video controls preload="metadata">
+        <video controls preload="metadata" aria-label={ alt || undefined }>
           <source src={ `${src}#t=0.001` } type={ `video/${extension}` } />
         </video>
         { alt && <p>{ alt }</p> }

@@ -1,5 +1,6 @@
 import { getBlogPosts } from "@/utils/contentfulUtils";
-import Home, { PAGE_SIZE, getStaticProps as getStaticPropsHome } from "@/pages";
+import Home, { getStaticProps as getStaticPropsHome } from "@/pages";
+import { PAGE_SIZE } from "@/constants";
 
 
 export const getStaticProps = getStaticPropsHome;
