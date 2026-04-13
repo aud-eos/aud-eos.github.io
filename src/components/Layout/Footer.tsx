@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FC } from "react";
+import { IconType } from "react-icons";
 import {
   FaBandcamp,
   FaDropbox,
@@ -11,75 +12,46 @@ import {
   FaTiktok,
   FaTwitter,
   FaFacebook,
+  FaYoutube,
 } from "react-icons/fa";
 import { FaSignalMessenger } from "react-icons/fa6";
 import { resetCookieConsent } from "@/components/CookieConsent";
 import styles from "@/styles/Layout.module.scss";
 import { OldSchoolButton } from "../OldSchoolButton";
 
+interface SocialLink {
+  href: string;
+  icon: IconType;
+  title: string;
+}
 
+const ICON_SIZE = 50;
+
+const SOCIAL_LINKS: SocialLink[] = [
+  { href: "https://www.instagram.com/Audeos", icon: FaInstagram, title: "Follow DJ Audeos on Instagram" },
+  { href: "https://soundcloud.com/audeos", icon: FaSoundcloud, title: "Listen DJ Audeos' music streaming on Soundcloud" },
+  { href: "https://www.tiktok.com/@audeos1", icon: FaTiktok, title: "Follow Benny Audeos on TikTok!" },
+  { href: "https://open.spotify.com/user/audeos?si=c4eec00475634694&nd=1&dlsi=09e968f5187346bd", icon: FaSpotify, title: "Follow Benny Audeos Playlists on Spotify" },
+  { href: "https://www.youtube.com/@Audeos", icon: FaYoutube, title: "DJ Audeos Youtube Channel" },
+  { href: "https://www.dropbox.com/home/Audeos", icon: FaDropbox, title: "Download free music from DJ Audeos on Dropbox" },
+  { href: "https://www.mixcloud.com/AUDEOS/", icon: FaMixcloud, title: "Listen to DJ Mixes from Audeos on Mixcloud" },
+  { href: "https://audeos.bandcamp.com/", icon: FaBandcamp, title: "Download music from DJ Audeos on Bandcamp" },
+  { href: "https://x.com/audeos", icon: FaTwitter, title: "Audeos on Twitter/X" },
+  { href: "https://www.facebook.com/audeos", icon: FaFacebook, title: "DJ Audeos on Facebook" },
+  { href: "https://github.com/aud-eos", icon: FaGithub, title: "Audeos on Github" },
+  { href: "https://signal.me/#eu/3MmHJflqdOPIJ1J1ZNmOSseSN5oW3woaADHRKZxSnasvbFg0-x5OG4q97CUKt3Iy", icon: FaSignalMessenger, title: "Contact Benny on Signal" },
+];
 
 export const Footer: FC = () => {
   return (
     <footer className={ styles.footer }>
 
       <div>
-
-        { /* Instagram */ }
-        <Link href="https://www.instagram.com/Audeos" target="_blank">
-          <FaInstagram size={ 50 } title="Follow DJ Audeos on Instagram" />
-        </Link>
-
-        { /* Soundcloud */ }
-        <Link href="https://soundcloud.com/audeos" target="_blank">
-          <FaSoundcloud size={ 50 } title="Listen DJ Audeos' music streaming on Soundcloud" />
-        </Link>
-
-        { /* TikTok */ }
-        <Link href="https://www.tiktok.com/@audeos1" target="_blank">
-          <FaTiktok size={ 50 } title="Follow Benny Audeos on TikTok!" />
-        </Link>
-
-        { /* Spotify */ }
-        <Link href="https://open.spotify.com/user/audeos?si=c4eec00475634694&nd=1&dlsi=09e968f5187346bd" target="_blank">
-          <FaSpotify size={ 50 } title="Follow Benny Audeos Playlists on Spotify" />
-        </Link>
-
-        { /* Dropbox */ }
-        <Link href="https://www.dropbox.com/home/Audeos" target="_blank">
-          <FaDropbox size={ 50 } title="Download free music from DJ Audeos on Dropbox" />
-        </Link>
-
-        { /* Mixcloud */ }
-        <Link href="https://www.mixcloud.com/AUDEOS/" target="_blank">
-          <FaMixcloud size={ 50 } title="Listen to DJ Mixes from Audeos on Mixcloud" />
-        </Link>
-
-        { /* Bandcamp */ }
-        <Link href="https://audeos.bandcamp.com/" target="_blank">
-          <FaBandcamp size={ 50 } title="Download music from DJ Audeos on Bandcamp" />
-        </Link>
-
-        { /* Twitter */ }
-        <Link href="https://x.com/audeos" target="_blank">
-          <FaTwitter size={ 50 } title="Audeos on Twitter/X" />
-        </Link>
-
-        { /* Facebook */ }
-        <Link href="https://www.facebook.com/audeos" target="_blank">
-          <FaFacebook size={ 50 } title="DJ Audeos on Facebook" />
-        </Link>
-
-        { /* Github */ }
-        <Link href="https://github.com/aud-eos" target="_blank">
-          <FaGithub size={ 50 } title="Audeos on Github" />
-        </Link>
-
-        { /* Signal */ }
-        <Link href="https://signal.me/#eu/3MmHJflqdOPIJ1J1ZNmOSseSN5oW3woaADHRKZxSnasvbFg0-x5OG4q97CUKt3Iy" target="_blank">
-          <FaSignalMessenger size={ 50 } title="Contact Benny on Signal" />
-        </Link>
-
+        { SOCIAL_LINKS.map( ({ href, icon: Icon, title }) => (
+          <Link key={ href } href={ href } target="_blank">
+            <Icon size={ ICON_SIZE } title={ title } />
+          </Link>
+        ) ) }
       </div>
 
       <div>
