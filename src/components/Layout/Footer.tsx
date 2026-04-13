@@ -10,6 +10,7 @@ import {
   FaSpotify,
   FaTiktok,
   FaTwitter,
+  FaFacebook,
 } from "react-icons/fa";
 import { FaSignalMessenger } from "react-icons/fa6";
 import { resetCookieConsent } from "@/components/CookieConsent";
@@ -62,6 +63,11 @@ export const Footer: FC = () => {
         { /* Twitter */ }
         <Link href="https://x.com/audeos" target="_blank">
           <FaTwitter size={ 50 } title="Audeos on Twitter/X" />
+        </Link>
+
+        { /* Facebook */ }
+        <Link href="https://www.facebook.com/audeos" target="_blank">
+          <FaFacebook size={ 50 } title="DJ Audeos on Facebook" />
         </Link>
 
         { /* Github */ }
