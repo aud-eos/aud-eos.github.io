@@ -1,7 +1,5 @@
 -include .env
 
-CONTENTFUL_ENVIRONMENT ?= master
-
 # Install dependencies
 install:
 	@yarn
@@ -63,17 +61,6 @@ upgrade-latest:
 # Verify package.json dependency integrity
 check:
 	@yarn check
-
-# Upload images from a local directory (or single file) to Contentful as published assets.
-# Outputs a JSON array of { filename, assetId, url } to stdout on success.
-# Usage: make upload-images DIR="/path/to/images"
-#        make upload-images DIR="/path/to/single-image.jpg"
-upload-images:
-	@node scripts/upload-images.mjs \
-		--dir "$(DIR)" \
-		--space-id $(CONTENTFUL_SPACE_ID) \
-		--environment-id $(CONTENTFUL_ENVIRONMENT) \
-		--token $(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN)
 
 # TypeScript-only type check (no ESLint)
 typecheck:
