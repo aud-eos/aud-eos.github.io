@@ -35,6 +35,17 @@ types:
 		-o src/types/contentful
 	$(MAKE) format
 
+# Upload images from a local directory (or single file) to Contentful.
+# Outputs a JSON array of { filename, assetId, url } to stdout.
+# Usage:
+#   make upload-images DIR="/path/to/images"
+#   make upload-images DIR="/path/to/single-image.jpg"
+upload-images:
+	@export CONTENTFUL_SPACE_ID=$(CONTENTFUL_SPACE_ID) \
+		CONTENTFUL_ENVIRONMENT=$(CONTENTFUL_ENVIRONMENT) \
+		CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN=$(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN); \
+		node scripts/upload-images.mjs "$(DIR)"
+
 # Run ESLint + TypeScript typecheck
 lint:
 	@yarn lint
