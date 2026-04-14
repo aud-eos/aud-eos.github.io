@@ -61,7 +61,8 @@ export const Footer: FC = () => {
       </div>
 
       <div>
-        <OldSchoolButton onClick={ resetCookieConsent }
+        <OldSchoolButton
+          onClick={ resetCookieConsent }
           label="Update Cookie Preferences"
         />
       </div>

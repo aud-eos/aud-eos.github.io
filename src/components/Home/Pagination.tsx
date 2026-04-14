@@ -41,7 +41,8 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ) {
             const href: string = getPaginatorUrl( pageNumber, tagId );
             const className: string|undefined = isCurrentPage ? styles.isCurrentPage : undefined;
             return (
-              <Link key={ pageNumber }
+              <Link
+                key={ pageNumber }
                 href={ href }
                 className={ className }
               >{ pageNumber }

@@ -23,7 +23,8 @@ export const OldSchoolButton: FC<OldSchoolButtonProps> = ({
 
   if( href ) {
     return (
-      <Link className={ combinedClassName }
+      <Link
+        className={ combinedClassName }
         href={ href }
       >
         { label }
@@ -32,7 +33,8 @@ export const OldSchoolButton: FC<OldSchoolButtonProps> = ({
   }
 
   return (
-    <button className={ combinedClassName }
+    <button
+      className={ combinedClassName }
       onClick={ onClick }
     >
       { label }

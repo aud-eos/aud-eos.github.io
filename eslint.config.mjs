@@ -49,6 +49,8 @@ const eslintConfig = defineConfig( [ ...nextTypescript, ...nextVitals, {
       },
     } ],
 
+    "react/jsx-max-props-per-line": [ 2, { maximum: 1, when: "multiline" } ],
+    "react/jsx-first-prop-new-line": [ 2, "multiline" ],
     semi: [ 2, "always" ],
 
     "space-in-parens": [ 2, "always", {
