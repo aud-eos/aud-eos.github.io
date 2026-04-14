@@ -96,57 +96,72 @@ describe( "uploadAndPublishImage", () => {
   });
 
   it( "creates an upload, creates an asset, processes, polls, and publishes", async () => {
-    const mockPublishedAsset = {
+    const createdAsset = {
       sys: { id: "asset-123" },
       fields: {
-        file: { "en-US": { url: "//images.ctfassets.net/space/asset-123/photo.jpg" } },
+        title: { "en-US": "photo" },
+        file: { "en-US": { contentType: "image/jpeg", fileName: "photo.jpg" } },
       },
     };
 
-    const mockProcessedAsset = {
-      sys: { id: "asset-123" },
-      fields: {
-        file: { "en-US": { url: "//images.ctfassets.net/space/asset-123/photo.jpg" } },
-      },
-      publish: vi.fn().mockResolvedValue( mockPublishedAsset ),
-    };
-
-    const mockUnprocessedAsset = {
+    const unprocessedAsset = {
       sys: { id: "asset-123" },
       fields: { file: { "en-US": {} } },
     };
 
-    const mockEnvironment = {
-      createUpload: vi.fn().mockResolvedValue({ sys: { id: "upload-456" } }),
-      createAsset: vi.fn().mockResolvedValue({
-        sys: { id: "asset-123" },
+    const processedAsset = {
+      sys: { id: "asset-123" },
+      fields: {
+        file: { "en-US": { url: "//images.ctfassets.net/space/asset-123/photo.jpg" } },
+      },
+    };
+
+    const publishedAsset = {
+      sys: { id: "asset-123" },
+      fields: {
+        file: { "en-US": { url: "//images.ctfassets.net/space/asset-123/photo.jpg" } },
+      },
+    };
+
+    const mockClient = {
+      upload: {
+        create: vi.fn().mockResolvedValue({ sys: { id: "upload-456" } }),
+      },
+      asset: {
+        create: vi.fn().mockResolvedValue( createdAsset ),
         processForAllLocales: vi.fn().mockResolvedValue( undefined ),
-      }),
-      getAsset: vi.fn()
-        .mockResolvedValueOnce( mockUnprocessedAsset )
-        .mockResolvedValueOnce( mockProcessedAsset ),
+        get: vi.fn()
+          .mockResolvedValueOnce( unprocessedAsset )
+          .mockResolvedValueOnce( processedAsset ),
+        publish: vi.fn().mockResolvedValue( publishedAsset ),
+      },
     };
 
     const filePath = join( tempDir, "photo.jpg" );
     writeFileSync( filePath, "fake image data" );
 
-    const result = await uploadAndPublishImage( mockEnvironment, filePath );
+    const result = await uploadAndPublishImage( mockClient, filePath );
 
-    expect( mockEnvironment.createUpload ).toHaveBeenCalledOnce();
-    expect( mockEnvironment.createAsset ).toHaveBeenCalledWith({
-      fields: {
-        title: { "en-US": "photo" },
-        file: {
-          "en-US": {
-            contentType: "image/jpeg",
-            fileName: "photo.jpg",
-            uploadFrom: {
-              sys: { type: "Link", linkType: "Upload", id: "upload-456" },
+    expect( mockClient.upload.create ).toHaveBeenCalledOnce();
+    expect( mockClient.asset.create ).toHaveBeenCalledWith(
+      {},
+      {
+        fields: {
+          title: { "en-US": "photo" },
+          file: {
+            "en-US": {
+              contentType: "image/jpeg",
+              fileName: "photo.jpg",
+              uploadFrom: {
+                sys: { type: "Link", linkType: "Upload", id: "upload-456" },
+              },
             },
           },
         },
       },
-    });
+    );
+    expect( mockClient.asset.processForAllLocales ).toHaveBeenCalledOnce();
+    expect( mockClient.asset.publish ).toHaveBeenCalledOnce();
     expect( result ).toEqual({
       filename: "photo.jpg",
       assetId: "asset-123",

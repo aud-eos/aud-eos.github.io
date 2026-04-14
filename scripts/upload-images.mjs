@@ -3,7 +3,7 @@
 import { readdirSync, readFileSync, statSync } from "fs";
 import { basename, extname, join } from "path";
 import { fileURLToPath } from "url";
-import contentfulManagement from "contentful-management";
+import { createClient } from "contentful-management";
 
 const SUPPORTED_EXTENSIONS = new Set( [ ".jpg", ".jpeg", ".png", ".gif", ".webp" ] );
 
@@ -35,7 +35,7 @@ const POLL_MAX_WAIT_MS = 30_000;
 const POLL_INITIAL_INTERVAL_MS = 1_000;
 const POLL_MAX_INTERVAL_MS = 10_000;
 
-async function waitForProcessing( environment, assetId ) {
+async function waitForProcessing( client, assetId ) {
   let elapsed = 0;
   let interval = POLL_INITIAL_INTERVAL_MS;
 
@@ -43,7 +43,7 @@ async function waitForProcessing( environment, assetId ) {
     await new Promise( resolve => setTimeout( resolve, interval ) );
     elapsed += interval;
 
-    const asset = await environment.getAsset( assetId );
+    const asset = await client.asset.get({ assetId });
     if( asset.fields.file?.[LOCALE]?.url ) return asset;
 
     interval = Math.min( interval * 2, POLL_MAX_INTERVAL_MS );
@@ -52,31 +52,40 @@ async function waitForProcessing( environment, assetId ) {
   throw new Error( `Asset ${assetId} did not finish processing within ${POLL_MAX_WAIT_MS / 1000}s` );
 }
 
-export async function uploadAndPublishImage( environment, filePath ) {
+export async function uploadAndPublishImage( client, filePath ) {
   const filename = basename( filePath );
   const title = basename( filePath, extname( filePath ) );
   const buffer = readFileSync( filePath );
 
-  const upload = await environment.createUpload({ file: buffer });
+  const upload = await client.upload.create(
+    {},
+    { file: buffer },
+  );
 
-  const asset = await environment.createAsset({
-    fields: {
-      title: { [LOCALE]: title },
-      file: {
-        [LOCALE]: {
-          contentType: mimeTypeForPath( filePath ),
-          fileName: filename,
-          uploadFrom: {
-            sys: { type: "Link", linkType: "Upload", id: upload.sys.id },
+  const asset = await client.asset.create(
+    {},
+    {
+      fields: {
+        title: { [LOCALE]: title },
+        file: {
+          [LOCALE]: {
+            contentType: mimeTypeForPath( filePath ),
+            fileName: filename,
+            uploadFrom: {
+              sys: { type: "Link", linkType: "Upload", id: upload.sys.id },
+            },
           },
         },
       },
     },
-  });
+  );
 
-  await asset.processForAllLocales();
-  const processed = await waitForProcessing( environment, asset.sys.id );
-  const published = await processed.publish();
+  await client.asset.processForAllLocales({}, asset );
+  const processed = await waitForProcessing( client, asset.sys.id );
+  const published = await client.asset.publish(
+    { assetId: processed.sys.id },
+    processed,
+  );
 
   return {
     filename,
@@ -106,9 +115,13 @@ export async function main( args ) {
     return;
   }
 
-  const client = contentfulManagement.createClient({ accessToken });
-  const space = await client.getSpace( spaceId );
-  const environment = await space.getEnvironment( environmentId );
+  const client = createClient(
+    { accessToken },
+    {
+      type: "plain",
+      defaults: { spaceId, environmentId },
+    },
+  );
 
   const filePaths = getImageFiles( dirOrFile );
   process.stderr.write( `Uploading ${filePaths.length} image(s) from ${dirOrFile}...\n` );
@@ -121,7 +134,7 @@ export async function main( args ) {
     process.stderr.write( `  [${results.length + failures.length + 1}/${filePaths.length}] ${filename}...` );
 
     try {
-      const result = await uploadAndPublishImage( environment, filePath );
+      const result = await uploadAndPublishImage( client, filePath );
       process.stderr.write( ` done (${result.assetId})\n` );
       results.push( result );
     } catch ( error ) {
