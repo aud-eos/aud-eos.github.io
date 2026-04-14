@@ -2,6 +2,7 @@
 
 import { readdirSync, readFileSync, statSync } from "fs";
 import { basename, extname, join } from "path";
+import { fileURLToPath } from "url";
 import contentfulManagement from "contentful-management";
 
 const SUPPORTED_EXTENSIONS = new Set( [ ".jpg", ".jpeg", ".png", ".gif", ".webp" ] );
@@ -19,9 +20,9 @@ export function getImageFiles( dirOrFile ) {
   if( stat.isFile() ) return [ dirOrFile ];
 
   return readdirSync( dirOrFile )
-    .filter( ( name ) => SUPPORTED_EXTENSIONS.has( extname( name ).toLowerCase() ) )
+    .filter( name => SUPPORTED_EXTENSIONS.has( extname( name ).toLowerCase() ) )
     .sort()
-    .map( ( name ) => join( dirOrFile, name ) );
+    .map( name => join( dirOrFile, name ) );
 }
 
 export function mimeTypeForPath( filePath ) {
@@ -38,8 +39,8 @@ async function waitForProcessing( environment, assetId ) {
   let elapsed = 0;
   let interval = POLL_INITIAL_INTERVAL_MS;
 
-  while( elapsed < POLL_MAX_WAIT_MS ) {
-    await new Promise( ( resolve ) => setTimeout( resolve, interval ) );
+  while ( elapsed < POLL_MAX_WAIT_MS ) {
+    await new Promise( resolve => setTimeout( resolve, interval ) );
     elapsed += interval;
 
     const asset = await environment.getAsset( assetId );
@@ -56,9 +57,9 @@ export async function uploadAndPublishImage( environment, filePath ) {
   const title = basename( filePath, extname( filePath ) );
   const buffer = readFileSync( filePath );
 
-  const upload = await environment.createUpload( { file: buffer } );
+  const upload = await environment.createUpload({ file: buffer });
 
-  const asset = await environment.createAsset( {
+  const asset = await environment.createAsset({
     fields: {
       title: { [LOCALE]: title },
       file: {
@@ -71,7 +72,7 @@ export async function uploadAndPublishImage( environment, filePath ) {
         },
       },
     },
-  } );
+  });
 
   await asset.processForAllLocales();
   const processed = await waitForProcessing( environment, asset.sys.id );
@@ -95,17 +96,17 @@ export async function main( args ) {
 
   const spaceId = process.env.CONTENTFUL_SPACE_ID;
   const accessToken = process.env.CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN;
-  const environmentId = process.env.CONTENTFUL_ENVIRONMENT || "master";
+  const environmentId = process.env.CONTENTFUL_ENVIRONMENT;
 
-  if( !spaceId || !accessToken ) {
+  if( !spaceId || !accessToken || !environmentId ) {
     process.stderr.write(
-      "Missing required env vars: CONTENTFUL_SPACE_ID, CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN\n",
+      "Missing required env vars: CONTENTFUL_SPACE_ID, CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN, CONTENTFUL_ENVIRONMENT\n",
     );
     process.exit( 1 );
     return;
   }
 
-  const client = contentfulManagement.createClient( { accessToken } );
+  const client = contentfulManagement.createClient({ accessToken });
   const space = await client.getSpace( spaceId );
   const environment = await space.getEnvironment( environmentId );
 
@@ -123,9 +124,9 @@ export async function main( args ) {
       const result = await uploadAndPublishImage( environment, filePath );
       process.stderr.write( ` done (${result.assetId})\n` );
       results.push( result );
-    } catch( error ) {
+    } catch ( error ) {
       process.stderr.write( ` FAILED: ${error.message}\n` );
-      failures.push( { filename, error: error.message } );
+      failures.push({ filename, error: error.message });
     }
   }
 
@@ -143,7 +144,6 @@ export async function main( args ) {
 }
 
 // Run when executed directly (not imported by tests)
-const isDirectRun = process.argv[1]?.endsWith( "upload-images.mjs" );
-if( isDirectRun ) {
+if( process.argv[1] === fileURLToPath( import.meta.url ) ) {
   main( process.argv.slice( 2 ) );
 }

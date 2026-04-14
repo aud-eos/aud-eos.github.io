@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from "fs";
+import { mkdtempSync, writeFileSync, rmSync } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
 import { getImageFiles, mimeTypeForPath, uploadAndPublishImage, main } from "./upload-images.mjs";
@@ -13,7 +13,7 @@ describe( "getImageFiles", () => {
   });
 
   afterEach( () => {
-    rmSync( tempDir, { recursive: true, force: true } );
+    rmSync( tempDir, { recursive: true, force: true });
   });
 
   it( "returns a single file when given a file path", () => {
@@ -85,6 +85,16 @@ describe( "mimeTypeForPath", () => {
 });
 
 describe( "uploadAndPublishImage", () => {
+  let tempDir;
+
+  beforeEach( () => {
+    tempDir = mkdtempSync( join( tmpdir(), "upload-test-" ) );
+  });
+
+  afterEach( () => {
+    rmSync( tempDir, { recursive: true, force: true });
+  });
+
   it( "creates an upload, creates an asset, processes, polls, and publishes", async () => {
     const mockPublishedAsset = {
       sys: { id: "asset-123" },
@@ -107,24 +117,23 @@ describe( "uploadAndPublishImage", () => {
     };
 
     const mockEnvironment = {
-      createUpload: vi.fn().mockResolvedValue( { sys: { id: "upload-456" } } ),
-      createAsset: vi.fn().mockResolvedValue( {
+      createUpload: vi.fn().mockResolvedValue({ sys: { id: "upload-456" } }),
+      createAsset: vi.fn().mockResolvedValue({
         sys: { id: "asset-123" },
         processForAllLocales: vi.fn().mockResolvedValue( undefined ),
-      } ),
+      }),
       getAsset: vi.fn()
         .mockResolvedValueOnce( mockUnprocessedAsset )
         .mockResolvedValueOnce( mockProcessedAsset ),
     };
 
-    const tempDir = mkdtempSync( join( tmpdir(), "upload-test-" ) );
     const filePath = join( tempDir, "photo.jpg" );
     writeFileSync( filePath, "fake image data" );
 
     const result = await uploadAndPublishImage( mockEnvironment, filePath );
 
     expect( mockEnvironment.createUpload ).toHaveBeenCalledOnce();
-    expect( mockEnvironment.createAsset ).toHaveBeenCalledWith( {
+    expect( mockEnvironment.createAsset ).toHaveBeenCalledWith({
       fields: {
         title: { "en-US": "photo" },
         file: {
@@ -137,21 +146,19 @@ describe( "uploadAndPublishImage", () => {
           },
         },
       },
-    } );
-    expect( result ).toEqual( {
+    });
+    expect( result ).toEqual({
       filename: "photo.jpg",
       assetId: "asset-123",
       url: "https://images.ctfassets.net/space/asset-123/photo.jpg",
-    } );
-
-    rmSync( tempDir, { recursive: true, force: true } );
+    });
   });
 });
 
 describe( "main", () => {
   it( "exits with code 1 when no directory argument is provided", async () => {
-    const mockExit = vi.spyOn( process, "exit" ).mockImplementation( () => {} );
-    const mockStderr = vi.spyOn( process.stderr, "write" ).mockImplementation( () => {} );
+    const mockExit = vi.spyOn( process, "exit" ).mockImplementation( () => {});
+    const mockStderr = vi.spyOn( process.stderr, "write" ).mockImplementation( () => {});
 
     await main( [] );
 
@@ -165,12 +172,13 @@ describe( "main", () => {
   });
 
   it( "exits with code 1 when required env vars are missing", async () => {
-    const mockExit = vi.spyOn( process, "exit" ).mockImplementation( () => {} );
-    const mockStderr = vi.spyOn( process.stderr, "write" ).mockImplementation( () => {} );
+    const mockExit = vi.spyOn( process, "exit" ).mockImplementation( () => {});
+    const mockStderr = vi.spyOn( process.stderr, "write" ).mockImplementation( () => {});
 
     const originalEnv = { ...process.env };
     delete process.env.CONTENTFUL_SPACE_ID;
     delete process.env.CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN;
+    delete process.env.CONTENTFUL_ENVIRONMENT;
 
     await main( [ "/some/path" ] );
 
