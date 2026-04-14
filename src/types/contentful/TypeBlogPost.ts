@@ -74,6 +74,12 @@ export interface TypeBlogPostFields {
      * @localized false
      */
     gallery?: EntryFieldTypes.Array<EntryFieldTypes.AssetLink>;
+    /**
+     * Field type definition for field 'soundcloudUrl' (soundcloudUrl)
+     * @name soundcloudUrl
+     * @localized false
+     */
+    soundcloudUrl?: EntryFieldTypes.Symbol;
 }
 
 /**
@@ -82,7 +88,7 @@ export interface TypeBlogPostFields {
  * @type {TypeBlogPostSkeleton}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 21
+ * @version 23
  */
 export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPost">;
 /**
@@ -91,7 +97,7 @@ export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPo
  * @type {TypeBlogPost}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 21
+ * @version 23
  */
 export type TypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode = LocaleCode> = Entry<TypeBlogPostSkeleton, Modifiers, Locales>;
 

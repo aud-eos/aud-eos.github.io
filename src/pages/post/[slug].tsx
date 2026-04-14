@@ -184,10 +184,8 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const playlist = post.fields.spotifyPlaylistId
     ? await getPlaylist( post.fields.spotifyPlaylistId ) : null;
 
-  // soundcloudUrl will be typed properly after Task 4 regenerates Contentful types
-  const rawFields: Record<string, unknown> = { ...post.fields };
-  const soundcloudUrl = typeof rawFields["soundcloudUrl"] === "string" ? rawFields["soundcloudUrl"] : null;
-  const soundCloudOembed = soundcloudUrl ? await getOembed( soundcloudUrl ) : null;
+  const soundCloudOembed = post.fields.soundcloudUrl
+    ? await getOembed( post.fields.soundcloudUrl ) : null;
 
   const sortedPosts = allPosts.items
     .slice()
