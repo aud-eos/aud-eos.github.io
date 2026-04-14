@@ -15,6 +15,8 @@ import { Tags } from "@/components/Tags";
 import { SpotifyPlaylist, getPlaylist } from "@/utils/spotify/getPlaylist";
 import Playlist from "@/components/Playlist";
 import Gallery, { resolveGalleryItems } from "@/components/Gallery";
+import { getOembed, SoundCloudOembed } from "@/utils/soundcloud/getOembed";
+import { SoundCloudEmbed } from "@/components/SoundCloudEmbed";
 
 
 
@@ -27,12 +29,13 @@ export interface PostNavLink {
 export interface BlogPostViewProps {
   post: BlogPost
   playlist?: SpotifyPlaylist|null
+  soundCloudOembed?: SoundCloudOembed|null
   prevPost?: PostNavLink|null
   nextPost?: PostNavLink|null
 }
 
 
-export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, nextPost }) => {
+export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, prevPost, nextPost }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${CONTENT_IMAGE_WIDTH}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
@@ -134,6 +137,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, 
               <p>
                 { post.fields.description }
               </p>
+              { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
@@ -180,6 +184,9 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const playlist = post.fields.spotifyPlaylistId
     ? await getPlaylist( post.fields.spotifyPlaylistId ) : null;
 
+  const soundCloudOembed = post.fields.soundcloudUrl
+    ? await getOembed( post.fields.soundcloudUrl ) : null;
+
   const sortedPosts = allPosts.items
     .slice()
     .sort( sortBlogPostsByDate )
@@ -203,6 +210,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
     props: {
       post,
       playlist,
+      soundCloudOembed,
       prevPost,
       nextPost,
     },

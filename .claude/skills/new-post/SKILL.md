@@ -63,6 +63,7 @@ Collect or derive all required fields. Show each to the user for approval:
 | **gallery** | Array of asset links from gallery upload (if any) |
 | **tags** | Fetch existing tags via `mcp__contentful__list_tags`. Suggest relevant ones. Never suggest creating new tags. |
 | **spotifyPlaylistId** | Ask if they want to embed a Spotify playlist (yes/no). Skip if no. |
+| **soundcloudUrl** | Ask if they want to embed a SoundCloud track or playlist (yes/no). If yes, collect the full SoundCloud URL. Skip if no. |
 | **location** | Ask if they want to add a location (yes/no). Skip if no. |
 
 ## SEO Check
@@ -143,7 +144,8 @@ Use `mcp__contentful__create_entry` with:
     "author": { "en-US": { "sys": { "type": "Link", "linkType": "Entry", "id": "<authorId>" } } },
     "image": { "en-US": { "sys": { "type": "Link", "linkType": "Asset", "id": "<imageAssetId>" } } },
     "gallery": { "en-US": [{ "sys": { "type": "Link", "linkType": "Asset", "id": "<assetId>" } }] },
-    "spotifyPlaylistId": { "en-US": "<playlistId>" }
+    "spotifyPlaylistId": { "en-US": "<playlistId>" },
+    "soundcloudUrl": { "en-US": "<soundcloudUrl>" }
   },
   "metadata": {
     "tags": [{ "sys": { "type": "Link", "linkType": "Tag", "id": "<tagId>" } }]
@@ -151,7 +153,7 @@ Use `mcp__contentful__create_entry` with:
 }
 ```
 
-Omit optional fields that were not provided (gallery, spotifyPlaylistId, location). Tags go in `metadata`, not `fields`.
+Omit optional fields that were not provided (gallery, spotifyPlaylistId, soundcloudUrl, location). Tags go in `metadata`, not `fields`.
 
 If the user chose **publish immediately**, follow up with `mcp__contentful__publish_entry`.
 
