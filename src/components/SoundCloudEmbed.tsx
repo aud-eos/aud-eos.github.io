@@ -5,6 +5,7 @@ import styles from "@/styles/SoundCloudEmbed.module.scss";
 
 export interface SoundCloudEmbedProps {
   oembed: SoundCloudOembed;
+  url: string;
 }
 
 const ALLOWED_IFRAME_HOST = "w.soundcloud.com";
@@ -26,7 +27,7 @@ function extractIframeSrc( html: string ): string | null {
   }
 }
 
-export const SoundCloudEmbed: FC<SoundCloudEmbedProps> = ({ oembed }) => {
+export const SoundCloudEmbed: FC<SoundCloudEmbedProps> = ({ oembed, url }) => {
   const iframeSrc = extractIframeSrc( oembed.html );
 
   if( !iframeSrc ) {
@@ -37,8 +38,8 @@ export const SoundCloudEmbed: FC<SoundCloudEmbedProps> = ({ oembed }) => {
     <section className={ styles.soundcloudEmbed }>
       <header className={ styles.soundcloudHeader }>
         <h2>
-          Listen to &quot;{ oembed.title }&quot; by{ " " }
-          <Link href={ oembed.author_url }>{ oembed.author_name }</Link>
+          Listen to &quot;<Link href={ url } target="_blank" rel="noopener noreferrer">{ oembed.title }</Link>&quot; by{ " " }
+          <Link href={ oembed.author_url } target="_blank" rel="noopener noreferrer">{ oembed.author_name }</Link>
         </h2>
       </header>
       <iframe

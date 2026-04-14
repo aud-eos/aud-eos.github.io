@@ -11,6 +11,8 @@ vi.mock( "next/link", () => ({
 import { SoundCloudEmbed } from "@/components/SoundCloudEmbed";
 import { SoundCloudOembed } from "@/utils/soundcloud/getOembed";
 
+const MOCK_SOUNDCLOUD_URL = "https://soundcloud.com/test-artist/test-track";
+
 const MOCK_OEMBED: SoundCloudOembed = {
   title: "Test Track",
   author_name: "Test Artist",
@@ -21,7 +23,7 @@ const MOCK_OEMBED: SoundCloudOembed = {
 
 describe( "SoundCloudEmbed", () => {
   it( "renders an iframe with the src extracted from oEmbed html", () => {
-    render( <SoundCloudEmbed oembed={ MOCK_OEMBED } /> );
+    render( <SoundCloudEmbed oembed={ MOCK_OEMBED } url={ MOCK_SOUNDCLOUD_URL } /> );
 
     const iframe = screen.getByTitle( "Test Track by Test Artist" );
     expect( iframe ).toBeInTheDocument();
@@ -32,11 +34,21 @@ describe( "SoundCloudEmbed", () => {
     );
   });
 
-  it( "renders the track title and author as a heading link", () => {
-    render( <SoundCloudEmbed oembed={ MOCK_OEMBED } /> );
+  it( "renders the title as a link to the SoundCloud URL that opens in a new tab", () => {
+    render( <SoundCloudEmbed oembed={ MOCK_OEMBED } url={ MOCK_SOUNDCLOUD_URL } /> );
 
-    const link = screen.getByRole( "link", { name: /Test Artist/i });
-    expect( link ).toHaveAttribute( "href", "https://soundcloud.com/test-artist" );
+    const titleLink = screen.getByRole( "link", { name: /Test Track/i });
+    expect( titleLink ).toHaveAttribute( "href", MOCK_SOUNDCLOUD_URL );
+    expect( titleLink ).toHaveAttribute( "target", "_blank" );
+    expect( titleLink ).toHaveAttribute( "rel", "noopener noreferrer" );
+  });
+
+  it( "renders the author as a link that opens in a new tab", () => {
+    render( <SoundCloudEmbed oembed={ MOCK_OEMBED } url={ MOCK_SOUNDCLOUD_URL } /> );
+
+    const authorLink = screen.getByRole( "link", { name: /Test Artist/i });
+    expect( authorLink ).toHaveAttribute( "href", "https://soundcloud.com/test-artist" );
+    expect( authorLink ).toHaveAttribute( "target", "_blank" );
   });
 
   it( "does not render an iframe when the src is not from w.soundcloud.com", () => {
@@ -45,7 +57,7 @@ describe( "SoundCloudEmbed", () => {
       html: '<iframe src="https://evil.com/exploit"></iframe>',
     };
 
-    render( <SoundCloudEmbed oembed={ maliciousOembed } /> );
+    render( <SoundCloudEmbed oembed={ maliciousOembed } url={ MOCK_SOUNDCLOUD_URL } /> );
 
     expect( document.querySelector( "iframe" ) ).toBeNull();
   });

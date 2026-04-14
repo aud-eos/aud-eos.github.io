@@ -137,7 +137,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
               <p>
                 { post.fields.description }
               </p>
-              { soundCloudOembed && <SoundCloudEmbed oembed={ soundCloudOembed } /> }
+              { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
