@@ -8,3 +8,4 @@ export const GOOGLE_ANALYTICS_ID = "G-D81YP4DGH3";
 export const COOKIE_CONSENT_KEY = "cookie-consent";
 export const POSTS_ANCHOR = "posts";
 export const PAGE_SIZE = 12;
+export const CONTENT_IMAGE_WIDTH = 750;

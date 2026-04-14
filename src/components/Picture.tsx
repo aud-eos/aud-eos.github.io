@@ -1,3 +1,4 @@
+import { CONTENT_IMAGE_WIDTH } from "@/constants";
 
 export interface PictureProps {
   url: string;
@@ -9,7 +10,7 @@ export interface PictureProps {
 
 export default function Picture({
   url,
-  maxWidth = 750,
+  maxWidth = CONTENT_IMAGE_WIDTH,
   maxHeight,
   alt,
   breakpoints = [ 749, 600, 350 ],
@@ -60,7 +61,7 @@ const getImgSrc = ( src: string, {
   const imageUrl = new URL( `https:${src}` );
 
   // Set "quality"
-  imageUrl.searchParams.set( "q", "100" );
+  imageUrl.searchParams.set( "q", "80" );
 
   // Set "format"
   if( format ) {
