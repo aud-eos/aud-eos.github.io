@@ -1,0 +1,52 @@
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import React from "react";
+
+vi.mock( "next/link", () => ({
+  default: ({ children, href, ...props }: React.ComponentProps<"a"> ) => (
+    <a href={ href } { ...props }>{ children }</a>
+  ),
+}) );
+
+import { SoundCloudEmbed } from "@/components/SoundCloudEmbed";
+import { SoundCloudOembed } from "@/utils/soundcloud/getOembed";
+
+const MOCK_OEMBED: SoundCloudOembed = {
+  title: "Test Track",
+  author_name: "Test Artist",
+  author_url: "https://soundcloud.com/test-artist",
+  html: '<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123"></iframe>',
+  thumbnail_url: "https://i1.sndcdn.com/artworks-000-t500x500.jpg",
+};
+
+describe( "SoundCloudEmbed", () => {
+  it( "renders an iframe with the src extracted from oEmbed html", () => {
+    render( <SoundCloudEmbed oembed={ MOCK_OEMBED } /> );
+
+    const iframe = screen.getByTitle( "Test Track by Test Artist" );
+    expect( iframe ).toBeInTheDocument();
+    expect( iframe.tagName ).toBe( "IFRAME" );
+    expect( iframe ).toHaveAttribute(
+      "src",
+      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123",
+    );
+  });
+
+  it( "renders the track title and author as a heading link", () => {
+    render( <SoundCloudEmbed oembed={ MOCK_OEMBED } /> );
+
+    const link = screen.getByRole( "link", { name: /Test Artist/i });
+    expect( link ).toHaveAttribute( "href", "https://soundcloud.com/test-artist" );
+  });
+
+  it( "does not render an iframe when the src is not from w.soundcloud.com", () => {
+    const maliciousOembed: SoundCloudOembed = {
+      ...MOCK_OEMBED,
+      html: '<iframe src="https://evil.com/exploit"></iframe>',
+    };
+
+    render( <SoundCloudEmbed oembed={ maliciousOembed } /> );
+
+    expect( document.querySelector( "iframe" ) ).toBeNull();
+  });
+});
