@@ -43,12 +43,12 @@ describe( "SoundCloudEmbed", () => {
     expect( titleLink ).toHaveAttribute( "rel", "noopener noreferrer" );
   });
 
-  it( "renders the author as a link that opens in a new tab", () => {
+  it( "renders a SoundCloud link to the author page that opens in a new tab", () => {
     render( <SoundCloudEmbed oembed={ MOCK_OEMBED } url={ MOCK_SOUNDCLOUD_URL } /> );
 
-    const authorLink = screen.getByRole( "link", { name: /Test Artist/i });
-    expect( authorLink ).toHaveAttribute( "href", "https://soundcloud.com/test-artist" );
-    expect( authorLink ).toHaveAttribute( "target", "_blank" );
+    const soundcloudLink = screen.getByRole( "link", { name: /SoundCloud/i });
+    expect( soundcloudLink ).toHaveAttribute( "href", "https://soundcloud.com/test-artist" );
+    expect( soundcloudLink ).toHaveAttribute( "target", "_blank" );
   });
 
   it( "does not render an iframe when the src is not from w.soundcloud.com", () => {

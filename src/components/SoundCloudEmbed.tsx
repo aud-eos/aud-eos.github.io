@@ -38,8 +38,8 @@ export const SoundCloudEmbed: FC<SoundCloudEmbedProps> = ({ oembed, url }) => {
     <section className={ styles.soundcloudEmbed }>
       <header className={ styles.soundcloudHeader }>
         <h2>
-          Listen to &quot;<Link href={ url } target="_blank" rel="noopener noreferrer">{ oembed.title }</Link>&quot; by{ " " }
-          <Link href={ oembed.author_url } target="_blank" rel="noopener noreferrer">{ oembed.author_name }</Link>
+          Listen to &quot;<Link href={ url } target="_blank" rel="noopener noreferrer">{ oembed.title }</Link>&quot; on{ " " }
+          <Link href={ oembed.author_url } target="_blank" rel="noopener noreferrer">SoundCloud</Link>
         </h2>
       </header>
       <iframe
