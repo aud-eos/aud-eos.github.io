@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import { BlogPost, getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
 import { resolvePostDate, sortBlogPostsByDate } from "@/utils/blogPostUtils";
-import { SITE_URL } from "@/constants";
+import { SITE_URL, CONTENT_IMAGE_WIDTH } from "@/constants";
 import { SeoHead } from "@/components/SeoHead";
 import styles from "@/styles/BlogPost.module.scss";
 import DateTimeFormat from "@/components/DateTimeFormat";
@@ -17,7 +17,6 @@ import Playlist from "@/components/Playlist";
 import Gallery, { resolveGalleryItems } from "@/components/Gallery";
 
 
-const IMAGE_SIZE = 750;
 
 
 export interface PostNavLink {
@@ -35,7 +34,7 @@ export interface BlogPostViewProps {
 
 export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, prevPost, nextPost }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
-  const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${IMAGE_SIZE}`;
+  const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${CONTENT_IMAGE_WIDTH}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
   const authorImageUrl = post.fields.author?.fields.image?.fields.file?.url;
   const authorProfileImageSrc = authorImageUrl ? `https:${authorImageUrl}?w=50` : null;

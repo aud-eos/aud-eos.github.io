@@ -1,6 +1,7 @@
 import { FC, useState, useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Asset } from "contentful";
+import { CONTENT_IMAGE_WIDTH } from "@/constants";
 import styles from "@/styles/Gallery.module.scss";
 
 export interface GalleryItem {
@@ -14,7 +15,6 @@ interface GalleryProps {
   items: GalleryItem[];
 }
 
-const GALLERY_IMAGE_WIDTH = 1200;
 
 function assetToGalleryItem(
   asset: Asset<"WITHOUT_UNRESOLVABLE_LINKS", string>,
@@ -25,7 +25,7 @@ function assetToGalleryItem(
   const isVideo = mimeType.startsWith( "video/" );
   const url = isVideo
     ? `https:${file.url}`
-    : `https:${file.url}?w=${GALLERY_IMAGE_WIDTH}`;
+    : `https:${file.url}?w=${CONTENT_IMAGE_WIDTH}&fm=webp&q=80`;
   return {
     url,
     description: asset.fields.description || "",
