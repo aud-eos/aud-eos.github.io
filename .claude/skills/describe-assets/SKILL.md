@@ -39,7 +39,13 @@ Use `mcp__contentful__list_assets` to find assets without descriptions. The tool
 
 For each asset missing a description:
 
-1. **Display the image** — use the `Read` tool on the image URL (`https:<url>`) so Claude can see the image content. Also show the URL so the user can view it.
+1. **Show the image** — download the image and open it in macOS Preview so the user can see it, then read it so Claude can suggest a description:
+
+```bash
+curl -s "https:<url>?w=400" -o /tmp/asset-preview.jpg && open /tmp/asset-preview.jpg
+```
+
+Then use the `Read` tool on `/tmp/asset-preview.jpg` so Claude can also see the image and draft a description. Also show the full Contentful URL as a fallback.
 2. **Show metadata:**
    - Title (filename)
    - Asset ID
