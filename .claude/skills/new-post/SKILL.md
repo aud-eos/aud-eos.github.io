@@ -79,6 +79,29 @@ Check these items:
 
 Present all warnings in a list. Do not block on warnings — they are advisory.
 
+## Link & Image Validation
+
+Run this automatically after the SEO check and **before** content review. This step is **blocking** — all URLs must resolve before proceeding to entry creation.
+
+1. **Extract all URLs** from the post body — both markdown images (`![alt](url)`) and inline links (`[text](url)`)
+2. **Validate each URL** by fetching it with `WebFetch` and checking that it loads successfully
+3. **Check for malformed URLs** — common issues include:
+   - Contentful image URLs using `https://images.ctfassets.net/...` instead of `//images.ctfassets.net/...` (must be protocol-relative)
+   - Missing colon in protocol (`https//` instead of `https://`)
+   - Double slashes or missing slashes
+   - Truncated or incomplete URLs
+   - Relative paths that should be absolute
+4. **Report results** in a table:
+
+```
+| URL | Type | Status |
+|-----|------|--------|
+| https://example.com/image.jpg | image | ✓ OK |
+| https//broken.com/img.jpg | image | ✗ Malformed protocol |
+```
+
+5. **If any URL fails**: show the broken URLs, suggest fixes, and ask the user to confirm corrections before proceeding. Do not continue to Content Review until all URLs are valid.
+
 ## Content Review
 
 Present the complete entry summary for user approval:
@@ -145,3 +168,6 @@ Report back with:
 - **Always show content for approval** before any Contentful write operation
 - **Remind about descriptive filenames** before image uploads
 - **Author defaults to sole author** — only ask for selection if multiple exist
+- **Embed the featured image in the body** — the cover image should always appear inline somewhere in the post body as a markdown image (`![alt](url)`). Place it where it fits naturally (e.g., near the top or after the intro).
+- **Use protocol-relative URLs for Contentful images** — inline images in the body must use `//images.ctfassets.net/...` (no `https:`). The site's `Picture` component prepends `https:`, so a full `https://` URL results in a broken `https://https//...` double protocol. This matches how Contentful's own markdown editor inserts images.
+- **Validate all URLs before publishing** — every inline link and image in the body must be fetched and confirmed working. Do not proceed to entry creation with broken URLs.
