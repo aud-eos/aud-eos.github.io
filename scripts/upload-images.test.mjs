@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
-import { getImageFiles } from "./upload-images.mjs";
+import { getImageFiles, mimeTypeForPath } from "./upload-images.mjs";
 
 describe( "getImageFiles", () => {
   let tempDir;
@@ -55,5 +55,31 @@ describe( "getImageFiles", () => {
 
     const result = getImageFiles( tempDir );
     expect( result ).toHaveLength( 5 );
+  });
+});
+
+describe( "mimeTypeForPath", () => {
+  it( "returns image/jpeg for .jpg", () => {
+    expect( mimeTypeForPath( "photo.jpg" ) ).toBe( "image/jpeg" );
+  });
+
+  it( "returns image/jpeg for .jpeg", () => {
+    expect( mimeTypeForPath( "photo.jpeg" ) ).toBe( "image/jpeg" );
+  });
+
+  it( "returns image/png for .png", () => {
+    expect( mimeTypeForPath( "photo.png" ) ).toBe( "image/png" );
+  });
+
+  it( "returns image/gif for .gif", () => {
+    expect( mimeTypeForPath( "photo.gif" ) ).toBe( "image/gif" );
+  });
+
+  it( "returns image/webp for .webp", () => {
+    expect( mimeTypeForPath( "photo.webp" ) ).toBe( "image/webp" );
+  });
+
+  it( "handles uppercase extensions", () => {
+    expect( mimeTypeForPath( "photo.PNG" ) ).toBe( "image/png" );
   });
 });
