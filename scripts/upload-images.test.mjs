@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
-import { getImageFiles, mimeTypeForPath, uploadAndPublishImage } from "./upload-images.mjs";
+import { getImageFiles, mimeTypeForPath, uploadAndPublishImage, main } from "./upload-images.mjs";
 
 describe( "getImageFiles", () => {
   let tempDir;
@@ -145,5 +145,42 @@ describe( "uploadAndPublishImage", () => {
     } );
 
     rmSync( tempDir, { recursive: true, force: true } );
+  });
+});
+
+describe( "main", () => {
+  it( "exits with code 1 when no directory argument is provided", async () => {
+    const mockExit = vi.spyOn( process, "exit" ).mockImplementation( () => {} );
+    const mockStderr = vi.spyOn( process.stderr, "write" ).mockImplementation( () => {} );
+
+    await main( [] );
+
+    expect( mockExit ).toHaveBeenCalledWith( 1 );
+    expect( mockStderr ).toHaveBeenCalledWith(
+      expect.stringContaining( "Usage:" ),
+    );
+
+    mockExit.mockRestore();
+    mockStderr.mockRestore();
+  });
+
+  it( "exits with code 1 when required env vars are missing", async () => {
+    const mockExit = vi.spyOn( process, "exit" ).mockImplementation( () => {} );
+    const mockStderr = vi.spyOn( process.stderr, "write" ).mockImplementation( () => {} );
+
+    const originalEnv = { ...process.env };
+    delete process.env.CONTENTFUL_SPACE_ID;
+    delete process.env.CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN;
+
+    await main( [ "/some/path" ] );
+
+    expect( mockExit ).toHaveBeenCalledWith( 1 );
+    expect( mockStderr ).toHaveBeenCalledWith(
+      expect.stringContaining( "CONTENTFUL_SPACE_ID" ),
+    );
+
+    process.env = originalEnv;
+    mockExit.mockRestore();
+    mockStderr.mockRestore();
   });
 });
