@@ -31,6 +31,15 @@ make upload-images DIR="/path/to/image.jpg"   # Upload a single image to Content
 
 Outputs a JSON array of `{ filename, assetId, url }` to stdout. Reads credentials from `.env` automatically. Always rename images to descriptive filenames before uploading.
 
+Blog post creation (Claude Code skill):
+
+```bash
+/new-post                    # Brainstorm mode: develop topic, outline, and draft collaboratively
+/new-post "My Post Title"    # Assembly mode: content ready, collect fields and create entry
+```
+
+Walks through content creation, image upload, SEO check, and Contentful entry creation. See `.claude/skills/new-post/SKILL.md` for the full workflow.
+
 The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are generated at build time into `public/`.
 
 ## Code style
