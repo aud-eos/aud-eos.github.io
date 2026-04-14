@@ -1,9 +1,9 @@
 // @vitest-environment node
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
-import { getImageFiles, mimeTypeForPath } from "./upload-images.mjs";
+import { getImageFiles, mimeTypeForPath, uploadAndPublishImage } from "./upload-images.mjs";
 
 describe( "getImageFiles", () => {
   let tempDir;
@@ -81,5 +81,69 @@ describe( "mimeTypeForPath", () => {
 
   it( "handles uppercase extensions", () => {
     expect( mimeTypeForPath( "photo.PNG" ) ).toBe( "image/png" );
+  });
+});
+
+describe( "uploadAndPublishImage", () => {
+  it( "creates an upload, creates an asset, processes, polls, and publishes", async () => {
+    const mockPublishedAsset = {
+      sys: { id: "asset-123" },
+      fields: {
+        file: { "en-US": { url: "//images.ctfassets.net/space/asset-123/photo.jpg" } },
+      },
+    };
+
+    const mockProcessedAsset = {
+      sys: { id: "asset-123" },
+      fields: {
+        file: { "en-US": { url: "//images.ctfassets.net/space/asset-123/photo.jpg" } },
+      },
+      publish: vi.fn().mockResolvedValue( mockPublishedAsset ),
+    };
+
+    const mockUnprocessedAsset = {
+      sys: { id: "asset-123" },
+      fields: { file: { "en-US": {} } },
+    };
+
+    const mockEnvironment = {
+      createUpload: vi.fn().mockResolvedValue( { sys: { id: "upload-456" } } ),
+      createAsset: vi.fn().mockResolvedValue( {
+        sys: { id: "asset-123" },
+        processForAllLocales: vi.fn().mockResolvedValue( undefined ),
+      } ),
+      getAsset: vi.fn()
+        .mockResolvedValueOnce( mockUnprocessedAsset )
+        .mockResolvedValueOnce( mockProcessedAsset ),
+    };
+
+    const tempDir = mkdtempSync( join( tmpdir(), "upload-test-" ) );
+    const filePath = join( tempDir, "photo.jpg" );
+    writeFileSync( filePath, "fake image data" );
+
+    const result = await uploadAndPublishImage( mockEnvironment, filePath );
+
+    expect( mockEnvironment.createUpload ).toHaveBeenCalledOnce();
+    expect( mockEnvironment.createAsset ).toHaveBeenCalledWith( {
+      fields: {
+        title: { "en-US": "photo" },
+        file: {
+          "en-US": {
+            contentType: "image/jpeg",
+            fileName: "photo.jpg",
+            uploadFrom: {
+              sys: { type: "Link", linkType: "Upload", id: "upload-456" },
+            },
+          },
+        },
+      },
+    } );
+    expect( result ).toEqual( {
+      filename: "photo.jpg",
+      assetId: "asset-123",
+      url: "https://images.ctfassets.net/space/asset-123/photo.jpg",
+    } );
+
+    rmSync( tempDir, { recursive: true, force: true } );
   });
 });
