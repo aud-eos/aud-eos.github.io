@@ -141,11 +141,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
                 { post.fields.description }
               </p>
               { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
-              { youTubeOembed && ( () => {
-                const postFields: Record<string, unknown> = { ...post.fields };
-                const youtubeUrl = postFields.youtubeUrl;
-                return typeof youtubeUrl === "string" && <YouTubeEmbed oembed={ youTubeOembed } url={ youtubeUrl } />;
-              })() }
+              { youTubeOembed && post.fields.youtubeUrl && <YouTubeEmbed oembed={ youTubeOembed } url={ post.fields.youtubeUrl } /> }
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
@@ -195,10 +191,8 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const soundCloudOembed = post.fields.soundcloudUrl
     ? await getOembed( post.fields.soundcloudUrl ) : null;
 
-  const postFields: Record<string, unknown> = { ...post.fields };
-  const youtubeUrlField = postFields.youtubeUrl;
-  const youTubeOembed = typeof youtubeUrlField === "string"
-    ? await getYouTubeOembed( youtubeUrlField ) : null;
+  const youTubeOembed = post.fields.youtubeUrl
+    ? await getYouTubeOembed( post.fields.youtubeUrl ) : null;
 
   const sortedPosts = allPosts.items
     .slice()
