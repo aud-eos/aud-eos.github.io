@@ -12,7 +12,11 @@ vi.mock( "@/utils/spotify/getPlaylist", () => ({
 vi.mock( "@/utils/soundcloud/getOembed", () => ({
   getOembed: vi.fn(),
 }) );
+vi.mock( "@/utils/youtube/getOembed", () => ({
+  getOembed: vi.fn(),
+}) );
 vi.mock( "@/components/SoundCloudEmbed", () => ({ SoundCloudEmbed: () => null }) );
+vi.mock( "@/components/YouTubeEmbed", () => ({ YouTubeEmbed: () => null }) );
 vi.mock( "next/link", () => ({
   default: ({ children, href, ...props }: React.ComponentProps<"a"> ) => (
     <a href={ href } { ...props }>{ children }</a>
@@ -38,6 +42,7 @@ import { BlogPostView, getStaticProps } from "@/pages/post/[slug]";
 import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
 import { getPlaylist } from "@/utils/spotify/getPlaylist";
 import { getOembed } from "@/utils/soundcloud/getOembed";
+import { getOembed as getYouTubeOembed } from "@/utils/youtube/getOembed";
 
 function makePost( overrides: {
   slug?: string;
@@ -120,6 +125,7 @@ describe( "getStaticProps — post navigation", () => {
     vi.mocked( getBlogPosts ).mockResolvedValue({ items: orderedPosts } as never );
     vi.mocked( getPlaylist ).mockResolvedValue( null as never );
     vi.mocked( getOembed ).mockResolvedValue( null );
+    vi.mocked( getYouTubeOembed ).mockResolvedValue( null );
   });
 
   it( "assigns both prevPost and nextPost for a middle post", async () => {
@@ -193,6 +199,7 @@ describe( "getStaticProps — SoundCloud oEmbed", () => {
     vi.mocked( getBlogPosts ).mockResolvedValue({ items: [ postWithSoundcloud, postWithoutSoundcloud ] } as never );
     vi.mocked( getPlaylist ).mockResolvedValue( null as never );
     vi.mocked( getOembed ).mockResolvedValue( null );
+    vi.mocked( getYouTubeOembed ).mockResolvedValue( null );
   });
 
   it( "fetches oEmbed data when soundcloudUrl is present", async () => {
@@ -216,6 +223,47 @@ describe( "getStaticProps — SoundCloud oEmbed", () => {
     expect( getOembed ).not.toHaveBeenCalled();
     expect( result ).toMatchObject({
       props: { soundCloudOembed: null },
+    });
+  });
+});
+
+describe( "getStaticProps — YouTube oEmbed", () => {
+  const postWithYoutube = makePost({ slug: "yt-post" });
+  Object.assign( postWithYoutube.fields, {
+    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  });
+
+  const postWithoutYoutube = makePost({ slug: "no-yt-post" });
+
+  beforeEach( () => {
+    vi.resetAllMocks();
+    vi.mocked( getBlogPosts ).mockResolvedValue({ items: [ postWithYoutube, postWithoutYoutube ] } as never );
+    vi.mocked( getPlaylist ).mockResolvedValue( null as never );
+    vi.mocked( getOembed ).mockResolvedValue( null );
+    vi.mocked( getYouTubeOembed ).mockResolvedValue( null );
+  });
+
+  it( "fetches oEmbed data when youtubeUrl is present", async () => {
+    const mockOembed = { title: "Video", author_name: "Channel", author_url: "https://www.youtube.com/@channel", html: "<iframe></iframe>", thumbnail_url: "" };
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithYoutube as never );
+    vi.mocked( getYouTubeOembed ).mockResolvedValue( mockOembed );
+
+    const result = await getStaticProps({ params: { slug: "yt-post" } } as never );
+
+    expect( getYouTubeOembed ).toHaveBeenCalledWith( "https://www.youtube.com/watch?v=dQw4w9WgXcQ" );
+    expect( result ).toMatchObject({
+      props: { youTubeOembed: mockOembed },
+    });
+  });
+
+  it( "passes null when youtubeUrl is absent", async () => {
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithoutYoutube as never );
+
+    const result = await getStaticProps({ params: { slug: "no-yt-post" } } as never );
+
+    expect( getYouTubeOembed ).not.toHaveBeenCalled();
+    expect( result ).toMatchObject({
+      props: { youTubeOembed: null },
     });
   });
 });
