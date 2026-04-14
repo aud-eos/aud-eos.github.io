@@ -21,7 +21,8 @@ export default function Picture({
         breakpoints
           // @TODO: I hate this.
           .map( breakpoint => shouldRenderSourceSet( breakpoint, maxWidth, maxHeight ) ?
-            <source key={ breakpoint }
+            <source
+              key={ breakpoint }
               media={ `(max-width: ${ breakpoint }px)` }
               srcSet={ getImgSrc( url, { width: breakpoint, format: "webp" }) }
               type={ "image/webp" }
