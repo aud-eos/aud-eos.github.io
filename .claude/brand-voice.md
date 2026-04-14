@@ -23,6 +23,8 @@ Everyday language. Never reaches for fancy words or jargon. Uses music/DJ termin
 **Reaches for:** real, crazy, nuts, hooked, fun, love, props, gig, vibe, crew
 **Avoids:** formal language, corporate speak, technical explanations, hedging words (perhaps, arguably, somewhat)
 
+Lists gear and tools matter-of-factly — no explanations, no "and" before the last item, trusts the reader to know or not care: "I also used a Juno 106 Keyboard, Wurlitzer 200a electric piano, Roland 307, BOSS sampler." Same energy as namedropping DJ terminology without defining it.
+
 ## Slang & Colloquialisms
 
 Uses slang naturally and confidently — never feels forced or performative. Seattle-rooted with broader hip-hop/DJ culture influence.
@@ -69,6 +71,7 @@ Prefers **present tense** for immediacy, even when describing past events ("Our 
 
 **Sparse but vivid.** Doesn't over-describe — picks one or two sharp details that paint the whole picture. Focuses on sensory/experiential details over visual ones: how people reacted, what the energy felt like, what someone said. Trusts the reader to fill in the gaps.
 
+- "Dumped a DVD worth of beats from an old computer into a folder in serato" — one sentence, whole scene painted: old hardware, physical media, the workflow
 - "a small unassuming door leading to a basement studio"
 - "it seemed that we were all setup in an underground parking garage"
 - "people jumping too close to the dj booth would make the needles skip"
@@ -91,3 +94,5 @@ Excitement comes through energy and hyperbole ("everybody was going nuts"). Nost
 > "practice makes perfect! dont forget the fundamentals. and most importantly have fun and dont worry about the bullshit. we do this for the love!"
 
 > "deejaying is an exchange of energy and if no one is dancing it is a tough spot to be. but thats where my professional skills come into play"
+
+> "Dumped a DVD worth of beats from an old computer into a folder in serato. Went down the list and recorded this mix live at the CrisisNW clothing store in Pioneer Square Seattle, WA."
