@@ -9,6 +9,10 @@ vi.mock( "@/utils/contentfulUtils", () => ({
 vi.mock( "@/utils/spotify/getPlaylist", () => ({
   getPlaylist: vi.fn(),
 }) );
+vi.mock( "@/utils/soundcloud/getOembed", () => ({
+  getOembed: vi.fn(),
+}) );
+vi.mock( "@/components/SoundCloudEmbed", () => ({ SoundCloudEmbed: () => null }) );
 vi.mock( "next/link", () => ({
   default: ({ children, href, ...props }: React.ComponentProps<"a"> ) => (
     <a href={ href } { ...props }>{ children }</a>
@@ -33,6 +37,7 @@ vi.mock( "@/components/Playlist", () => ({ default: () => null }) );
 import { BlogPostView, getStaticProps } from "@/pages/post/[slug]";
 import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
 import { getPlaylist } from "@/utils/spotify/getPlaylist";
+import { getOembed } from "@/utils/soundcloud/getOembed";
 
 function makePost( overrides: {
   slug?: string;
@@ -114,6 +119,7 @@ describe( "getStaticProps — post navigation", () => {
   beforeEach( () => {
     vi.mocked( getBlogPosts ).mockResolvedValue({ items: orderedPosts } as never );
     vi.mocked( getPlaylist ).mockResolvedValue( null as never );
+    vi.mocked( getOembed ).mockResolvedValue( null );
   });
 
   it( "assigns both prevPost and nextPost for a middle post", async () => {
@@ -170,6 +176,46 @@ describe( "getStaticProps — post navigation", () => {
     const result = await getStaticProps({ params: { slug: "created-second" } } as never );
     expect( result ).toMatchObject({
       props: { prevPost: { slug: "created-first" }, nextPost: null },
+    });
+  });
+});
+
+describe( "getStaticProps — SoundCloud oEmbed", () => {
+  const postWithSoundcloud = makePost({ slug: "sc-post" });
+  Object.assign( postWithSoundcloud.fields, {
+    soundcloudUrl: "https://soundcloud.com/artist/track",
+  });
+
+  const postWithoutSoundcloud = makePost({ slug: "no-sc-post" });
+
+  beforeEach( () => {
+    vi.resetAllMocks();
+    vi.mocked( getBlogPosts ).mockResolvedValue({ items: [ postWithSoundcloud, postWithoutSoundcloud ] } as never );
+    vi.mocked( getPlaylist ).mockResolvedValue( null as never );
+    vi.mocked( getOembed ).mockResolvedValue( null );
+  });
+
+  it( "fetches oEmbed data when soundcloudUrl is present", async () => {
+    const mockOembed = { title: "Track", author_name: "Artist", author_url: "https://soundcloud.com/artist", html: "<iframe></iframe>", thumbnail_url: "" };
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithSoundcloud as never );
+    vi.mocked( getOembed ).mockResolvedValue( mockOembed );
+
+    const result = await getStaticProps({ params: { slug: "sc-post" } } as never );
+
+    expect( getOembed ).toHaveBeenCalledWith( "https://soundcloud.com/artist/track" );
+    expect( result ).toMatchObject({
+      props: { soundCloudOembed: mockOembed },
+    });
+  });
+
+  it( "passes null when soundcloudUrl is absent", async () => {
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithoutSoundcloud as never );
+
+    const result = await getStaticProps({ params: { slug: "no-sc-post" } } as never );
+
+    expect( getOembed ).not.toHaveBeenCalled();
+    expect( result ).toMatchObject({
+      props: { soundCloudOembed: null },
     });
   });
 });
