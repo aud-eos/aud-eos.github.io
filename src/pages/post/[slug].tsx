@@ -137,11 +137,11 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
               <p>
                 { post.fields.description }
               </p>
+              { soundCloudOembed && <SoundCloudEmbed oembed={ soundCloudOembed } /> }
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
             { playlist && <Playlist playlist={ playlist } /> }
-            { soundCloudOembed && <SoundCloudEmbed oembed={ soundCloudOembed } /> }
             { ( prevPost || nextPost ) && (
               <nav className={ styles.postNav }>
                 { nextPost && (
