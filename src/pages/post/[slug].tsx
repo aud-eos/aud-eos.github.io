@@ -17,6 +17,8 @@ import Playlist from "@/components/Playlist";
 import Gallery, { resolveGalleryItems } from "@/components/Gallery";
 import { getOembed, SoundCloudOembed } from "@/utils/soundcloud/getOembed";
 import { SoundCloudEmbed } from "@/components/SoundCloudEmbed";
+import { getOembed as getYouTubeOembed, YouTubeOembed } from "@/utils/youtube/getOembed";
+import { YouTubeEmbed } from "@/components/YouTubeEmbed";
 
 
 
@@ -30,12 +32,13 @@ export interface BlogPostViewProps {
   post: BlogPost
   playlist?: SpotifyPlaylist|null
   soundCloudOembed?: SoundCloudOembed|null
+  youTubeOembed?: YouTubeOembed|null
   prevPost?: PostNavLink|null
   nextPost?: PostNavLink|null
 }
 
 
-export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, prevPost, nextPost }) => {
+export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, youTubeOembed, prevPost, nextPost }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${CONTENT_IMAGE_WIDTH}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
@@ -138,6 +141,11 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
                 { post.fields.description }
               </p>
               { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
+              { youTubeOembed && ( () => {
+                const postFields: Record<string, unknown> = { ...post.fields };
+                const youtubeUrl = postFields.youtubeUrl;
+                return typeof youtubeUrl === "string" && <YouTubeEmbed oembed={ youTubeOembed } url={ youtubeUrl } />;
+              })() }
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
@@ -187,6 +195,11 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const soundCloudOembed = post.fields.soundcloudUrl
     ? await getOembed( post.fields.soundcloudUrl ) : null;
 
+  const postFields: Record<string, unknown> = { ...post.fields };
+  const youtubeUrlField = postFields.youtubeUrl;
+  const youTubeOembed = typeof youtubeUrlField === "string"
+    ? await getYouTubeOembed( youtubeUrlField ) : null;
+
   const sortedPosts = allPosts.items
     .slice()
     .sort( sortBlogPostsByDate )
@@ -211,6 +224,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
       post,
       playlist,
       soundCloudOembed,
+      youTubeOembed,
       prevPost,
       nextPost,
     },
