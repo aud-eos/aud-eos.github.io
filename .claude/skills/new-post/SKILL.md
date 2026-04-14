@@ -16,10 +16,11 @@ Guide the user through creating a blog post for audeos.com and publishing it to 
 
 ## Brainstorm Mode
 
-1. **Topic exploration** — ask what the user wants to write about, help refine the angle
-2. **Outline** — collaboratively build a section-by-section outline
-3. **Drafting** — work through each section iteratively. The user drives the voice; help structure and expand. Do not write the entire post yourself — collaborate section by section.
-4. Continue to **Image Upload** below
+1. **Load brand voice** — read `.claude/brand-voice.md` if it exists. Use it as a style reference throughout drafting — match the user's sentence structure, vocabulary, tone, and rhythm. If the file doesn't exist, skip this step and let the user drive the voice entirely.
+2. **Topic exploration** — ask what the user wants to write about, help refine the angle
+3. **Outline** — collaboratively build a section-by-section outline
+4. **Drafting** — work through each section iteratively. The user drives the voice; help structure and expand. Apply the brand voice profile when writing or suggesting text. Do not write the entire post yourself — collaborate section by section.
+5. Continue to **Image Upload** below
 
 ## Assembly Mode
 
@@ -168,6 +169,7 @@ Report back with:
 - **Always show content for approval** before any Contentful write operation
 - **Remind about descriptive filenames** before image uploads
 - **Author defaults to sole author** — only ask for selection if multiple exist
+- **Apply brand voice when writing** — always read `.claude/brand-voice.md` before drafting or suggesting text. Match the documented style patterns. If the profile doesn't exist yet, suggest running `/brand-voice` first to build one.
 - **Embed the featured image in the body** — the cover image should always appear inline somewhere in the post body as a markdown image (`![alt](url)`). Place it where it fits naturally (e.g., near the top or after the intro).
 - **Use protocol-relative URLs for Contentful images** — inline images in the body must use `//images.ctfassets.net/...` (no `https:`). The site's `Picture` component prepends `https:`, so a full `https://` URL results in a broken `https://https//...` double protocol. This matches how Contentful's own markdown editor inserts images.
 - **Validate all URLs before publishing** — every inline link and image in the body must be fetched and confirmed working. Do not proceed to entry creation with broken URLs.
