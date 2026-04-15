@@ -25,7 +25,7 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ) {
     return null;
   }
   return (
-    <nav>
+    <nav className={ styles.pagination }>
       {
         Boolean( page > 1 ) &&
           <Link

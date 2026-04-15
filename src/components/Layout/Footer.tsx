@@ -17,7 +17,6 @@ import {
 import { FaSignalMessenger } from "react-icons/fa6";
 import { resetCookieConsent } from "@/components/CookieConsent";
 import styles from "@/styles/Layout.module.scss";
-import { OldSchoolButton } from "../OldSchoolButton";
 
 interface SocialLink {
   href: string;
@@ -25,7 +24,7 @@ interface SocialLink {
   title: string;
 }
 
-const ICON_SIZE = 50;
+const ICON_SIZE = 36;
 
 const SOCIAL_LINKS: SocialLink[] = [
   { href: "https://www.instagram.com/Audeos", icon: FaInstagram, title: "Follow DJ Audeos on Instagram" },
@@ -46,7 +45,7 @@ export const Footer: FC = () => {
   return (
     <footer className={ styles.footer }>
 
-      <div>
+      <div className={ styles.socialLinks }>
         { SOCIAL_LINKS.map( ({ href, icon: Icon, title }) => (
           <Link key={ href } href={ href } target="_blank">
             <Icon size={ ICON_SIZE } title={ title } />
@@ -61,10 +60,9 @@ export const Footer: FC = () => {
       </div>
 
       <div>
-        <OldSchoolButton
-          onClick={ resetCookieConsent }
-          label="Update Cookie Preferences"
-        />
+        <button className={ styles.cookieLink } onClick={ resetCookieConsent }>
+          Update Cookie Preferences
+        </button>
       </div>
 
     </footer>

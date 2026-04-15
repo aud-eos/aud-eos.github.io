@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "@/styles/Home.module.scss";
 import { BlogPosts, getBlogPosts, getTags } from "@/utils/contentfulUtils";
 import BlogPostList from "@/components/Home/BlogPostList";
@@ -7,11 +8,10 @@ import { sortTagsById } from "@/utils/blogPostUtils";
 import { GetStaticPropsContext } from "next";
 import Pagination from "@/components/Home/Pagination";
 import { generateFeeds } from "@/lib/generateFeeds";
-import { META_DESCRIPTION, META_IMAGE, META_TITLE, POSTS_ANCHOR, SITE_URL } from "@/constants";
+import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
 import { capitalize } from "@/utils/stringUtils";
-import { OldSchoolButton } from "@/components/OldSchoolButton";
 import { SeoHead } from "@/components/SeoHead";
-import { useEffect } from "react";
+
 
 export interface HomeProps {
   posts: BlogPosts
@@ -28,13 +28,6 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
   const isTagPage = Boolean( tagId );
   const isPaginated = page > 1;
 
-  useEffect( () => {
-    if( !tagId ) return;
-    const isMobile = window.innerWidth <= 768;
-    if( !isMobile ) return;
-    const postsElement = document.getElementById( POSTS_ANCHOR );
-    postsElement?.scrollIntoView({ behavior: "smooth" });
-  }, [ tagId ] );
   const tagLabel = tagId ? capitalize( tagId ) : "";
 
   const pageTitle = isTagPage && isPaginated
@@ -71,21 +64,21 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
       </SeoHead>
       <Layout isFullwidth>
         <main className={ styles.main }>
-          <nav>
+          <nav className={ styles.tagNav }>
             {
               tags.items
                 .sort( sortTagsById )
                 .map( tag => {
-                  const className = tag.sys.id === tagId ? styles.isTagged : "";
-                  const href = tag.sys.id === tagId ? "/" : `/tags/${tag.sys.id}`;
+                  const isActive = tag.sys.id === tagId;
+                  const href = isActive ? "/" : `/tags/${tag.sys.id}`;
                   return (
-                    <div key={ tag.sys.id } className={ styles.navButtonWrapper }>
-                      <OldSchoolButton
-                        className={ className }
-                        href={ href }
-                        label={ tag.sys.id }
-                      />
-                    </div>
+                    <Link
+                      key={ tag.sys.id }
+                      href={ href }
+                      className={ isActive ? styles.tagActive : styles.tag }
+                    >
+                      { tag.sys.id }
+                    </Link>
                   );
                 })
             }

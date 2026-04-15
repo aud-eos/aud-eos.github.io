@@ -3,6 +3,7 @@
   flex-direction: column;
   flex: 1;
   align-items: center;
+  width: 100%;
   > header {
     display: flex;
     flex-direction: column;
@@ -18,78 +19,108 @@
       }
     }
   }
-  > nav {
+}
+
+.tagNav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 0;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.tagActive {
+  composes: tag;
+  opacity: 1;
+  font-weight: 700;
+  border-bottom-color: currentColor;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem 1rem;
+
+  a {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
-    font-size: 1rem;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-    > a {
-      min-height: 3rem;
-      min-width: 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      display: block;
-      font-size: 1.5em;
-      margin-block-start: 0.83em;
-      margin-block-end: 0.83em;
-      margin-inline-start: 0px;
-      margin-inline-end: 0px;
-      font-weight: bold;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
   }
 }
 
-.navButtonWrapper {
-  margin: .5rem;
-}
-
-.isTagged, .isCurrentPage, a:hover > h3, nav a:hover {
-  color: lightgreen!important;
-  background: #555555!important;
+.isCurrentPage {
+  background: rgba(255, 255, 255, 0.15);
+  font-weight: 700;
 }
 
 ul.imageGallery {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: 9rem;
   justify-content: center;
   width: 100%;
-  max-width: 1300px;
+  padding-left: 3rem;
+  padding-right: 3rem;
 
   li {
-    min-width: 300px;
-    max-width: 300px;
-    padding-left: .5rem;
-    padding-right: .5rem;
-
     figure {
       picture {
-        filter: drop-shadow(.25rem .25rem 10rem rgba(255, 255, 255, 0.25));
-        > img {
-          margin-bottom: .25rem;
-        }
         > img {
           display: block;
           width: 100%;
           object-fit: cover;
-          aspect-ratio: 1/1;
-          border: .25rem solid white;
-          filter: drop-shadow(.25rem .25rem 0 lightgreen);
+          aspect-ratio: 4/3;
+          border-radius: 10px;
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          margin-bottom: 0.25rem;
+
+          &:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+          }
         }
       }
       > figcaption, section {
-        padding-right: .5rem;
-        padding-left: .5rem;
-        padding-top: .5rem;
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+        padding-top: 0.5rem;
         > a {
           text-decoration: none;
         }

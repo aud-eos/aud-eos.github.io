@@ -55,7 +55,7 @@
     // Article Header
     > header {
 
-      > figure, h1, address, p, section {
+      > figure, h1, address, p {
         margin-bottom: 1rem;
       }
 
@@ -69,7 +69,7 @@
         }
       }
       > h1 {
-        font-size: xxx-large;
+        font-size: min(3rem, 8vw);
       }
       > address {
         display: flex;
