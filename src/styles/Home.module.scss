@@ -58,38 +58,36 @@
 
 ul.imageGallery {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
   justify-content: center;
   width: 100%;
   max-width: 1300px;
 
   li {
-    min-width: 300px;
-    max-width: 300px;
-    padding-left: .5rem;
-    padding-right: .5rem;
-
     figure {
       picture {
-        filter: drop-shadow(.25rem .25rem 10rem rgba(255, 255, 255, 0.25));
-        > img {
-          margin-bottom: .25rem;
-        }
         > img {
           display: block;
           width: 100%;
           object-fit: cover;
-          aspect-ratio: 1/1;
-          border: .25rem solid white;
-          filter: drop-shadow(.25rem .25rem 0 lightgreen);
+          aspect-ratio: 4/3;
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          margin-bottom: 0.25rem;
+
+          &:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+          }
         }
       }
       > figcaption, section {
-        padding-right: .5rem;
-        padding-left: .5rem;
-        padding-top: .5rem;
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+        padding-top: 0.5rem;
         > a {
           text-decoration: none;
         }
