@@ -3,6 +3,7 @@
   flex-direction: column;
   flex: 1;
   align-items: center;
+  width: 100%;
   > header {
     display: flex;
     flex-direction: column;
@@ -59,11 +60,12 @@
 ul.imageGallery {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: 9rem;
   justify-content: center;
   width: 100%;
-  max-width: 1300px;
+  padding-left: 3rem;
+  padding-right: 3rem;
 
   li {
     figure {

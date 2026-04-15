@@ -4,14 +4,12 @@ export interface PictureProps {
   url: string;
   alt: string;
   maxWidth?: number;
-  maxHeight?: number;
   breakpoints?: number[],
 }
 
 export default function Picture({
   url,
   maxWidth = CONTENT_IMAGE_WIDTH,
-  maxHeight,
   alt,
   breakpoints = [ 749, 600, 350 ],
 }: PictureProps ) {
@@ -19,22 +17,22 @@ export default function Picture({
     <picture>
       {
         breakpoints
-          // @TODO: I hate this.
-          .map( breakpoint => shouldRenderSourceSet( breakpoint, maxWidth, maxHeight ) ?
+          .filter( breakpoint => breakpoint < maxWidth )
+          .map( breakpoint =>
             <source
               key={ breakpoint }
               media={ `(max-width: ${ breakpoint }px)` }
               srcSet={ getImgSrc( url, { width: breakpoint, format: "webp" }) }
               type={ "image/webp" }
-            /> : null,
+            />,
           )
       }
       <source
-        srcSet={ getImgSrc( url, { width: maxWidth, height: maxHeight, format: "webp" }) }
+        srcSet={ getImgSrc( url, { width: maxWidth, format: "webp" }) }
         type="image/webp"
       />
       <img
-        src={ getImgSrc( url, { width: maxWidth, height: maxHeight }) }
+        src={ getImgSrc( url, { width: maxWidth }) }
         alt={ alt }
       />
     </picture>
@@ -45,7 +43,6 @@ export default function Picture({
 export interface ImageSourceOptions {
   format?: "jpg"|"png"|"webp"|"gif"|"avif";
   width?: number;
-  height?: number;
 }
 
 /**
@@ -57,7 +54,6 @@ export interface ImageSourceOptions {
 const getImgSrc = ( src: string, {
   format,
   width,
-  height,
 }: ImageSourceOptions ): string => {
   const imageUrl = new URL( `https:${src}` );
 
@@ -79,19 +75,5 @@ const getImgSrc = ( src: string, {
     imageUrl.searchParams.set( "w", width.toString() );
   }
 
-  if( height ) {
-    imageUrl.searchParams.set( "h", height.toString() );
-  }
-
   return imageUrl.toString();
-};
-
-
-const shouldRenderSourceSet = (
-  breakpoint: number,
-  maxWidth: number,
-  maxHeight?: number,
-): boolean => {
-  const compareTo = ( maxHeight || maxWidth );
-  return breakpoint < ( compareTo );
 };

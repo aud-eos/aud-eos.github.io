@@ -9,7 +9,7 @@ import { BlogPost } from "@/utils/contentfulUtils";
 import { POSTS_ANCHOR } from "@/constants";
 
 
-const IMAGE_HEIGHT = 350;
+const IMAGE_WIDTH = 800;
 
 
 export interface BlogPostListProps {
@@ -38,7 +38,7 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
                   <Link href={ url } aria-label={ post.fields.title }>
                     <Picture
                       url={ pictureUrl }
-                      maxHeight={ IMAGE_HEIGHT }
+                      maxWidth={ IMAGE_WIDTH }
                       alt={ altText }
                     />
                   </Link>
