@@ -11,6 +11,7 @@
  */
 import axios from "axios";
 import { strict as assert } from "assert";
+import { retryRequest } from "./retryRequest";
 
 
 const SPOTIFY_CLIENT_ID: string = process.env[
@@ -36,12 +37,10 @@ export const getClientCredentials = async () => {
   const body = { grant_type: "client_credentials" };
   const cfg = { headers };
   const url = "https://accounts.spotify.com/api/token";
-  return axios.post<{
+  const response = await retryRequest( () => axios.post<{
     access_token: string
     token_type: string
     expires_in: number
-  }>( url, body, cfg )
-    .then( response => {
-      return response.data;
-    });
+  }>( url, body, cfg ) );
+  return response.data;
 };

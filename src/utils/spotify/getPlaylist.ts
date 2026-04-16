@@ -1,6 +1,7 @@
 import axios from "axios";
 import { strict as assert } from "assert";
 import { getClientCredentials } from "./getClientCredentials";
+import { retryRequest } from "./retryRequest";
 
 
 const SPOTIFY_CLIENT_ID: string = process.env[
@@ -130,17 +131,12 @@ interface SpotifyUser {
 
 
 export async function getPlaylist( playlistId: string ) {
-  return getClientCredentials()
-    .then( async response => {
-      const { access_token } = response;
-      const url = `https://api.spotify.com/v1/playlists/${playlistId}`;
-      const headers = {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${access_token}`,
-      };
-      const cfg = { headers };
-      const { data } = await axios.get<SpotifyPlaylist>( url, cfg );
-      return data;
-    });
-
+  const credentials = await getClientCredentials();
+  const url = `https://api.spotify.com/v1/playlists/${playlistId}`;
+  const headers = {
+    "Accept": "application/json",
+    "Authorization": `Bearer ${credentials.access_token}`,
+  };
+  const { data } = await retryRequest( () => axios.get<SpotifyPlaylist>( url, { headers }) );
+  return data;
 }
