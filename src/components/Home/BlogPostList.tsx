@@ -81,7 +81,7 @@ function useCardInteractions( listRef: React.RefObject<HTMLUListElement | null> 
       list.removeEventListener( "touchcancel", handleTouchEnd );
       clearPreview();
     };
-  }, [] );
+  }, [ listRef ] );
 }
 
 
