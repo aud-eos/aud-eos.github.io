@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { resolvePostDate, sortBlogPostsByDate } from "@/utils/blogPostUtils";
 import DateTimeFormat from "@/components/DateTimeFormat";
@@ -10,6 +11,7 @@ import { POSTS_ANCHOR } from "@/constants";
 
 
 const IMAGE_WIDTH = 800;
+const OBSERVER_THRESHOLD = 0.15;
 
 
 export interface BlogPostListProps {
@@ -19,8 +21,37 @@ export interface BlogPostListProps {
 }
 
 export default function BlogPostList({ posts, page, tagId }: BlogPostListProps ) {
+  const listRef = useRef<HTMLUListElement>( null );
+
+  useEffect( () => {
+    const list = listRef.current;
+    if( !list ) return;
+
+    const prefersReducedMotion = window.matchMedia( "(prefers-reduced-motion: reduce)" ).matches;
+    if( prefersReducedMotion ) {
+      list.querySelectorAll( "li" ).forEach( item => item.classList.add( styles.visible ) );
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach( entry => {
+          if( entry.isIntersecting ) {
+            entry.target.classList.add( styles.visible );
+            observer.unobserve( entry.target );
+          }
+        });
+      },
+      { threshold: OBSERVER_THRESHOLD },
+    );
+
+    list.querySelectorAll( "li" ).forEach( item => observer.observe( item ) );
+
+    return () => observer.disconnect();
+  }, [ posts, page, tagId ] );
+
   return (
-    <ul id={ POSTS_ANCHOR } className={ styles.imageGallery } role="list">
+    <ul id={ POSTS_ANCHOR } className={ styles.imageGallery } role="list" ref={ listRef }>
       {
         [ ...posts ]
           .sort( sortBlogPostsByDate )
