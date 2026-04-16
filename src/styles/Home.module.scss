@@ -91,12 +91,41 @@
 ul.imageGallery {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-  gap: 9rem;
+  grid-template-columns: 1fr;
+  gap: 5rem;
   justify-content: center;
   width: 100%;
-  padding-left: 3rem;
-  padding-right: 3rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+
+  // 2-column grid — equal gaps and page margins
+  @media (min-width: 800px) {
+    --grid-gap: 2rem;
+
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-gap);
+    padding-left: var(--grid-gap);
+    padding-right: var(--grid-gap);
+  }
+
+  // Increase spacing at tablet size
+  @media (min-width: 872px) {
+    --grid-gap: 2.5rem;
+  }
+
+  // Wider screens — increase the uniform spacing
+  @media (min-width: 1100px) {
+    --grid-gap: 3.5rem;
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1600px) {
+    --grid-gap: 4.5rem;
+    grid-template-columns: repeat(4, 1fr);
+  }
 
   li {
     // Scale reveal — hidden by default, shown by IntersectionObserver
