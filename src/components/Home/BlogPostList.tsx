@@ -1,15 +1,88 @@
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { resolvePostDate, sortBlogPostsByDate } from "@/utils/blogPostUtils";
 import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import Picture from "@/components/Picture";
 import { Tags } from "@/components/Tags";
-import { PAGE_SIZE } from "@/constants";
+import { PAGE_SIZE, POSTS_ANCHOR } from "@/constants";
 import { BlogPost } from "@/utils/contentfulUtils";
-import { POSTS_ANCHOR } from "@/constants";
 
 
 const IMAGE_WIDTH = 800;
+const OBSERVER_THRESHOLD = 0.15;
+const LONG_PRESS_DURATION = 500;
+const TOUCH_MOVE_THRESHOLD = 10;
+
+function useCardInteractions( listRef: React.RefObject<HTMLUListElement | null> ) {
+  useEffect( () => {
+    const listOrNull = listRef.current;
+    if( !listOrNull ) return;
+    const list: HTMLUListElement = listOrNull;
+
+    const isTouchDevice = window.matchMedia( "(hover: none)" ).matches;
+    const prefersReducedMotion = window.matchMedia( "(prefers-reduced-motion: reduce)" ).matches;
+    if( !isTouchDevice || prefersReducedMotion ) return;
+
+    let pressTimer: ReturnType<typeof setTimeout> | null = null;
+    let startX = 0;
+    let startY = 0;
+    let activeCard: HTMLElement | null = null;
+
+    function clearPreview() {
+      if( activeCard ) {
+        activeCard.classList.remove( styles.longPressPreview );
+        activeCard = null;
+      }
+      if( pressTimer ) {
+        clearTimeout( pressTimer );
+        pressTimer = null;
+      }
+    }
+
+    function handleTouchStart( event: TouchEvent ) {
+      if( !( event.target instanceof Element ) ) return;
+      const card = event.target.closest( "li" );
+      if( !card || !( card instanceof HTMLElement ) || !list.contains( card ) ) return;
+
+      const touch = event.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+
+      pressTimer = setTimeout( () => {
+        activeCard = card;
+        activeCard.classList.add( styles.longPressPreview );
+      }, LONG_PRESS_DURATION );
+    }
+
+    function handleTouchMove( event: TouchEvent ) {
+      if( !pressTimer && !activeCard ) return;
+      const touch = event.touches[0];
+      const deltaX = Math.abs( touch.clientX - startX );
+      const deltaY = Math.abs( touch.clientY - startY );
+      if( deltaX > TOUCH_MOVE_THRESHOLD || deltaY > TOUCH_MOVE_THRESHOLD ) {
+        clearPreview();
+      }
+    }
+
+    function handleTouchEnd() {
+      clearPreview();
+    }
+
+    list.addEventListener( "touchstart", handleTouchStart, { passive: true });
+    list.addEventListener( "touchmove", handleTouchMove, { passive: true });
+    list.addEventListener( "touchend", handleTouchEnd );
+    list.addEventListener( "touchcancel", handleTouchEnd );
+
+    return () => {
+      list.removeEventListener( "touchstart", handleTouchStart );
+      list.removeEventListener( "touchmove", handleTouchMove );
+      list.removeEventListener( "touchend", handleTouchEnd );
+      list.removeEventListener( "touchcancel", handleTouchEnd );
+      clearPreview();
+    };
+  }, [ listRef ] );
+}
 
 
 export interface BlogPostListProps {
@@ -19,8 +92,39 @@ export interface BlogPostListProps {
 }
 
 export default function BlogPostList({ posts, page, tagId }: BlogPostListProps ) {
+  const listRef = useRef<HTMLUListElement>( null );
+
+  useEffect( () => {
+    const list = listRef.current;
+    if( !list ) return;
+
+    const prefersReducedMotion = window.matchMedia( "(prefers-reduced-motion: reduce)" ).matches;
+    if( prefersReducedMotion ) {
+      list.querySelectorAll( "li" ).forEach( item => item.classList.add( styles.visible ) );
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach( entry => {
+          if( entry.isIntersecting ) {
+            entry.target.classList.add( styles.visible );
+            observer.unobserve( entry.target );
+          }
+        });
+      },
+      { threshold: OBSERVER_THRESHOLD },
+    );
+
+    list.querySelectorAll( "li" ).forEach( item => observer.observe( item ) );
+
+    return () => observer.disconnect();
+  }, [ posts, page, tagId ] );
+
+  useCardInteractions( listRef );
+
   return (
-    <ul id={ POSTS_ANCHOR } className={ styles.imageGallery } role="list">
+    <ul id={ POSTS_ANCHOR } className={ styles.imageGallery } role="list" ref={ listRef }>
       {
         [ ...posts ]
           .sort( sortBlogPostsByDate )
@@ -33,7 +137,7 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
             const timestamp = resolvePostDate( post );
 
             return (
-              <li key={ post.sys.id }>
+              <li key={ post.sys.id } style={ { viewTransitionName: `post-${post.fields.slug}` } }>
                 <figure>
                   <Link href={ url } aria-label={ post.fields.title }>
                     <Picture

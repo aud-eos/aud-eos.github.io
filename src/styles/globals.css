@@ -120,3 +120,17 @@ a {
     color-scheme: dark;
   }
 }
+
+/* View Transitions — tag navigation crossfade/morph */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0s;
+  }
+}

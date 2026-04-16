@@ -30,6 +30,7 @@
   padding: 0.75rem 0;
   margin-bottom: 2rem;
   border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+  view-transition-name: tag-nav;
 }
 
 .tag {
@@ -127,22 +128,56 @@ ul.imageGallery {
   }
 
   li {
+    // Scale reveal — hidden by default, shown by IntersectionObserver
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    // Stagger delays for multi-column layouts
+    &:nth-child(2) { transition-delay: 0.08s; }
+    &:nth-child(3) { transition-delay: 0.16s; }
+    &:nth-child(4) { transition-delay: 0.24s; }
+
+    // Reset stagger for rows beyond the first (every 2 cards at 2-col, etc.)
+    @media (min-width: 800px) {
+      &:nth-child(2n+1) { transition-delay: 0s; }
+      &:nth-child(2n+2) { transition-delay: 0.08s; }
+    }
+    @media (min-width: 1200px) {
+      &:nth-child(3n+1) { transition-delay: 0s; }
+      &:nth-child(3n+2) { transition-delay: 0.08s; }
+      &:nth-child(3n+3) { transition-delay: 0.16s; }
+    }
+    @media (min-width: 1600px) {
+      &:nth-child(4n+1) { transition-delay: 0s; }
+      &:nth-child(4n+2) { transition-delay: 0.08s; }
+      &:nth-child(4n+3) { transition-delay: 0.16s; }
+      &:nth-child(4n+4) { transition-delay: 0.24s; }
+    }
+
     figure {
       picture {
+        overflow: hidden;
+        display: block;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        transition: box-shadow 0.3s ease;
+        margin-bottom: 0.25rem;
+
+        &:hover {
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        }
+
         > img {
           display: block;
           width: 100%;
           object-fit: cover;
           aspect-ratio: 4/3;
-          border-radius: 10px;
           border: 2px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-          margin-bottom: 0.25rem;
+          transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
           &:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+            transform: scale(1.08);
           }
         }
       }
@@ -153,6 +188,79 @@ ul.imageGallery {
         > a {
           text-decoration: none;
         }
+      }
+    }
+  }
+
+  // Scale reveal — visible state (applied by IntersectionObserver)
+  li.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // Mobile tap feedback
+  @media (hover: none) {
+    li figure a:active {
+      transform: scale(0.97);
+      transition: transform 0.15s ease;
+    }
+  }
+
+  // Long-press preview state
+  li.longPressPreview {
+    transform: scale(1) translateY(-4px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    figure picture > img {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// Reduced motion: disable all animations
+@media (prefers-reduced-motion: reduce) {
+  ul.imageGallery {
+    li {
+      opacity: 1;
+      transform: none;
+      transition: none;
+
+      figure picture {
+        transition: none;
+
+        &:hover {
+          box-shadow: none;
+        }
+
+        > img {
+          transition: none;
+
+          &:hover {
+            transform: none;
+          }
+        }
+      }
+    }
+
+    li.visible {
+      transition: none;
+    }
+
+    @media (hover: none) {
+      li figure a:active {
+        transform: none;
+        transition: none;
+      }
+    }
+
+    li.longPressPreview {
+      transform: none;
+      box-shadow: none;
+      transition: none;
+
+      figure picture > img {
+        transform: none;
       }
     }
   }
