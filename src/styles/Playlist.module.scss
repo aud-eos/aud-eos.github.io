@@ -1,40 +1,196 @@
-section.playlistHeader {
+// Spotify Playlist — Spotify-inspired design
+
+.header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.2) 0%, rgba(29, 185, 84, 0.02) 100%);
   margin-top: 2rem;
-  margin-bottom: 2rem;
-  > a > img {
-    margin-right: 1rem;
-    @media (prefers-color-scheme: light) {
-      filter: invert(100%);
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 599px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.cover {
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+
+    a {
+      text-decoration: none;
     }
   }
 }
 
-h3.totalTracks {
-  margin-bottom: 1rem;
-  text-align: center;
+.meta {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 599px) {
+    justify-content: center;
+  }
 }
 
-ul.playlist {
+.ownerLink {
+  color: #1db954;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.spotifyLogo {
+  margin-right: 0.25rem;
+
+  @media (prefers-color-scheme: light) {
+    filter: invert(100%);
+  }
+}
+
+// Track list
+.trackList {
   list-style: none;
-  > li {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 1rem;
-    > a {
-      filter: drop-shadow(.25rem .25rem 10rem rgba(255, 255, 255, 0.25));
-      > img {
-        border: .25rem solid white;
-        filter: drop-shadow(.25rem .25rem 0 grey);
-      }
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
     }
-    > ul {
-      padding-left: 2rem;
-      list-style-type: square;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+  }
+}
+
+.trackNumber {
+  opacity: 0.3;
+  width: 1.5rem;
+  text-align: right;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.albumArt {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.trackInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.trackTitle {
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trackArtists {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trackAlbum {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+  max-width: 30%;
+
+  @media (max-width: 599px) {
+    display: none;
+  }
+}
+
+.trackDuration {
+  opacity: 0.3;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  text-align: right;
+  min-width: 3rem;
+}
+
+.hidden {
+  display: none;
+}
+
+// Expand/collapse toggle
+.expandToggle {
+  display: block;
+  margin: 1rem auto;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 0.85rem;
+  opacity: 0.5;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// Footer CTA
+.footerCta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+
+  a {
+    color: #1db954;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 }
