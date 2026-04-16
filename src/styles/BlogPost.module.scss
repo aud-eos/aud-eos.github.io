@@ -11,6 +11,15 @@
     }
   }
 
+  // Remove link effects from tag pills so they match the index page
+  section a {
+    @media (prefers-color-scheme: light) {
+      filter: none;
+      text-shadow: none;
+      color: inherit;
+    }
+  }
+
   .postNav {
     display: flex;
     justify-content: space-between;
@@ -29,6 +38,16 @@
       gap: 0.25rem;
       max-width: 45%;
       text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      transition: background 0.15s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        @media (prefers-color-scheme: light) {
+          background: rgba(0, 0, 0, 0.08);
+        }
+      }
 
       > span:first-child {
         font-size: small;
@@ -84,6 +103,10 @@
           border-radius: 100%;
           border: .2rem solid gold;
           margin: 0 .5rem 0 0;
+          background: #000;
+          @media (prefers-color-scheme: light) {
+            background: #fff;
+          }
         }
       }
       > p {

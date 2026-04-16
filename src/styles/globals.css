@@ -113,6 +113,7 @@ body {
 a {
   color: inherit;
   text-decoration: underline;
+  text-underline-offset: 0.25em;
 }
 
 @media (prefers-color-scheme: dark) {

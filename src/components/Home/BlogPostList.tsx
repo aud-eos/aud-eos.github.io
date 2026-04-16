@@ -147,10 +147,12 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
                     />
                   </Link>
                   <figcaption>
-                    <Link href={ url }><h3>{ post.fields.title }</h3></Link>
-                    <DateTimeFormat
-                      timestamp={ timestamp }
-                    />
+                    <Link href={ url }>
+                      <h3>{ post.fields.title }</h3>
+                      <DateTimeFormat
+                        timestamp={ timestamp }
+                      />
+                    </Link>
                   </figcaption>
                   <Tags
                     tags={ post.metadata.tags }

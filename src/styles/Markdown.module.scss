@@ -2,9 +2,18 @@
 
   a {
     color: lightgreen;
+    padding: 0.1rem 0.25rem;
+    border-radius: 4px;
+    transition: background 0.15s ease;
     @media (prefers-color-scheme: light) {
       filter: drop-shadow(.1rem .1rem .1rem black);
       text-shadow: -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
+    }
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      @media (prefers-color-scheme: light) {
+        background: rgba(0, 0, 0, 0.08);
+      }
     }
   }
 
@@ -38,6 +47,13 @@
         max-width: 100%;
         border: .5rem solid white;
     }
+    > figcaption {
+        font-size: 0.85rem;
+        font-style: italic;
+        opacity: 0.6;
+        text-align: center;
+        margin-top: 0.5rem;
+    }
   }
 
   > video {
@@ -55,6 +71,13 @@
     > p {
       margin-bottom: 1rem;
     }
+  }
+
+  hr {
+    border: none;
+    height: 4px;
+    background: currentColor;
+    margin: 2rem 0;
   }
 
   ul {
