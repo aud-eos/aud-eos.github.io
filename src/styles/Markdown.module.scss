@@ -1,68 +1,126 @@
 .reactMarkdown {
+  font-size: 1.05rem;
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.8);
+
+  @media (prefers-color-scheme: light) {
+    color: rgba(0, 0, 0, 0.75);
+  }
 
   a {
     color: lightgreen;
-    @media (prefers-color-scheme: light) {
-      filter: drop-shadow(.1rem .1rem .1rem black);
-      text-shadow: -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
-    }
+    text-decoration: underline;
   }
 
-  p, h1, h2, h3, h4, h5, h6, li {
-    font-size: 1.2rem;
-  }
-
-  p, h1, h2, h3, h4, h5, h6 {
-    margin-bottom: 1rem;
+  p {
+    margin-bottom: 1.5rem;
   }
 
   h1 {
-    margin-top: 3rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 3rem 0 1rem;
   }
 
   h2 {
-    font-size: xx-large;
-    margin-top: 2rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 3rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    @media (prefers-color-scheme: light) {
+      border-bottom-color: rgba(0, 0, 0, 0.1);
+    }
   }
 
   h3 {
-    font-size: x-large;
-    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 2.5rem 0 0.75rem;
+  }
+
+  h4, h5, h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 2rem 0 0.5rem;
   }
 
   > figure {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+
     > picture > img {
-        object-fit: cover;
-        width: 100%;
-        max-width: 100%;
-        border: .5rem solid white;
+      object-fit: cover;
+      width: 100%;
+      max-width: 100%;
+      border-radius: 8px;
     }
   }
 
   > video {
     width: 100%;
     max-width: 100%;
-    border: .5rem solid white;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
   }
 
   > blockquote {
-    border-left: 2rem solid #ccc;
-    padding-left: 1rem;
+    margin: 2rem 0;
+    padding: 0 0 0 1.5rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.15);
+    opacity: 0.75;
     font-style: italic;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
+
+    @media (prefers-color-scheme: light) {
+      border-left-color: rgba(0, 0, 0, 0.15);
+    }
+
     > p {
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
   }
 
-  ul {
-    padding-left: 2rem;
-    list-style-type: square;
-    margin-bottom: 1rem;
+  hr {
+    border: none;
+    margin: 3rem auto;
+    text-align: center;
+
+    &::after {
+      content: "· · ·";
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 0.5em;
+
+      @media (prefers-color-scheme: light) {
+        color: rgba(0, 0, 0, 0.2);
+      }
+    }
   }
 
+  code {
+    font-family: ui-monospace, "Cascadia Mono", monospace;
+    font-size: 0.88em;
+    padding: 0.15em 0.35em;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.05);
+
+    @media (prefers-color-scheme: light) {
+      background: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  ul,
+  ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
 }
-
-

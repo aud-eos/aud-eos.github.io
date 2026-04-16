@@ -89,56 +89,61 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
         <main className={ styles.main }>
           <article>
             <header>
-              <figure>
+              <figure className={ styles.hero }>
                 <Image
                   src={ metaImage }
                   alt={ metaImageDesc }
                   fill
                   priority
+                  className={ styles.heroImage }
                 />
-                <figcaption>
-                  { metaImageDesc }
-                </figcaption>
+                <div className={ styles.heroOverlay }>
+                  <h1>{ post.fields.title }</h1>
+                  <DateTimeFormat timestamp={ resolvePostDate( post ) } withDayName={ false } withTime={ false } />
+                </div>
+                { metaImageDesc && (
+                  <figcaption className={ styles.heroCaption }>
+                    { metaImageDesc }
+                  </figcaption>
+                ) }
               </figure>
-              <h1>{ post.fields.title }</h1>
-              <address>
-                { authorProfileImageSrc && (
-                  authorSlug
-                    ? <Link href={ `/author/${authorSlug}` }>
-                      <Image
+              <div className={ styles.metaArea }>
+                <address>
+                  { authorProfileImageSrc && (
+                    authorSlug
+                      ? <Link href={ `/author/${authorSlug}` }>
+                        <Image
+                          src={ authorProfileImageSrc }
+                          alt={ authorName || "" }
+                          width="50"
+                          height="50"
+                          priority
+                        />
+                      </Link>
+                      : <Image
                         src={ authorProfileImageSrc }
                         alt={ authorName || "" }
                         width="50"
                         height="50"
                         priority
                       />
-                    </Link>
-                    : <Image
-                      src={ authorProfileImageSrc }
-                      alt={ authorName || "" }
-                      width="50"
-                      height="50"
-                      priority
-                    />
-                ) }
-                <span>
-                  <DateTimeFormat timestamp={ resolvePostDate( post ) } withDayName={ false } withTime={ false } />
-                  <br />
+                  ) }
                   {
-                    !!authorName &&
-                      <b>
+                    !!authorName && (
+                      <span>
                         By { authorSlug
                           ? <Link rel="author" href={ `/author/${authorSlug}` }>{ authorName }</Link>
                           : authorName
                         }
-                      </b>
+                      </span>
+                    )
                   }
-                </span>
-              </address>
-              <Tags tags={ post.metadata.tags } />
-              <p>
-                { post.fields.description }
-              </p>
+                </address>
+                <Tags tags={ post.metadata.tags } />
+                <p className={ styles.lede }>
+                  { post.fields.description }
+                </p>
+              </div>
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
