@@ -189,6 +189,19 @@ ul.imageGallery {
           text-decoration: none;
         }
       }
+      > figcaption > a {
+        display: block;
+        padding: 0.2rem 0.4rem;
+        border-radius: 6px;
+        transition: background 0.15s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.15);
+          @media (prefers-color-scheme: light) {
+            background: rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
     }
   }
 
