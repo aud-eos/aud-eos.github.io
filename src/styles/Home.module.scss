@@ -130,21 +130,24 @@ ul.imageGallery {
         overflow: hidden;
         display: block;
         border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        transition: box-shadow 0.3s ease;
+        margin-bottom: 0.25rem;
+
+        &:hover {
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        }
 
         > img {
           display: block;
           width: 100%;
           object-fit: cover;
           aspect-ratio: 4/3;
-          border-radius: 10px;
           border: 2px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-          transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
-          margin-bottom: 0.25rem;
+          transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
           &:hover {
             transform: scale(1.08);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
           }
         }
       }
@@ -182,11 +185,19 @@ ul.imageGallery {
       transform: none;
       transition: none;
 
-      figure picture > img {
+      figure picture {
         transition: none;
 
         &:hover {
-          transform: none;
+          box-shadow: none;
+        }
+
+        > img {
+          transition: none;
+
+          &:hover {
+            transform: none;
+          }
         }
       }
     }
