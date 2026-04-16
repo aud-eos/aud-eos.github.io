@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { resolvePostDate, sortBlogPostsByDate } from "@/utils/blogPostUtils";
 import DateTimeFormat from "@/components/DateTimeFormat";
@@ -12,6 +12,77 @@ import { POSTS_ANCHOR } from "@/constants";
 
 const IMAGE_WIDTH = 800;
 const OBSERVER_THRESHOLD = 0.15;
+const LONG_PRESS_DURATION = 500;
+const TOUCH_MOVE_THRESHOLD = 10;
+
+function useCardInteractions( listRef: React.RefObject<HTMLUListElement | null> ) {
+  useEffect( () => {
+    const listOrNull = listRef.current;
+    if( !listOrNull ) return;
+    const list: HTMLUListElement = listOrNull;
+
+    const isTouchDevice = window.matchMedia( "(hover: none)" ).matches;
+    const prefersReducedMotion = window.matchMedia( "(prefers-reduced-motion: reduce)" ).matches;
+    if( !isTouchDevice || prefersReducedMotion ) return;
+
+    let pressTimer: ReturnType<typeof setTimeout> | null = null;
+    let startX = 0;
+    let startY = 0;
+    let activeCard: HTMLElement | null = null;
+
+    function clearPreview() {
+      if( activeCard ) {
+        activeCard.classList.remove( styles.longPressPreview );
+        activeCard = null;
+      }
+      if( pressTimer ) {
+        clearTimeout( pressTimer );
+        pressTimer = null;
+      }
+    }
+
+    function handleTouchStart( event: TouchEvent ) {
+      const card = ( event.target as HTMLElement ).closest( "li" );
+      if( !card || !list.contains( card ) ) return;
+
+      const touch = event.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+
+      pressTimer = setTimeout( () => {
+        activeCard = card as HTMLElement;
+        activeCard.classList.add( styles.longPressPreview );
+      }, LONG_PRESS_DURATION );
+    }
+
+    function handleTouchMove( event: TouchEvent ) {
+      if( !pressTimer && !activeCard ) return;
+      const touch = event.touches[0];
+      const deltaX = Math.abs( touch.clientX - startX );
+      const deltaY = Math.abs( touch.clientY - startY );
+      if( deltaX > TOUCH_MOVE_THRESHOLD || deltaY > TOUCH_MOVE_THRESHOLD ) {
+        clearPreview();
+      }
+    }
+
+    function handleTouchEnd() {
+      clearPreview();
+    }
+
+    list.addEventListener( "touchstart", handleTouchStart, { passive: true });
+    list.addEventListener( "touchmove", handleTouchMove, { passive: true });
+    list.addEventListener( "touchend", handleTouchEnd );
+    list.addEventListener( "touchcancel", handleTouchEnd );
+
+    return () => {
+      list.removeEventListener( "touchstart", handleTouchStart );
+      list.removeEventListener( "touchmove", handleTouchMove );
+      list.removeEventListener( "touchend", handleTouchEnd );
+      list.removeEventListener( "touchcancel", handleTouchEnd );
+      clearPreview();
+    };
+  }, [] );
+}
 
 
 export interface BlogPostListProps {
@@ -49,6 +120,8 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
 
     return () => observer.disconnect();
   }, [ posts, page, tagId ] );
+
+  useCardInteractions( listRef );
 
   return (
     <ul id={ POSTS_ANCHOR } className={ styles.imageGallery } role="list" ref={ listRef }>
