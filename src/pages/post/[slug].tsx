@@ -122,7 +122,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
                     />
                 ) }
                 <span>
-                  Last updated: <DateTimeFormat timestamp={ post.sys.updatedAt } withDayName={ false } />
+                  <DateTimeFormat timestamp={ resolvePostDate( post ) } withDayName={ false } withTime={ false } />
                   <br />
                   {
                     !!authorName &&
@@ -131,7 +131,6 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
                           ? <Link rel="author" href={ `/author/${authorSlug}` }>{ authorName }</Link>
                           : authorName
                         }
-                        { ` on ` } <DateTimeFormat timestamp={ resolvePostDate( post ) } />
                       </b>
                   }
                 </span>
@@ -140,11 +139,11 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
               <p>
                 { post.fields.description }
               </p>
-              { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
-              { youTubeOembed && post.fields.youtubeUrl && <YouTubeEmbed oembed={ youTubeOembed } url={ post.fields.youtubeUrl } /> }
             </header>
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
+            { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
+            { youTubeOembed && post.fields.youtubeUrl && <YouTubeEmbed oembed={ youTubeOembed } url={ post.fields.youtubeUrl } /> }
             { playlist && <Playlist playlist={ playlist } /> }
             { ( prevPost || nextPost ) && (
               <nav className={ styles.postNav }>
