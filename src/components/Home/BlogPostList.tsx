@@ -64,7 +64,7 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
             const timestamp = resolvePostDate( post );
 
             return (
-              <li key={ post.sys.id }>
+              <li key={ post.sys.id } style={ { viewTransitionName: post.fields.slug } }>
                 <figure>
                   <Link href={ url } aria-label={ post.fields.title }>
                     <Picture
