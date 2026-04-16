@@ -1,6 +1,12 @@
 import axios from "axios";
+import fs from "fs";
+import path from "path";
 import { strict as assert } from "assert";
 import { getClientCredentials } from "./getClientCredentials";
+import { retryRequest } from "./retryRequest";
+
+
+const CACHE_DIR = path.join( process.cwd(), "data", "spotify" );
 
 
 const SPOTIFY_CLIENT_ID: string = process.env[
@@ -129,18 +135,61 @@ interface SpotifyUser {
 }
 
 
-export async function getPlaylist( playlistId: string ) {
-  return getClientCredentials()
-    .then( async response => {
-      const { access_token } = response;
-      const url = `https://api.spotify.com/v1/playlists/${playlistId}`;
-      const headers = {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${access_token}`,
-      };
-      const cfg = { headers };
-      const { data } = await axios.get<SpotifyPlaylist>( url, cfg );
-      return data;
-    });
+function getCachePath( playlistId: string ): string {
+  return path.join( CACHE_DIR, `${playlistId}.json` );
+}
 
+
+function readCachedPlaylist( playlistId: string ): SpotifyPlaylist | null {
+  const cachePath = getCachePath( playlistId );
+  if( !fs.existsSync( cachePath ) ) return null;
+  const raw = fs.readFileSync( cachePath, "utf-8" );
+  return JSON.parse( raw ) as SpotifyPlaylist;
+}
+
+
+function writeCachedPlaylist( playlistId: string, playlist: SpotifyPlaylist ): void {
+  fs.mkdirSync( CACHE_DIR, { recursive: true });
+  const cachePath = getCachePath( playlistId );
+  fs.writeFileSync( cachePath, JSON.stringify( playlist, null, 2 ) );
+}
+
+
+async function fetchSnapshotId( playlistId: string, accessToken: string ): Promise<string> {
+  const url = `https://api.spotify.com/v1/playlists/${playlistId}?fields=snapshot_id`;
+  const headers = {
+    "Accept": "application/json",
+    "Authorization": `Bearer ${accessToken}`,
+  };
+  const { data } = await retryRequest( () => axios.get<{ snapshot_id: string }>( url, { headers }) );
+  return data.snapshot_id;
+}
+
+
+async function fetchFullPlaylist( playlistId: string, accessToken: string ): Promise<SpotifyPlaylist> {
+  const url = `https://api.spotify.com/v1/playlists/${playlistId}`;
+  const headers = {
+    "Accept": "application/json",
+    "Authorization": `Bearer ${accessToken}`,
+  };
+  const { data } = await retryRequest( () => axios.get<SpotifyPlaylist>( url, { headers }) );
+  return data;
+}
+
+
+export async function getPlaylist( playlistId: string ): Promise<SpotifyPlaylist> {
+  const credentials = await getClientCredentials();
+  const cached = readCachedPlaylist( playlistId );
+
+  const remoteSnapshotId = await fetchSnapshotId( playlistId, credentials.access_token );
+
+  if( cached && cached.snapshot_id === remoteSnapshotId ) {
+    console.log( `Spotify cache hit for playlist ${playlistId} (snapshot ${remoteSnapshotId})` );
+    return cached;
+  }
+
+  console.log( `Spotify cache miss for playlist ${playlistId} — fetching full playlist` );
+  const playlist = await fetchFullPlaylist( playlistId, credentials.access_token );
+  writeCachedPlaylist( playlistId, playlist );
+  return playlist;
 }

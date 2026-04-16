@@ -59,7 +59,7 @@ The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are gener
 - `src/utils/contentfulUtils.ts` wraps the Contentful SDK — all CMS access goes through `getBlogPosts()`, `getBlogPost(slug)`, `getTags()`, `getAuthors()`, and `getAuthor(slug)`.
 - Pages use `getStaticProps` to fetch content at build time. No client-side data fetching from Contentful.
 - Search (`src/pages/search.tsx`) is fully client-side using Fuse.js — all posts are embedded in the page as props and searched in-browser.
-- Spotify integration (`src/utils/spotify/`) fetches data at build time and is embedded statically.
+- Spotify integration (`src/utils/spotify/`) fetches data at build time and is embedded statically. Playlist JSON is cached in `data/spotify/{playlistId}.json` (committed to git). On build, only the lightweight `snapshot_id` is fetched from Spotify — the full playlist is only re-fetched when the snapshot changes. API calls use `retryRequest` with exponential backoff to handle 429 rate limits.
 - Feeds are generated in `src/lib/generateFeeds.ts` and called from `getStaticProps` in `src/pages/index.tsx`.
 
 ### Routing

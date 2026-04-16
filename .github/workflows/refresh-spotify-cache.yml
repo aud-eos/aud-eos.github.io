@@ -1,0 +1,48 @@
+name: Refresh Spotify Cache
+
+on:
+  schedule:
+    # Daily at 6:00 AM UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build to refresh Spotify cache
+        env:
+          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
+          CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN }}
+          CONTENTFUL_ENVIRONMENT: ${{ secrets.CONTENTFUL_ENVIRONMENT }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        run: yarn build
+
+      - name: Commit updated cache files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/spotify/
+          if git diff --cached --quiet; then
+            echo "No Spotify cache changes"
+          else
+            git commit -m "chore: refresh Spotify playlist cache"
+            git push
+          fi
