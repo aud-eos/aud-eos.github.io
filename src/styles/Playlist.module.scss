@@ -73,13 +73,18 @@
   list-style: none;
 }
 
+// Scale reveal — hidden by default, revealed by IntersectionObserver
 .track {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  transition: background 0.15s ease;
+  transition: opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    background 0.15s ease;
+  opacity: 0;
+  transform: scale(0.95);
 
   &:hover {
     background: rgba(255, 255, 255, 0.07);
@@ -92,6 +97,12 @@
       text-decoration: underline;
     }
   }
+}
+
+// Visible state — applied by IntersectionObserver
+.track.visible {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .trackNumber {
@@ -153,28 +164,6 @@
   min-width: 3rem;
 }
 
-.hidden {
-  display: none;
-}
-
-// Expand/collapse toggle
-.expandToggle {
-  display: block;
-  margin: 1rem auto;
-  background: none;
-  border: none;
-  color: inherit;
-  font-size: 0.85rem;
-  opacity: 0.5;
-  cursor: pointer;
-  text-decoration: underline;
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
 // Footer CTA
 .footerCta {
   display: flex;
@@ -192,5 +181,18 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+}
+
+// Reduced motion: disable all animations
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    opacity: 1;
+    transform: none;
+    transition: background 0.15s ease;
+  }
+
+  .track.visible {
+    transition: background 0.15s ease;
   }
 }

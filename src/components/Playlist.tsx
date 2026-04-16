@@ -1,11 +1,11 @@
-import { useState, Fragment } from "react";
+import { useEffect, useRef, Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { SpotifyPlaylist } from "@/utils/spotify/getPlaylist";
 import styles from "@/styles/Playlist.module.scss";
 
 
-const INITIAL_VISIBLE_TRACKS = 20;
+const OBSERVER_THRESHOLD = 0.1;
 
 
 function formatDuration( durationMs: number ): string {
@@ -30,10 +30,36 @@ export interface SpotifyPlaylistProps {
 
 
 export default function Playlist({ playlist }: SpotifyPlaylistProps ) {
-  const [ isExpanded, setIsExpanded ] = useState( false );
+  const trackListRef = useRef<HTMLUListElement>( null );
   const tracks = playlist.tracks.items;
-  const hasHiddenTracks = tracks.length > INITIAL_VISIBLE_TRACKS;
   const coverImage = playlist.images[0];
+
+  useEffect( () => {
+    const list = trackListRef.current;
+    if( !list ) return;
+
+    const prefersReducedMotion = window.matchMedia( "(prefers-reduced-motion: reduce)" ).matches;
+    if( prefersReducedMotion ) {
+      list.querySelectorAll( "li" ).forEach( item => item.classList.add( styles.visible ) );
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach( entry => {
+          if( entry.isIntersecting ) {
+            entry.target.classList.add( styles.visible );
+            observer.unobserve( entry.target );
+          }
+        });
+      },
+      { threshold: OBSERVER_THRESHOLD },
+    );
+
+    list.querySelectorAll( "li" ).forEach( item => observer.observe( item ) );
+
+    return () => observer.disconnect();
+  }, [ tracks ] );
 
   return (
     <section>
@@ -72,15 +98,14 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ) {
         </div>
       </header>
 
-      <ul className={ styles.trackList }>
+      <ul className={ styles.trackList } ref={ trackListRef }>
         { tracks.map( ( track, index ) => {
           const albumArtUrl = findSmallAlbumImage( track.track.album.images );
-          const isHidden = !isExpanded && index >= INITIAL_VISIBLE_TRACKS;
 
           return (
             <li
               key={ track.track.id }
-              className={ `${styles.track}${isHidden ? ` ${styles.hidden}` : ""}` }
+              className={ styles.track }
             >
               <span className={ styles.trackNumber }>{ index + 1 }</span>
               { albumArtUrl && (
@@ -123,15 +148,6 @@ export default function Playlist({ playlist }: SpotifyPlaylistProps ) {
           );
         }) }
       </ul>
-
-      { hasHiddenTracks && (
-        <button
-          className={ styles.expandToggle }
-          onClick={ () => setIsExpanded( !isExpanded ) }
-        >
-          { isExpanded ? "Show less" : `Show all ${tracks.length} tracks` }
-        </button>
-      ) }
 
       <div className={ styles.footerCta }>
         <Image
