@@ -5,9 +5,8 @@ import DateTimeFormat from "@/components/DateTimeFormat";
 import styles from "@/styles/Home.module.scss";
 import Picture from "@/components/Picture";
 import { Tags } from "@/components/Tags";
-import { PAGE_SIZE } from "@/constants";
+import { PAGE_SIZE, POSTS_ANCHOR } from "@/constants";
 import { BlogPost } from "@/utils/contentfulUtils";
-import { POSTS_ANCHOR } from "@/constants";
 
 
 const IMAGE_WIDTH = 800;
@@ -42,15 +41,16 @@ function useCardInteractions( listRef: React.RefObject<HTMLUListElement | null> 
     }
 
     function handleTouchStart( event: TouchEvent ) {
-      const card = ( event.target as HTMLElement ).closest( "li" );
-      if( !card || !list.contains( card ) ) return;
+      if( !( event.target instanceof Element ) ) return;
+      const card = event.target.closest( "li" );
+      if( !card || !( card instanceof HTMLElement ) || !list.contains( card ) ) return;
 
       const touch = event.touches[0];
       startX = touch.clientX;
       startY = touch.clientY;
 
       pressTimer = setTimeout( () => {
-        activeCard = card as HTMLElement;
+        activeCard = card;
         activeCard.classList.add( styles.longPressPreview );
       }, LONG_PRESS_DURATION );
     }
@@ -137,7 +137,7 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
             const timestamp = resolvePostDate( post );
 
             return (
-              <li key={ post.sys.id } style={ { viewTransitionName: post.fields.slug } }>
+              <li key={ post.sys.id } style={ { viewTransitionName: `post-${post.fields.slug}` } }>
                 <figure>
                   <Link href={ url } aria-label={ post.fields.title }>
                     <Picture

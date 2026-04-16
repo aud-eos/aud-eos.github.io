@@ -77,8 +77,8 @@ describe( "BlogPostList", () => {
       <BlogPostList posts={ makePosts( 2 ) as never[] } page={ 1 } />,
     );
     const items = container.querySelectorAll( "li" );
-    expect( ( items[0] as HTMLElement ).style.viewTransitionName ).toBe( "post-1" );
-    expect( ( items[1] as HTMLElement ).style.viewTransitionName ).toBe( "post-0" );
+    expect( ( items[0] as HTMLElement ).style.viewTransitionName ).toBe( "post-post-1" );
+    expect( ( items[1] as HTMLElement ).style.viewTransitionName ).toBe( "post-post-0" );
   });
 
   it( "creates an IntersectionObserver on mount", () => {
