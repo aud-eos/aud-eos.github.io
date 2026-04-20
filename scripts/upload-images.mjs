@@ -5,7 +5,7 @@ import { basename, extname, join } from "path";
 import { fileURLToPath } from "url";
 import { createClient } from "contentful-management";
 
-const SUPPORTED_EXTENSIONS = new Set( [ ".jpg", ".jpeg", ".png", ".gif", ".webp" ] );
+const SUPPORTED_EXTENSIONS = new Set( [ ".jpg", ".jpeg", ".png", ".gif", ".webp", ".mov", ".mp4", ".webm" ] );
 
 const MIME_TYPES = {
   ".jpg": "image/jpeg",
@@ -13,6 +13,9 @@ const MIME_TYPES = {
   ".png": "image/png",
   ".gif": "image/gif",
   ".webp": "image/webp",
+  ".mov": "video/quicktime",
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
 };
 
 export function getImageFiles( dirOrFile ) {

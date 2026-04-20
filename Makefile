@@ -35,11 +35,13 @@ types:
 		-o src/types/contentful
 	$(MAKE) format
 
-# Upload images from a local directory (or single file) to Contentful.
+# Upload media (images or videos) from a local directory or single file to Contentful.
+# Supported: .jpg, .jpeg, .png, .gif, .webp, .mov, .mp4, .webm
 # Outputs a JSON array of { filename, assetId, url } to stdout.
 # Usage:
 #   make upload-images DIR="/path/to/images"
 #   make upload-images DIR="/path/to/single-image.jpg"
+#   make upload-images DIR="/path/to/video.mov"
 upload-images:
 	@export CONTENTFUL_SPACE_ID=$(CONTENTFUL_SPACE_ID) \
 		CONTENTFUL_ENVIRONMENT=$(CONTENTFUL_ENVIRONMENT) \
