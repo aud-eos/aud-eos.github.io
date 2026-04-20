@@ -8,6 +8,7 @@
     @media (prefers-color-scheme: light) {
       filter: drop-shadow(.1rem .1rem .1rem black);
       text-shadow: -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
+      font-weight: 700;
     }
     &:hover {
       background: rgba(255, 255, 255, 0.1);
