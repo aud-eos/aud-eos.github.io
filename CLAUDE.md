@@ -25,11 +25,12 @@ make upgrade-latest  # yarn outdated + upgrade to latest including majors
 Contentful asset management (Makefile):
 
 ```bash
-make upload-images DIR="/path/to/dir"         # Upload all images in a directory to Contentful
+make upload-images DIR="/path/to/dir"         # Upload all media in a directory to Contentful
 make upload-images DIR="/path/to/image.jpg"   # Upload a single image to Contentful
+make upload-images DIR="/path/to/video.mov"   # Upload a single video to Contentful
 ```
 
-Outputs a JSON array of `{ filename, assetId, url }` to stdout. Reads credentials from `.env` automatically. Always rename images to descriptive filenames before uploading.
+Supports images (.jpg, .jpeg, .png, .gif, .webp) and videos (.mov, .mp4, .webm). Outputs a JSON array of `{ filename, assetId, url }` to stdout. Reads credentials from `.env` automatically. Always rename files to descriptive filenames before uploading.
 
 Blog post creation (Claude Code skill):
 
