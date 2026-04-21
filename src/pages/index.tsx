@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "@/styles/Home.module.scss";
-import { BlogPosts, getBlogPosts, getTags } from "@/utils/contentfulUtils";
+import { BlogPost, BlogPosts, getBlogPosts, getTags } from "@/utils/contentfulUtils";
 import BlogPostList from "@/components/Home/BlogPostList";
 import { Layout } from "@/components/Layout/Layout";
 import { TagCollection } from "contentful";
@@ -12,6 +12,13 @@ import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants"
 import { capitalize } from "@/utils/stringUtils";
 import { SeoHead } from "@/components/SeoHead";
 
+
+function buildTagDescription( tagLabel: string, posts: BlogPost[] ): string {
+  const count = posts.length;
+  const recentTitles = posts.slice( 0, 3 ).map( post => post.fields.title );
+  const titleList = recentTitles.join( ", " );
+  return `${count} ${tagLabel} posts on Audeos.com — including ${titleList}`;
+}
 
 export interface HomeProps {
   posts: BlogPosts
@@ -39,7 +46,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
         : META_TITLE;
 
   const pageDescription = isTagPage
-    ? `Browse all ${tagLabel} posts on Audeos.com`
+    ? buildTagDescription( tagLabel, filteredBlogPosts )
     : META_DESCRIPTION;
 
   const canonicalUrl = isTagPage && isPaginated
