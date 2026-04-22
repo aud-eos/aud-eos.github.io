@@ -1,0 +1,52 @@
+{
+  "graphics": {
+    "title": "Graphic Design & Visual Art",
+    "description": "Visual art, design projects, and graphic design work featured on Audeos.",
+    "ogImage": null
+  },
+  "merch": {
+    "title": "Merchandise & Store",
+    "description": "Audeos merchandise, limited edition releases, and store updates.",
+    "ogImage": null
+  },
+  "plantlife": {
+    "title": "Plants & Horticulture",
+    "description": "Plant care, gardening, and horticulture content from the Audeos blog.",
+    "ogImage": null
+  },
+  "edits": {
+    "title": "Music Edits & Remixes",
+    "description": "Original music edits, remixes, and custom bootleg versions curated by Audeos.",
+    "ogImage": null
+  },
+  "records": {
+    "title": "Vinyl Records & Discography",
+    "description": "Vinyl record reviews, recommendations, and discography highlights from Audeos.",
+    "ogImage": null
+  },
+  "radio": {
+    "title": "Radio & Broadcast",
+    "description": "Radio shows, broadcasts, and audio programming from Audeos.",
+    "ogImage": null
+  },
+  "technology": {
+    "title": "Music Technology & Gear",
+    "description": "Music production gear, audio technology, and equipment reviews on Audeos.",
+    "ogImage": null
+  },
+  "playlists": {
+    "title": "Curated Playlists",
+    "description": "Hand-curated playlists and listening guides from Audeos.",
+    "ogImage": null
+  },
+  "dj": {
+    "title": "DJ Mixes & Sets",
+    "description": "DJ mixes, live sets, and DJ performance recaps from Audeos.",
+    "ogImage": null
+  },
+  "nightlife": {
+    "title": "Nightlife & Events",
+    "description": "Nightlife coverage, event recaps, and venue highlights from Audeos.",
+    "ogImage": null
+  }
+}
