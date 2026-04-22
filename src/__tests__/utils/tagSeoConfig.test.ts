@@ -11,7 +11,7 @@ describe( "validateTagSeoConfig", () => {
         ogImage: null,
       },
     };
-    const tagIds = ["jazz"];
+    const tagIds = [ "jazz" ];
 
     const result = validateTagSeoConfig( config, tagIds );
 
@@ -26,10 +26,10 @@ describe( "validateTagSeoConfig", () => {
         ogImage: null,
       },
     };
-    const tagIds = ["jazz", "ambient"];
+    const tagIds = [ "jazz", "ambient" ];
 
     expect( () => validateTagSeoConfig( config, tagIds ) ).toThrowError(
-      'Tag "ambient" exists in Contentful but is missing from data/tags.json'
+      'Tag "ambient" exists in Contentful but is missing from data/tags.json',
     );
   });
 
@@ -46,7 +46,7 @@ describe( "validateTagSeoConfig", () => {
         ogImage: null,
       },
     };
-    const tagIds = ["jazz"];
+    const tagIds = [ "jazz" ];
 
     const result = validateTagSeoConfig( config, tagIds );
 
