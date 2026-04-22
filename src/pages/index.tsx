@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "@/styles/Home.module.scss";
-import { BlogPost, BlogPosts, getBlogPosts, getTags } from "@/utils/contentfulUtils";
+import { BlogPosts, getBlogPosts, getTags } from "@/utils/contentfulUtils";
 import BlogPostList from "@/components/Home/BlogPostList";
 import { Layout } from "@/components/Layout/Layout";
 import { TagCollection } from "contentful";
@@ -9,25 +9,20 @@ import { GetStaticPropsContext } from "next";
 import Pagination from "@/components/Home/Pagination";
 import { generateFeeds } from "@/lib/generateFeeds";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
-import { capitalize } from "@/utils/stringUtils";
 import { SeoHead } from "@/components/SeoHead";
-
-
-function buildTagDescription( tagLabel: string, posts: BlogPost[] ): string {
-  const count = posts.length;
-  const recentTitles = posts.slice( 0, 3 ).map( post => post.fields.title );
-  const titleList = recentTitles.join( ", " );
-  return `${count} ${tagLabel} posts on Audeos.com — including ${titleList}`;
-}
+import { TagSeoConfig, TagSeoConfigMap } from "@/types/tagConfig";
+import tagSeoConfigData from "../../data/tags.json";
+import { validateTagSeoConfig } from "@/utils/tagSeoConfig";
 
 export interface HomeProps {
   posts: BlogPosts
   tags: TagCollection
   page: number
   tagId?: string
+  tagSeoConfig?: TagSeoConfig
 }
 
-export default function Home({ posts, page, tags, tagId }: HomeProps ) {
+export default function Home({ posts, page, tags, tagId, tagSeoConfig }: HomeProps ) {
   const filteredBlogPosts = posts.items
     .filter( post => tagId === null || post.metadata.tags
       .find( tag => tag.sys.id === tagId ) );
@@ -35,7 +30,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
   const isTagPage = Boolean( tagId );
   const isPaginated = page > 1;
 
-  const tagLabel = tagId ? capitalize( tagId ) : "";
+  const tagLabel = tagSeoConfig?.title ?? "";
 
   const pageTitle = isTagPage && isPaginated
     ? `${tagLabel} — Page ${page} | Audeos.com`
@@ -45,9 +40,13 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
         ? `Blog — Page ${page} | ${META_TITLE}`
         : META_TITLE;
 
-  const pageDescription = isTagPage
-    ? buildTagDescription( tagLabel, filteredBlogPosts )
+  const pageDescription = isTagPage && tagSeoConfig
+    ? tagSeoConfig.description
     : META_DESCRIPTION;
+
+  const ogImage = isTagPage && tagSeoConfig?.ogImage
+    ? tagSeoConfig.ogImage
+    : META_IMAGE;
 
   const canonicalUrl = isTagPage && isPaginated
     ? `${SITE_URL}/tags/${tagId}/page/${page}`
@@ -63,7 +62,7 @@ export default function Home({ posts, page, tags, tagId }: HomeProps ) {
         title={ pageTitle }
         canonicalUrl={ canonicalUrl }
         description={ pageDescription }
-        ogImage={ META_IMAGE }
+        ogImage={ ogImage }
       >
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
         <link rel="alternate" type="application/atom+xml" href="/atom.xml" />
@@ -111,6 +110,14 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const page: number = Number( context.params?.page ) || 1;
   const tags = await getTags();
   const posts = await getBlogPosts();
+
+  const tagConfig: TagSeoConfigMap = tagSeoConfigData satisfies TagSeoConfigMap;
+  const contentfulTagIds = tags.items.map( tag => tag.sys.id );
+  validateTagSeoConfig( tagConfig, contentfulTagIds );
+
+  const resolvedTagId = Array.isArray( tagId ) ? tagId[0] : tagId;
+  const tagSeoConfig = resolvedTagId ? tagConfig[resolvedTagId] : null;
+
   if( !tagId && page === 1 ) {
     generateFeeds( posts.items );
   }
@@ -120,6 +127,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
       posts,
       tags,
       page,
+      tagSeoConfig,
     },
   };
 }

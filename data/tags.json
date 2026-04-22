@@ -1,0 +1,52 @@
+{
+  "graphics": {
+    "title": "Graphic Design & Visual Art",
+    "description": "Visual art, design projects, and graphic design work by DJ Audeos.",
+    "ogImage": null
+  },
+  "merch": {
+    "title": "Merch",
+    "description": "Streetwear designed by DJ Audeos",
+    "ogImage": null
+  },
+  "plantlife": {
+    "title": "Plants & Horticulture",
+    "description": "Cannabis content from the garden of Audeos",
+    "ogImage": null
+  },
+  "edits": {
+    "title": "Music Edits & Remixes",
+    "description": "Original music edits, remixes, and custom bootleg versions by DJ Audeos.",
+    "ogImage": null
+  },
+  "records": {
+    "title": "Records",
+    "description": "Music releases produced and written DJ Audeos.",
+    "ogImage": null
+  },
+  "radio": {
+    "title": "Radio",
+    "description": "DJ mix shows and broadcasts from DJ Audeos.",
+    "ogImage": null
+  },
+  "technology": {
+    "title": "Technology",
+    "description": "Tech blog posts, software engineering, and more.",
+    "ogImage": null
+  },
+  "playlists": {
+    "title": "Playlists",
+    "description": "Hand-curated playlists from DJ Audeos available on Spotify.",
+    "ogImage": null
+  },
+  "dj": {
+    "title": "DJ gigs",
+    "description": "DJ performances and recaps of events featuring DJ Audeos.",
+    "ogImage": null
+  },
+  "nightlife": {
+    "title": "Nightlife",
+    "description": "Nightlife promo and recaps of events featuring DJ Audeos.",
+    "ogImage": null
+  }
+}
