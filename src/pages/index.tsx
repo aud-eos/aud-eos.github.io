@@ -111,7 +111,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const tags = await getTags();
   const posts = await getBlogPosts();
 
-  const tagConfig: TagSeoConfigMap = tagSeoConfigData satisfies TagSeoConfigMap;
+  const tagConfig = tagSeoConfigData satisfies TagSeoConfigMap;
   const contentfulTagIds = tags.items.map( tag => tag.sys.id );
   validateTagSeoConfig( tagConfig, contentfulTagIds );
 
