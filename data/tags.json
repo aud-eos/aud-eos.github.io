@@ -1,52 +1,52 @@
 {
   "graphics": {
     "title": "Graphic Design & Visual Art",
-    "description": "Visual art, design projects, and graphic design work featured on Audeos.",
+    "description": "Visual art, design projects, and graphic design work by DJ Audeos.",
     "ogImage": null
   },
   "merch": {
-    "title": "Merchandise & Store",
-    "description": "Audeos merchandise, limited edition releases, and store updates.",
+    "title": "Merch",
+    "description": "Streetwear designed by DJ Audeos",
     "ogImage": null
   },
   "plantlife": {
     "title": "Plants & Horticulture",
-    "description": "Plant care, gardening, and horticulture content from the Audeos blog.",
+    "description": "Cannabis content from the garden of Audeos",
     "ogImage": null
   },
   "edits": {
     "title": "Music Edits & Remixes",
-    "description": "Original music edits, remixes, and custom bootleg versions curated by Audeos.",
+    "description": "Original music edits, remixes, and custom bootleg versions by DJ Audeos.",
     "ogImage": null
   },
   "records": {
-    "title": "Vinyl Records & Discography",
-    "description": "Vinyl record reviews, recommendations, and discography highlights from Audeos.",
+    "title": "Records",
+    "description": "Music releases produced and written DJ Audeos.",
     "ogImage": null
   },
   "radio": {
-    "title": "Radio & Broadcast",
-    "description": "Radio shows, broadcasts, and audio programming from Audeos.",
+    "title": "Radio",
+    "description": "DJ mix shows and broadcasts from DJ Audeos.",
     "ogImage": null
   },
   "technology": {
-    "title": "Music Technology & Gear",
-    "description": "Music production gear, audio technology, and equipment reviews on Audeos.",
+    "title": "Technology",
+    "description": "Tech blog posts, software engineering, and more.",
     "ogImage": null
   },
   "playlists": {
-    "title": "Curated Playlists",
-    "description": "Hand-curated playlists and listening guides from Audeos.",
+    "title": "Playlists",
+    "description": "Hand-curated playlists from DJ Audeos available on Spotify.",
     "ogImage": null
   },
   "dj": {
-    "title": "DJ Mixes & Sets",
-    "description": "DJ mixes, live sets, and DJ performance recaps from Audeos.",
+    "title": "DJ gigs",
+    "description": "DJ performances and recaps of events featuring DJ Audeos.",
     "ogImage": null
   },
   "nightlife": {
-    "title": "Nightlife & Events",
-    "description": "Nightlife coverage, event recaps, and venue highlights from Audeos.",
+    "title": "Nightlife",
+    "description": "Nightlife promo and recaps of events featuring DJ Audeos.",
     "ogImage": null
   }
 }
