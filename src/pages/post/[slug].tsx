@@ -39,12 +39,13 @@ export interface BlogPostViewProps {
   tikTokOembed?: TikTokOembed|null
   locationLat?: number|null
   locationLon?: number|null
+  locationAddress?: string|null
   prevPost?: PostNavLink|null
   nextPost?: PostNavLink|null
 }
 
 
-export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, youTubeOembed, tikTokOembed, locationLat, locationLon, prevPost, nextPost }) => {
+export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, youTubeOembed, tikTokOembed, locationLat, locationLon, locationAddress, prevPost, nextPost }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${CONTENT_IMAGE_WIDTH}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
@@ -153,7 +154,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
             { youTubeOembed && post.fields.youtubeUrl && <YouTubeEmbed oembed={ youTubeOembed } url={ post.fields.youtubeUrl } /> }
             { playlist && <Playlist playlist={ playlist } /> }
             { locationLat != null && locationLon != null && (
-              <LocationMap lat={ locationLat } lon={ locationLon } />
+              <LocationMap lat={ locationLat } lon={ locationLon } address={ locationAddress ?? undefined } />
             ) }
             { ( prevPost || nextPost ) && (
               <nav className={ styles.postNav }>
@@ -208,6 +209,9 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
 
   const locationLat = post.fields.location?.lat ?? null;
   const locationLon = post.fields.location?.lon ?? null;
+  const locationAddress = "address" in post.fields
+    ? String( post.fields["address" as keyof typeof post.fields] ?? "" ) || null
+    : null;
 
   const sortedPosts = allPosts.items
     .slice()
@@ -237,6 +241,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
       tikTokOembed,
       locationLat,
       locationLon,
+      locationAddress,
       prevPost,
       nextPost,
     },

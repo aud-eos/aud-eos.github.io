@@ -30,4 +30,17 @@ describe( "LocationMap", () => {
     const iframe = screen.getByTitle( "Location map" );
     expect( iframe ).toHaveAttribute( "loading", "lazy" );
   });
+
+  it( "renders the address when provided", () => {
+    render( <LocationMap lat={ MOCK_LAT } lon={ MOCK_LON } address="233 Broadway, Seattle, WA 98122" /> );
+
+    expect( screen.getByText( "233 Broadway, Seattle, WA 98122" ) ).toBeInTheDocument();
+  });
+
+  it( "does not render an address paragraph when address is not provided", () => {
+    render( <LocationMap lat={ MOCK_LAT } lon={ MOCK_LON } /> );
+
+    const header = screen.getByRole( "heading", { name: "Location" }).parentElement;
+    expect( header?.querySelectorAll( "p" ) ).toHaveLength( 0 );
+  });
 });
