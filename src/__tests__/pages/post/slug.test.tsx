@@ -41,6 +41,7 @@ vi.mock( "@/components/Markdown", () => ({
 vi.mock( "@/components/Tags", () => ({ Tags: () => null }) );
 vi.mock( "@/components/DateTimeFormat", () => ({ default: () => null }) );
 vi.mock( "@/components/Playlist", () => ({ default: () => null }) );
+vi.mock( "@/components/LocationMap", () => ({ LocationMap: () => null }) );
 
 import { BlogPostView, getStaticProps } from "@/pages/post/[slug]";
 import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
@@ -314,6 +315,50 @@ describe( "getStaticProps — TikTok oEmbed", () => {
     expect( getTikTokOembed ).not.toHaveBeenCalled();
     expect( result ).toMatchObject({
       props: { tikTokOembed: null },
+    });
+  });
+});
+
+describe( "getStaticProps — location map", () => {
+  const postWithLocation = makePost({ slug: "loc-post" });
+  Object.assign( postWithLocation.fields, {
+    location: { lat: 47.6062, lon: -122.3321 },
+  });
+
+  const postWithoutLocation = makePost({ slug: "no-loc-post" });
+
+  beforeEach( () => {
+    vi.resetAllMocks();
+    vi.mocked( getBlogPosts ).mockResolvedValue({ items: [ postWithLocation, postWithoutLocation ] } as never );
+    vi.mocked( getPlaylist ).mockResolvedValue( null as never );
+    vi.mocked( getOembed ).mockResolvedValue( null );
+    vi.mocked( getYouTubeOembed ).mockResolvedValue( null );
+    vi.mocked( getTikTokOembed ).mockResolvedValue( null );
+  });
+
+  it( "passes lat and lon when location is present", async () => {
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithLocation as never );
+
+    const result = await getStaticProps({ params: { slug: "loc-post" } } as never );
+
+    expect( result ).toMatchObject({
+      props: {
+        locationLat: 47.6062,
+        locationLon: -122.3321,
+      },
+    });
+  });
+
+  it( "passes null for location props when location is absent", async () => {
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithoutLocation as never );
+
+    const result = await getStaticProps({ params: { slug: "no-loc-post" } } as never );
+
+    expect( result ).toMatchObject({
+      props: {
+        locationLat: null,
+        locationLon: null,
+      },
     });
   });
 });
