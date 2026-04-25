@@ -60,4 +60,16 @@ describe( "TikTokEmbed", () => {
     const script = document.querySelector( 'script[src="https://www.tiktok.com/embed.js"]' );
     expect( script ).toBeNull();
   });
+
+  it( "strips script tags from oEmbed HTML to avoid double-loading embed.js", () => {
+    const oembedWithScript: TikTokOembed = {
+      ...MOCK_OEMBED,
+      html: '<blockquote class="tiktok-embed"><section>Test content</section></blockquote><script async src="https://www.tiktok.com/embed.js"></script>',
+    };
+
+    render( <TikTokEmbed oembed={ oembedWithScript } url={ MOCK_TIKTOK_URL } /> );
+
+    const scripts = document.querySelectorAll( 'script[src="https://www.tiktok.com/embed.js"]' );
+    expect( scripts ).toHaveLength( 1 );
+  });
 });
