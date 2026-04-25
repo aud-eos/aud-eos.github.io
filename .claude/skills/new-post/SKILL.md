@@ -65,6 +65,7 @@ Collect or derive all required fields. Show each to the user for approval:
 | **spotifyPlaylistId** | Ask if they want to embed a Spotify playlist (yes/no). Skip if no. |
 | **soundcloudUrl** | Ask if they want to embed a SoundCloud track or playlist (yes/no). If yes, collect the full SoundCloud URL. Skip if no. |
 | **youtubeUrl** | Ask if they want to embed a YouTube video (yes/no). If yes, collect the full YouTube URL. Skip if no. |
+| **tiktokUrl** | Ask if they want to embed a TikTok video (yes/no). If yes, collect the full TikTok URL. Fetch oEmbed data via `curl -s "https://www.tiktok.com/oembed?format=json&url=<encoded-url>"` to get the title and thumbnail. Offer to use the TikTok thumbnail as the featured image — download it with `curl -o`, rename to a descriptive filename, and upload via `make upload-images`. |
 | **location** | Ask if they want to add a location (yes/no). Skip if no. |
 
 ## SEO Check
@@ -147,7 +148,8 @@ Use `mcp__contentful__create_entry` with:
     "gallery": { "en-US": [{ "sys": { "type": "Link", "linkType": "Asset", "id": "<assetId>" } }] },
     "spotifyPlaylistId": { "en-US": "<playlistId>" },
     "soundcloudUrl": { "en-US": "<soundcloudUrl>" },
-    "youtubeUrl": { "en-US": "<youtubeUrl>" }
+    "youtubeUrl": { "en-US": "<youtubeUrl>" },
+    "tiktokUrl": { "en-US": "<tiktokUrl>" }
   },
   "metadata": {
     "tags": [{ "sys": { "type": "Link", "linkType": "Tag", "id": "<tagId>" } }]
@@ -155,7 +157,7 @@ Use `mcp__contentful__create_entry` with:
 }
 ```
 
-Omit optional fields that were not provided (gallery, spotifyPlaylistId, soundcloudUrl, youtubeUrl, location). Tags go in `metadata`, not `fields`.
+Omit optional fields that were not provided (gallery, spotifyPlaylistId, soundcloudUrl, youtubeUrl, tiktokUrl, location). Tags go in `metadata`, not `fields`.
 
 If the user chose **publish immediately**, follow up with `mcp__contentful__publish_entry`.
 

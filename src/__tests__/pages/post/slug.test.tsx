@@ -15,8 +15,12 @@ vi.mock( "@/utils/soundcloud/getOembed", () => ({
 vi.mock( "@/utils/youtube/getOembed", () => ({
   getOembed: vi.fn(),
 }) );
+vi.mock( "@/utils/tiktok/getOembed", () => ({
+  getOembed: vi.fn(),
+}) );
 vi.mock( "@/components/SoundCloudEmbed", () => ({ SoundCloudEmbed: () => null }) );
 vi.mock( "@/components/YouTubeEmbed", () => ({ YouTubeEmbed: () => null }) );
+vi.mock( "@/components/TikTokEmbed", () => ({ TikTokEmbed: () => null }) );
 vi.mock( "next/link", () => ({
   default: ({ children, href, ...props }: React.ComponentProps<"a"> ) => (
     <a href={ href } { ...props }>{ children }</a>
@@ -43,6 +47,7 @@ import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
 import { getPlaylist } from "@/utils/spotify/getPlaylist";
 import { getOembed } from "@/utils/soundcloud/getOembed";
 import { getOembed as getYouTubeOembed } from "@/utils/youtube/getOembed";
+import { getOembed as getTikTokOembed } from "@/utils/tiktok/getOembed";
 
 function makePost( overrides: {
   slug?: string;
@@ -126,6 +131,7 @@ describe( "getStaticProps — post navigation", () => {
     vi.mocked( getPlaylist ).mockResolvedValue( null as never );
     vi.mocked( getOembed ).mockResolvedValue( null );
     vi.mocked( getYouTubeOembed ).mockResolvedValue( null );
+    vi.mocked( getTikTokOembed ).mockResolvedValue( null );
   });
 
   it( "assigns both prevPost and nextPost for a middle post", async () => {
@@ -200,6 +206,7 @@ describe( "getStaticProps — SoundCloud oEmbed", () => {
     vi.mocked( getPlaylist ).mockResolvedValue( null as never );
     vi.mocked( getOembed ).mockResolvedValue( null );
     vi.mocked( getYouTubeOembed ).mockResolvedValue( null );
+    vi.mocked( getTikTokOembed ).mockResolvedValue( null );
   });
 
   it( "fetches oEmbed data when soundcloudUrl is present", async () => {
@@ -241,6 +248,7 @@ describe( "getStaticProps — YouTube oEmbed", () => {
     vi.mocked( getPlaylist ).mockResolvedValue( null as never );
     vi.mocked( getOembed ).mockResolvedValue( null );
     vi.mocked( getYouTubeOembed ).mockResolvedValue( null );
+    vi.mocked( getTikTokOembed ).mockResolvedValue( null );
   });
 
   it( "fetches oEmbed data when youtubeUrl is present", async () => {
@@ -264,6 +272,48 @@ describe( "getStaticProps — YouTube oEmbed", () => {
     expect( getYouTubeOembed ).not.toHaveBeenCalled();
     expect( result ).toMatchObject({
       props: { youTubeOembed: null },
+    });
+  });
+});
+
+describe( "getStaticProps — TikTok oEmbed", () => {
+  const postWithTiktok = makePost({ slug: "tt-post" });
+  Object.assign( postWithTiktok.fields, {
+    tiktokUrl: "https://www.tiktok.com/@testuser/video/1234567890",
+  });
+
+  const postWithoutTiktok = makePost({ slug: "no-tt-post" });
+
+  beforeEach( () => {
+    vi.resetAllMocks();
+    vi.mocked( getBlogPosts ).mockResolvedValue({ items: [ postWithTiktok, postWithoutTiktok ] } as never );
+    vi.mocked( getPlaylist ).mockResolvedValue( null as never );
+    vi.mocked( getOembed ).mockResolvedValue( null );
+    vi.mocked( getYouTubeOembed ).mockResolvedValue( null );
+    vi.mocked( getTikTokOembed ).mockResolvedValue( null );
+  });
+
+  it( "fetches oEmbed data when tiktokUrl is present", async () => {
+    const mockOembed = { title: "TikTok Video", author_name: "testuser", author_url: "https://www.tiktok.com/@testuser", html: "<blockquote>content</blockquote>", thumbnail_url: "" };
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithTiktok as never );
+    vi.mocked( getTikTokOembed ).mockResolvedValue( mockOembed );
+
+    const result = await getStaticProps({ params: { slug: "tt-post" } } as never );
+
+    expect( getTikTokOembed ).toHaveBeenCalledWith( "https://www.tiktok.com/@testuser/video/1234567890" );
+    expect( result ).toMatchObject({
+      props: { tikTokOembed: mockOembed },
+    });
+  });
+
+  it( "passes null when tiktokUrl is absent", async () => {
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithoutTiktok as never );
+
+    const result = await getStaticProps({ params: { slug: "no-tt-post" } } as never );
+
+    expect( getTikTokOembed ).not.toHaveBeenCalled();
+    expect( result ).toMatchObject({
+      props: { tikTokOembed: null },
     });
   });
 });

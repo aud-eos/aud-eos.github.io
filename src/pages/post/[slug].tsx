@@ -19,6 +19,8 @@ import { getOembed, SoundCloudOembed } from "@/utils/soundcloud/getOembed";
 import { SoundCloudEmbed } from "@/components/SoundCloudEmbed";
 import { getOembed as getYouTubeOembed, YouTubeOembed } from "@/utils/youtube/getOembed";
 import { YouTubeEmbed } from "@/components/YouTubeEmbed";
+import { getOembed as getTikTokOembed, TikTokOembed } from "@/utils/tiktok/getOembed";
+import { TikTokEmbed } from "@/components/TikTokEmbed";
 
 
 
@@ -33,12 +35,13 @@ export interface BlogPostViewProps {
   playlist?: SpotifyPlaylist|null
   soundCloudOembed?: SoundCloudOembed|null
   youTubeOembed?: YouTubeOembed|null
+  tikTokOembed?: TikTokOembed|null
   prevPost?: PostNavLink|null
   nextPost?: PostNavLink|null
 }
 
 
-export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, youTubeOembed, prevPost, nextPost }) => {
+export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, youTubeOembed, tikTokOembed, prevPost, nextPost }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${CONTENT_IMAGE_WIDTH}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
@@ -140,6 +143,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
                 { post.fields.description }
               </p>
             </header>
+            { tikTokOembed && post.fields.tiktokUrl && <TikTokEmbed oembed={ tikTokOembed } url={ post.fields.tiktokUrl } /> }
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
             { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
@@ -193,6 +197,9 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const youTubeOembed = post.fields.youtubeUrl
     ? await getYouTubeOembed( post.fields.youtubeUrl ) : null;
 
+  const tikTokOembed = post.fields.tiktokUrl
+    ? await getTikTokOembed( post.fields.tiktokUrl ) : null;
+
   const sortedPosts = allPosts.items
     .slice()
     .sort( sortBlogPostsByDate )
@@ -218,6 +225,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
       playlist,
       soundCloudOembed,
       youTubeOembed,
+      tikTokOembed,
       prevPost,
       nextPost,
     },
