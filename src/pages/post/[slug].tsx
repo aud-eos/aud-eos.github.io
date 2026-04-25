@@ -36,12 +36,13 @@ export interface BlogPostViewProps {
   soundCloudOembed?: SoundCloudOembed|null
   youTubeOembed?: YouTubeOembed|null
   tikTokOembed?: TikTokOembed|null
+  tikTokOembedDark?: TikTokOembed|null
   prevPost?: PostNavLink|null
   nextPost?: PostNavLink|null
 }
 
 
-export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, youTubeOembed, tikTokOembed, prevPost, nextPost }) => {
+export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, youTubeOembed, tikTokOembed, tikTokOembedDark, prevPost, nextPost }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${CONTENT_IMAGE_WIDTH}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
@@ -143,7 +144,7 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
                 { post.fields.description }
               </p>
             </header>
-            { tikTokOembed && post.fields.tiktokUrl && <TikTokEmbed oembed={ tikTokOembed } url={ post.fields.tiktokUrl } /> }
+            { tikTokOembed && post.fields.tiktokUrl && <TikTokEmbed oembed={ tikTokOembed } oembedDark={ tikTokOembedDark } url={ post.fields.tiktokUrl } /> }
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
             { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
@@ -197,8 +198,12 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const youTubeOembed = post.fields.youtubeUrl
     ? await getYouTubeOembed( post.fields.youtubeUrl ) : null;
 
-  const tikTokOembed = post.fields.tiktokUrl
-    ? await getTikTokOembed( post.fields.tiktokUrl ) : null;
+  const [ tikTokOembed, tikTokOembedDark ] = post.fields.tiktokUrl
+    ? await Promise.all( [
+      getTikTokOembed( post.fields.tiktokUrl ),
+      getTikTokOembed( post.fields.tiktokUrl, { darkMode: true }),
+    ] )
+    : [ null, null ];
 
   const sortedPosts = allPosts.items
     .slice()
@@ -226,6 +231,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
       soundCloudOembed,
       youTubeOembed,
       tikTokOembed,
+      tikTokOembedDark,
       prevPost,
       nextPost,
     },

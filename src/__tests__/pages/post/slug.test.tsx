@@ -293,27 +293,31 @@ describe( "getStaticProps — TikTok oEmbed", () => {
     vi.mocked( getTikTokOembed ).mockResolvedValue( null );
   });
 
-  it( "fetches oEmbed data when tiktokUrl is present", async () => {
+  it( "fetches both light and dark oEmbed data when tiktokUrl is present", async () => {
     const mockOembed = { title: "TikTok Video", author_name: "testuser", author_url: "https://www.tiktok.com/@testuser", html: "<blockquote>content</blockquote>", thumbnail_url: "" };
+    const mockOembedDark = { ...mockOembed, html: "<blockquote>dark content</blockquote>" };
     vi.mocked( getBlogPost ).mockResolvedValue( postWithTiktok as never );
-    vi.mocked( getTikTokOembed ).mockResolvedValue( mockOembed );
+    vi.mocked( getTikTokOembed )
+      .mockResolvedValueOnce( mockOembed )
+      .mockResolvedValueOnce( mockOembedDark );
 
     const result = await getStaticProps({ params: { slug: "tt-post" } } as never );
 
     expect( getTikTokOembed ).toHaveBeenCalledWith( "https://www.tiktok.com/@testuser/video/1234567890" );
+    expect( getTikTokOembed ).toHaveBeenCalledWith( "https://www.tiktok.com/@testuser/video/1234567890", { darkMode: true });
     expect( result ).toMatchObject({
-      props: { tikTokOembed: mockOembed },
+      props: { tikTokOembed: mockOembed, tikTokOembedDark: mockOembedDark },
     });
   });
 
-  it( "passes null when tiktokUrl is absent", async () => {
+  it( "passes null for both when tiktokUrl is absent", async () => {
     vi.mocked( getBlogPost ).mockResolvedValue( postWithoutTiktok as never );
 
     const result = await getStaticProps({ params: { slug: "no-tt-post" } } as never );
 
     expect( getTikTokOembed ).not.toHaveBeenCalled();
     expect( result ).toMatchObject({
-      props: { tikTokOembed: null },
+      props: { tikTokOembed: null, tikTokOembedDark: null },
     });
   });
 });

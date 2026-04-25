@@ -4,6 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
+**Do not start the dev server** — the user typically runs `yarn dev` themselves in a separate terminal. Never launch it from Claude Code.
+
 ```bash
 yarn dev          # Start development server
 yarn build        # Build for production (postbuild runs next-sitemap automatically)
