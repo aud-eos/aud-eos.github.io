@@ -29,7 +29,7 @@ describe( "getOembed", () => {
     const result = await getOembed( TIKTOK_VIDEO_URL );
 
     expect( mockFetch ).toHaveBeenCalledWith(
-      `https://www.tiktok.com/oembed?format=json&url=${encodeURIComponent( TIKTOK_VIDEO_URL )}`,
+      `https://www.tiktok.com/oembed?format=json&dark_mode=1&url=${encodeURIComponent( TIKTOK_VIDEO_URL )}`,
     );
     expect( result ).toEqual( MOCK_OEMBED_RESPONSE );
   });
