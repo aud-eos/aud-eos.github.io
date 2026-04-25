@@ -15,7 +15,7 @@ function stripScriptTags( html: string ): string {
   let previous;
   do {
     previous = result;
-    result = result.replace( /<script[^>]*>[\s\S]*?<\/script>/gi, "" );
+    result = result.replace( /<script[^>]*>[\s\S]*?<\/script\s*>/gi, "" );
   } while ( result !== previous );
   return result;
 }
