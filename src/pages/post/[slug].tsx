@@ -143,9 +143,9 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
                 { post.fields.description }
               </p>
             </header>
-            { tikTokOembed && post.fields.tiktokUrl && <TikTokEmbed oembed={ tikTokOembed } url={ post.fields.tiktokUrl } /> }
             <Markdown>{ post.fields.body || "" }</Markdown>
             <Gallery items={ resolveGalleryItems( post.fields.gallery ) } />
+            { tikTokOembed && post.fields.tiktokUrl && <TikTokEmbed oembed={ tikTokOembed } url={ post.fields.tiktokUrl } /> }
             { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
             { youTubeOembed && post.fields.youtubeUrl && <YouTubeEmbed oembed={ youTubeOembed } url={ post.fields.youtubeUrl } /> }
             { playlist && <Playlist playlist={ playlist } /> }
