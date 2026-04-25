@@ -11,13 +11,11 @@ export interface TikTokEmbedProps {
 const TIKTOK_EMBED_SCRIPT_SRC = "https://www.tiktok.com/embed.js";
 
 function stripScriptTags( html: string ): string {
-  let result = html;
-  let previous;
-  do {
-    previous = result;
-    result = result.replace( /<script[^>]*>[\s\S]*?<\/script\s*>/gi, "" );
-  } while ( result !== previous );
-  return result;
+  const doc = new DOMParser().parseFromString( html, "text/html" );
+  for( const script of Array.from( doc.querySelectorAll( "script" ) ) ) {
+    script.remove();
+  }
+  return doc.body.innerHTML;
 }
 
 export const TikTokEmbed: FC<TikTokEmbedProps> = ({ oembed, url }) => {
