@@ -1,12 +1,12 @@
-# Google Maps Static Map — Implementation Plan
+# Mapbox Static Map — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Render a static Google Maps image on blog posts with a location field, with CSS-based light/dark theme switching.
+**Goal:** Render a static Mapbox map image on blog posts with a location field, with CSS-based light/dark theme switching.
 
 **Architecture:** Build static map URLs in `getStaticProps` using lat/lon from Contentful. Pass both light and dark URLs as props. The component renders two `<img>` tags inside a Google Maps link, CSS toggles visibility via `prefers-color-scheme`.
 
-**Tech Stack:** Next.js (static export), React, TypeScript, Vitest, Google Static Maps API, SCSS modules
+**Tech Stack:** Next.js (static export), React, TypeScript, Vitest, Mapbox Static Images API, SCSS modules
 
 **Closes:** #12
 
@@ -16,7 +16,7 @@
 
 | Action | File | Responsibility |
 |--------|------|----------------|
-| Create | `src/utils/maps/buildStaticMapUrl.ts` | Construct Static Maps API URLs with theme styles |
+| Create | `src/utils/maps/buildStaticMapUrl.ts` | Construct Mapbox Static Images API URLs with theme styles |
 | Create | `src/utils/maps/buildStaticMapUrl.test.ts` | Unit tests for URL construction |
 | Create | `src/components/LocationMap.tsx` | Map component with CSS theme toggle |
 | Create | `src/__tests__/components/LocationMap.test.tsx` | Unit tests for map component |
@@ -37,45 +37,51 @@
 Create `src/utils/maps/buildStaticMapUrl.test.ts`:
 
 ```typescript
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+
+vi.stubEnv( "MAPBOX_ACCESS_TOKEN", "test-mapbox-token" );
+
 import { buildStaticMapUrl } from "./buildStaticMapUrl";
 
 const MOCK_LAT = 47.6062;
 const MOCK_LON = -122.3321;
 
 describe( "buildStaticMapUrl", () => {
-  it( "returns a Google Static Maps API URL with the correct center coordinates", () => {
+  it( "returns a Mapbox Static Images API URL", () => {
     const url = buildStaticMapUrl( MOCK_LAT, MOCK_LON, "light" );
 
-    expect( url ).toContain( `center=${MOCK_LAT},${MOCK_LON}` );
-    expect( url ).toStartWith( "https://maps.googleapis.com/maps/api/staticmap" );
+    expect( url ).toStartWith( "https://api.mapbox.com/styles/v1/" );
   });
 
-  it( "includes zoom, size, scale, and marker parameters", () => {
+  it( "includes the correct coordinates in the URL", () => {
     const url = buildStaticMapUrl( MOCK_LAT, MOCK_LON, "light" );
 
-    expect( url ).toContain( "zoom=15" );
-    expect( url ).toContain( "size=600x300" );
-    expect( url ).toContain( "scale=2" );
-    expect( url ).toContain( `markers=${MOCK_LAT},${MOCK_LON}` );
+    expect( url ).toContain( `${MOCK_LON},${MOCK_LAT}` );
   });
 
-  it( "includes the API key from environment", () => {
+  it( "includes a pin marker at the coordinates", () => {
     const url = buildStaticMapUrl( MOCK_LAT, MOCK_LON, "light" );
 
-    expect( url ).toContain( "key=" );
+    expect( url ).toContain( `pin-s+e74c3c(${MOCK_LON},${MOCK_LAT})` );
   });
 
-  it( "does not include style parameters for light theme", () => {
+  it( "includes retina scale, size, and access token", () => {
     const url = buildStaticMapUrl( MOCK_LAT, MOCK_LON, "light" );
 
-    expect( url ).not.toContain( "style=" );
+    expect( url ).toContain( "600x300@2x" );
+    expect( url ).toContain( "access_token=test-mapbox-token" );
   });
 
-  it( "includes dark style parameters for dark theme", () => {
+  it( "uses the streets style for light theme", () => {
+    const url = buildStaticMapUrl( MOCK_LAT, MOCK_LON, "light" );
+
+    expect( url ).toContain( "mapbox/streets-v12" );
+  });
+
+  it( "uses the dark style for dark theme", () => {
     const url = buildStaticMapUrl( MOCK_LAT, MOCK_LON, "dark" );
 
-    expect( url ).toContain( "style=" );
+    expect( url ).toContain( "mapbox/dark-v11" );
   });
 });
 ```
@@ -92,72 +98,37 @@ Create `src/utils/maps/buildStaticMapUrl.ts`:
 ```typescript
 import { strict as assert } from "assert";
 
-const GOOGLE_MAPS_API_KEY: string = process.env["GOOGLE_MAPS_API_KEY"] as string;
-assert( !!GOOGLE_MAPS_API_KEY );
+const MAPBOX_ACCESS_TOKEN: string = process.env["MAPBOX_ACCESS_TOKEN"] as string;
+assert( !!MAPBOX_ACCESS_TOKEN );
 
-const STATIC_MAPS_ENDPOINT = "https://maps.googleapis.com/maps/api/staticmap";
+const MAPBOX_ENDPOINT = "https://api.mapbox.com/styles/v1";
 const MAP_ZOOM = 15;
-const MAP_SIZE = "600x300";
-const MAP_SCALE = 2;
+const MAP_WIDTH = 600;
+const MAP_HEIGHT = 300;
+const MARKER_COLOR = "e74c3c";
 
-const DARK_STYLES = [
-  "element:geometry|color:0x242f3e",
-  "element:labels.text.stroke|color:0x242f3e",
-  "element:labels.text.fill|color:0x746855",
-  "feature:administrative.locality|element:labels.text.fill|color:0xd59563",
-  "feature:road|element:geometry|color:0x38414e",
-  "feature:road|element:geometry.stroke|color:0x212a37",
-  "feature:road|element:labels.text.fill|color:0x9ca5b3",
-  "feature:road.highway|element:geometry|color:0x746855",
-  "feature:road.highway|element:geometry.stroke|color:0x1f2835",
-  "feature:water|element:geometry|color:0x17263c",
-  "feature:water|element:labels.text.fill|color:0x515c6d",
-];
+const STYLE_IDS: Record<"light" | "dark", string> = {
+  light: "mapbox/streets-v12",
+  dark: "mapbox/dark-v11",
+};
 
 export function buildStaticMapUrl( lat: number, lon: number, theme: "light" | "dark" ): string {
-  const params = new URLSearchParams({
-    center: `${lat},${lon}`,
-    zoom: String( MAP_ZOOM ),
-    size: MAP_SIZE,
-    scale: String( MAP_SCALE ),
-    markers: `${lat},${lon}`,
-    key: GOOGLE_MAPS_API_KEY,
-  });
-
-  if( theme === "dark" ) {
-    for( const style of DARK_STYLES ) {
-      params.append( "style", style );
-    }
-  }
-
-  return `${STATIC_MAPS_ENDPOINT}?${params.toString()}`;
+  const styleId = STYLE_IDS[theme];
+  const marker = `pin-s+${MARKER_COLOR}(${lon},${lat})`;
+  return `${MAPBOX_ENDPOINT}/${styleId}/static/${marker}/${lon},${lat},${MAP_ZOOM},0/${MAP_WIDTH}x${MAP_HEIGHT}@2x?access_token=${MAPBOX_ACCESS_TOKEN}`;
 }
 ```
 
-- [ ] **Step 4: Set up the env var for tests**
-
-The module-level `assert` will fail if `GOOGLE_MAPS_API_KEY` is not set. Add a test setup that sets a dummy value. Create or update the test to stub the env var before the import:
-
-Update `src/utils/maps/buildStaticMapUrl.test.ts` to add at the top, before the import:
-
-```typescript
-import { describe, it, expect, vi } from "vitest";
-
-vi.stubEnv( "GOOGLE_MAPS_API_KEY", "test-api-key" );
-
-import { buildStaticMapUrl } from "./buildStaticMapUrl";
-```
-
-- [ ] **Step 5: Run tests to verify they pass**
+- [ ] **Step 4: Run tests to verify they pass**
 
 Run: `yarn test src/utils/maps/buildStaticMapUrl.test.ts`
-Expected: 5 tests PASS.
+Expected: 6 tests PASS.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add src/utils/maps/
-git commit -m "feat: add Google Static Maps URL builder utility"
+git commit -m "feat: add Mapbox static map URL builder utility"
 ```
 
 ---
@@ -180,8 +151,8 @@ import React from "react";
 import { LocationMap } from "@/components/LocationMap";
 
 const MOCK_PROPS = {
-  lightMapUrl: "https://maps.googleapis.com/maps/api/staticmap?style=light",
-  darkMapUrl: "https://maps.googleapis.com/maps/api/staticmap?style=dark",
+  lightMapUrl: "https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/test-light",
+  darkMapUrl: "https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/test-dark",
   lat: 47.6062,
   lon: -122.3321,
 };
@@ -190,7 +161,7 @@ describe( "LocationMap", () => {
   it( "renders a link to Google Maps with the correct coordinates", () => {
     render( <LocationMap { ...MOCK_PROPS } /> );
 
-    const link = screen.getByRole( "link", { name: /location map/i });
+    const link = screen.getByRole( "link" );
     expect( link ).toHaveAttribute( "href", "https://www.google.com/maps?q=47.6062,-122.3321" );
     expect( link ).toHaveAttribute( "target", "_blank" );
     expect( link ).toHaveAttribute( "rel", "noopener noreferrer" );
@@ -345,7 +316,7 @@ Add mock at the top alongside the other mocks:
 ```typescript
 vi.mock( "@/utils/maps/buildStaticMapUrl", () => ({
   buildStaticMapUrl: vi.fn( ( lat: number, lon: number, theme: string ) =>
-    `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&theme=${theme}` ),
+    `https://api.mapbox.com/static/${lat},${lon}/${theme}` ),
 }) );
 ```
 
@@ -390,8 +361,8 @@ describe( "getStaticProps — location map", () => {
     expect( buildStaticMapUrl ).toHaveBeenCalledWith( 47.6062, -122.3321, "dark" );
     expect( result ).toMatchObject({
       props: {
-        locationMapLight: expect.stringContaining( "theme=light" ),
-        locationMapDark: expect.stringContaining( "theme=dark" ),
+        locationMapLight: expect.any( String ),
+        locationMapDark: expect.any( String ),
         locationLat: 47.6062,
         locationLon: -122.3321,
       },
@@ -520,21 +491,21 @@ git commit -m "feat: integrate location map into blog post page"
 
 **Files:** None (configuration + manual verification)
 
-- [ ] **Step 1: Add GOOGLE_MAPS_API_KEY to .env.local**
+- [ ] **Step 1: Add MAPBOX_ACCESS_TOKEN to .env.local**
 
-Ask the user to add their Google Maps API key to `.env.local`:
+Ask the user to add their Mapbox access token to `.env.local`:
 
 ```
-GOOGLE_MAPS_API_KEY=<their-key>
+MAPBOX_ACCESS_TOKEN=<their-token>
 ```
 
 - [ ] **Step 2: Add to GitHub Actions secrets**
 
-Remind the user to add `GOOGLE_MAPS_API_KEY` to GitHub Actions secrets for the build pipeline.
+Remind the user to add `MAPBOX_ACCESS_TOKEN` to GitHub Actions secrets for the build pipeline.
 
 - [ ] **Step 3: Update CLAUDE.md with the new env var**
 
-Add `GOOGLE_MAPS_API_KEY` to the environment variables section in `CLAUDE.md`.
+Add `MAPBOX_ACCESS_TOKEN` to the environment variables section in `CLAUDE.md`.
 
 - [ ] **Step 4: Run the full build**
 
@@ -545,5 +516,5 @@ Expected: Build completes successfully. Posts with locations render map URLs in 
 
 ```bash
 git add CLAUDE.md
-git commit -m "docs: add GOOGLE_MAPS_API_KEY to environment variables"
+git commit -m "docs: add MAPBOX_ACCESS_TOKEN to environment variables"
 ```

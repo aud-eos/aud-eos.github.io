@@ -1,24 +1,25 @@
-# Google Maps Static Map Integration
+# Mapbox Static Map Integration
 
 ## Overview
 
-Render a static Google Maps image on blog posts that have a `location` field. The image links to Google Maps for full interactivity. Light and dark themed variants swap via CSS `prefers-color-scheme` media query — no JavaScript needed.
+Render a static Mapbox map image on blog posts that have a `location` field. The image links to Google Maps for full interactivity. Light and dark themed variants swap via CSS `prefers-color-scheme` media query — no JavaScript needed.
 
 ## Decisions
 
-- **Static Maps API** over Embed API or JS API — lightest weight, just an `<img>` tag, fits the static export architecture
-- **Build URLs in `getStaticProps`** — follows existing data-resolution pattern, API key in env vars with HTTP referrer restriction
+- **Mapbox Static Images API** over Google Maps — free tier (50,000 req/month), no billing account required
+- **Build URLs in `getStaticProps`** — follows existing data-resolution pattern, access token in env vars
 - **CSS-based theme switching** — two `<img>` tags toggled with `display: none`/`display: block` via `prefers-color-scheme`, no hydration concerns
 - **Render after all embeds** — map is supplementary context, not primary content
 - **Lazy loading** — `loading="lazy"` on both images so the hidden variant doesn't get fetched
+- **Link to Google Maps** — clicking the map opens Google Maps (better UX than Mapbox for directions/navigation)
 
 ## Environment
 
-New required env var: `GOOGLE_MAPS_API_KEY`
+New required env var: `MAPBOX_ACCESS_TOKEN`
 
-- Must have Static Maps API enabled in Google Cloud Console
-- HTTP referrer restriction to `audeos.com/*` (key is visible in page source by design)
+- Free Mapbox account, no billing required
 - Asserted at module level in the map utility using the existing `assert` pattern
+- Token is visible in page source (standard for static map URLs)
 
 Add to GitHub Actions secrets for the build pipeline.
 
@@ -30,25 +31,29 @@ Pure function: `buildStaticMapUrl( lat: number, lon: number, theme: "light" | "d
 
 **Parameters:**
 - `lat`, `lon` — from Contentful location field
-- `theme` — determines style params
+- `theme` — determines which Mapbox style to use
+
+**Mapbox Static Images URL format:**
+```
+https://api.mapbox.com/styles/v1/{style_id}/static/pin-s+e74c3c({lon},{lat})/{lon},{lat},{zoom},0/{width}x{height}@2x?access_token={token}
+```
 
 **Map configuration:**
 - Zoom: 15 (neighborhood level)
-- Size: `600x300`
-- Scale: `2` (retina)
-- Marker: red pin at lat/lon
-- Dark theme: dark grey land, dark water, light roads, minimal labels (inline style params)
-- Light theme: default Google Maps styling (no style params)
+- Size: `600x300` with `@2x` for retina
+- Marker: small red pin (`pin-s+e74c3c`) at lat/lon
+- Dark theme: `mapbox/dark-v11` style
+- Light theme: `mapbox/streets-v12` style
 
-Returns the full Static Maps API URL with all parameters.
+Returns the full Mapbox Static Images API URL.
 
 ## Component
 
 ### `src/components/LocationMap.tsx`
 
 **Props:**
-- `lightMapUrl: string` — Static Maps URL with light theme
-- `darkMapUrl: string` — Static Maps URL with dark theme
+- `lightMapUrl: string` — Static map URL with light theme
+- `darkMapUrl: string` — Static map URL with dark theme
 - `lat: number`
 - `lon: number`
 
