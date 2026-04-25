@@ -21,6 +21,7 @@ import { getOembed as getYouTubeOembed, YouTubeOembed } from "@/utils/youtube/ge
 import { YouTubeEmbed } from "@/components/YouTubeEmbed";
 import { getOembed as getTikTokOembed, TikTokOembed } from "@/utils/tiktok/getOembed";
 import { TikTokEmbed } from "@/components/TikTokEmbed";
+import { LocationMap } from "@/components/LocationMap";
 
 
 
@@ -36,12 +37,14 @@ export interface BlogPostViewProps {
   soundCloudOembed?: SoundCloudOembed|null
   youTubeOembed?: YouTubeOembed|null
   tikTokOembed?: TikTokOembed|null
+  googleMapsUrl?: string|null
+  locationAddress?: string|null
   prevPost?: PostNavLink|null
   nextPost?: PostNavLink|null
 }
 
 
-export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, youTubeOembed, tikTokOembed, prevPost, nextPost }) => {
+export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloudOembed, youTubeOembed, tikTokOembed, googleMapsUrl, locationAddress, prevPost, nextPost }) => {
   const metaTitle = `${post.fields.title} | Audeos.com`;
   const metaImage = `https:${post.fields.image?.fields.file?.url}?w=${CONTENT_IMAGE_WIDTH}`;
   const metaImageDesc = post.fields.image?.fields.description || "";
@@ -149,6 +152,9 @@ export const BlogPostView: FC<BlogPostViewProps> = ({ post, playlist, soundCloud
             { soundCloudOembed && post.fields.soundcloudUrl && <SoundCloudEmbed oembed={ soundCloudOembed } url={ post.fields.soundcloudUrl } /> }
             { youTubeOembed && post.fields.youtubeUrl && <YouTubeEmbed oembed={ youTubeOembed } url={ post.fields.youtubeUrl } /> }
             { playlist && <Playlist playlist={ playlist } /> }
+            { ( googleMapsUrl || locationAddress ) && (
+              <LocationMap googleMapsUrl={ googleMapsUrl ?? undefined } address={ locationAddress ?? undefined } />
+            ) }
             { ( prevPost || nextPost ) && (
               <nav className={ styles.postNav }>
                 { nextPost && (
@@ -200,6 +206,9 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
   const tikTokOembed = post.fields.tiktokUrl
     ? await getTikTokOembed( post.fields.tiktokUrl ) : null;
 
+  const googleMapsUrl = post.fields.googleMapsUrl ?? null;
+  const locationAddress = post.fields.address ?? null;
+
   const sortedPosts = allPosts.items
     .slice()
     .sort( sortBlogPostsByDate )
@@ -226,6 +235,8 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
       soundCloudOembed,
       youTubeOembed,
       tikTokOembed,
+      googleMapsUrl,
+      locationAddress,
       prevPost,
       nextPost,
     },

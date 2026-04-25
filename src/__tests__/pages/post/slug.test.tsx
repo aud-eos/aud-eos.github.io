@@ -41,6 +41,7 @@ vi.mock( "@/components/Markdown", () => ({
 vi.mock( "@/components/Tags", () => ({ Tags: () => null }) );
 vi.mock( "@/components/DateTimeFormat", () => ({ default: () => null }) );
 vi.mock( "@/components/Playlist", () => ({ default: () => null }) );
+vi.mock( "@/components/LocationMap", () => ({ LocationMap: () => null }) );
 
 import { BlogPostView, getStaticProps } from "@/pages/post/[slug]";
 import { getBlogPost, getBlogPosts } from "@/utils/contentfulUtils";
@@ -314,6 +315,51 @@ describe( "getStaticProps — TikTok oEmbed", () => {
     expect( getTikTokOembed ).not.toHaveBeenCalled();
     expect( result ).toMatchObject({
       props: { tikTokOembed: null },
+    });
+  });
+});
+
+describe( "getStaticProps — location map", () => {
+  const postWithLocation = makePost({ slug: "loc-post" });
+  Object.assign( postWithLocation.fields, {
+    googleMapsUrl: "https://www.google.com/maps/place/Test/@47.6062,-122.3321,17z",
+    address: "123 Test St, Seattle, WA",
+  });
+
+  const postWithoutLocation = makePost({ slug: "no-loc-post" });
+
+  beforeEach( () => {
+    vi.resetAllMocks();
+    vi.mocked( getBlogPosts ).mockResolvedValue({ items: [ postWithLocation, postWithoutLocation ] } as never );
+    vi.mocked( getPlaylist ).mockResolvedValue( null as never );
+    vi.mocked( getOembed ).mockResolvedValue( null );
+    vi.mocked( getYouTubeOembed ).mockResolvedValue( null );
+    vi.mocked( getTikTokOembed ).mockResolvedValue( null );
+  });
+
+  it( "passes googleMapsUrl and address when present", async () => {
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithLocation as never );
+
+    const result = await getStaticProps({ params: { slug: "loc-post" } } as never );
+
+    expect( result ).toMatchObject({
+      props: {
+        googleMapsUrl: "https://www.google.com/maps/place/Test/@47.6062,-122.3321,17z",
+        locationAddress: "123 Test St, Seattle, WA",
+      },
+    });
+  });
+
+  it( "passes null for location props when absent", async () => {
+    vi.mocked( getBlogPost ).mockResolvedValue( postWithoutLocation as never );
+
+    const result = await getStaticProps({ params: { slug: "no-loc-post" } } as never );
+
+    expect( result ).toMatchObject({
+      props: {
+        googleMapsUrl: null,
+        locationAddress: null,
+      },
     });
   });
 });
