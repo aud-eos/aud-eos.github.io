@@ -49,30 +49,4 @@ describe( "getOembed", () => {
 
     expect( result ).toBeNull();
   });
-
-  it( "appends dark_mode=1 when darkMode option is true", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve( MOCK_OEMBED_RESPONSE ),
-    });
-
-    await getOembed( TIKTOK_VIDEO_URL, { darkMode: true });
-
-    expect( mockFetch ).toHaveBeenCalledWith(
-      `https://www.tiktok.com/oembed?format=json&url=${encodeURIComponent( TIKTOK_VIDEO_URL )}&dark_mode=1`,
-    );
-  });
-
-  it( "does not append dark_mode when darkMode option is false", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve( MOCK_OEMBED_RESPONSE ),
-    });
-
-    await getOembed( TIKTOK_VIDEO_URL, { darkMode: false });
-
-    expect( mockFetch ).toHaveBeenCalledWith(
-      `https://www.tiktok.com/oembed?format=json&url=${encodeURIComponent( TIKTOK_VIDEO_URL )}`,
-    );
-  });
 });

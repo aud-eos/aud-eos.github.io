@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
@@ -21,26 +21,7 @@ const MOCK_OEMBED: TikTokOembed = {
   thumbnail_url: "https://p16-sign.tiktokcdn.com/obj/test-thumbnail.jpg",
 };
 
-const MOCK_OEMBED_DARK: TikTokOembed = {
-  ...MOCK_OEMBED,
-  html: '<blockquote class="tiktok-embed" data-dark="1"><section>Dark content</section></blockquote>',
-};
-
-function mockMatchMedia( matches: boolean ) {
-  Object.defineProperty( window, "matchMedia", {
-    writable: true,
-    value: vi.fn().mockReturnValue({
-      matches,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    }),
-  });
-}
-
 describe( "TikTokEmbed", () => {
-  beforeEach( () => {
-    mockMatchMedia( false );
-  });
   it( "renders the oEmbed HTML content", () => {
     render( <TikTokEmbed oembed={ MOCK_OEMBED } url={ MOCK_TIKTOK_URL } /> );
 
@@ -90,31 +71,5 @@ describe( "TikTokEmbed", () => {
 
     const scripts = document.querySelectorAll( 'script[src="https://www.tiktok.com/embed.js"]' );
     expect( scripts ).toHaveLength( 1 );
-  });
-});
-
-describe( "TikTokEmbed — dark mode", () => {
-  it( "renders dark oEmbed HTML when prefers-color-scheme is dark", () => {
-    mockMatchMedia( false );
-
-    render( <TikTokEmbed oembed={ MOCK_OEMBED } oembedDark={ MOCK_OEMBED_DARK } url={ MOCK_TIKTOK_URL } /> );
-
-    expect( screen.getByText( "Dark content" ) ).toBeInTheDocument();
-  });
-
-  it( "renders light oEmbed HTML when prefers-color-scheme is light", () => {
-    mockMatchMedia( true );
-
-    render( <TikTokEmbed oembed={ MOCK_OEMBED } oembedDark={ MOCK_OEMBED_DARK } url={ MOCK_TIKTOK_URL } /> );
-
-    expect( screen.getByText( "Test content" ) ).toBeInTheDocument();
-  });
-
-  it( "falls back to light oEmbed when oembedDark is not provided", () => {
-    mockMatchMedia( false );
-
-    render( <TikTokEmbed oembed={ MOCK_OEMBED } url={ MOCK_TIKTOK_URL } /> );
-
-    expect( screen.getByText( "Test content" ) ).toBeInTheDocument();
   });
 });

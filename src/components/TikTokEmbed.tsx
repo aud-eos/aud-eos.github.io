@@ -1,40 +1,21 @@
-import { FC, useCallback, useEffect, useRef, useSyncExternalStore } from "react";
+import { FC, useEffect, useRef } from "react";
 import Link from "next/link";
 import { TikTokOembed } from "@/utils/tiktok/getOembed";
 import styles from "@/styles/TikTokEmbed.module.scss";
 
 export interface TikTokEmbedProps {
   oembed: TikTokOembed;
-  oembedDark?: TikTokOembed | null;
   url: string;
 }
 
 const TIKTOK_EMBED_SCRIPT_SRC = "https://www.tiktok.com/embed.js";
-const LIGHT_MODE_QUERY = "(prefers-color-scheme: light)";
 
 function stripScriptTags( html: string ): string {
   return html.replace( /<script[^>]*>[\s\S]*?<\/script>/gi, "" );
 }
 
-function useIsLightMode(): boolean {
-  const subscribe = useCallback( ( callback: () => void ) => {
-    const mediaQuery = window.matchMedia( LIGHT_MODE_QUERY );
-    mediaQuery.addEventListener( "change", callback );
-    return () => mediaQuery.removeEventListener( "change", callback );
-  }, [] );
-
-  const getSnapshot = useCallback(
-    () => window.matchMedia( LIGHT_MODE_QUERY ).matches,
-    [],
-  );
-
-  return useSyncExternalStore( subscribe, getSnapshot, () => false );
-}
-
-export const TikTokEmbed: FC<TikTokEmbedProps> = ({ oembed, oembedDark, url }) => {
+export const TikTokEmbed: FC<TikTokEmbedProps> = ({ oembed, url }) => {
   const scriptRef = useRef<HTMLDivElement>( null );
-  const isLight = useIsLightMode();
-  const activeOembed = isLight || !oembedDark ? oembed : oembedDark;
 
   useEffect( () => {
     const container = scriptRef.current;
@@ -50,12 +31,12 @@ export const TikTokEmbed: FC<TikTokEmbedProps> = ({ oembed, oembedDark, url }) =
     return () => {
       script.remove();
     };
-  }, [ activeOembed ] );
+  }, [] );
 
   // Safe: oEmbed HTML is fetched at build time from TikTok's official API —
   // a trusted first-party source, not user-supplied input. Script tags are
   // stripped since we load embed.js separately via useEffect.
-  const sanitizedHtml = { __html: stripScriptTags( activeOembed.html ) };
+  const sanitizedHtml = { __html: stripScriptTags( oembed.html ) };
 
   return (
     <section className={ styles.tiktokEmbed }>
@@ -65,9 +46,9 @@ export const TikTokEmbed: FC<TikTokEmbedProps> = ({ oembed, oembedDark, url }) =
             href={ url }
             target="_blank"
             rel="noopener noreferrer"
-          >{ activeOembed.title }</Link>&quot; on{ " " }
+          >{ oembed.title }</Link>&quot; on{ " " }
           <Link
-            href={ activeOembed.author_url }
+            href={ oembed.author_url }
             target="_blank"
             rel="noopener noreferrer"
           >TikTok</Link>
