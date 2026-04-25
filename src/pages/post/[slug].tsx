@@ -209,9 +209,7 @@ export async function getStaticProps( context: GetStaticPropsContext ) {
 
   const locationLat = post.fields.location?.lat ?? null;
   const locationLon = post.fields.location?.lon ?? null;
-  const locationAddress = "address" in post.fields
-    ? String( post.fields["address" as keyof typeof post.fields] ?? "" ) || null
-    : null;
+  const locationAddress = post.fields.address ?? null;
 
   const sortedPosts = allPosts.items
     .slice()

@@ -92,6 +92,12 @@ export interface TypeBlogPostFields {
      * @localized false
      */
     tiktokUrl?: EntryFieldTypes.Symbol;
+    /**
+     * Field type definition for field 'address' (Address)
+     * @name Address
+     * @localized false
+     */
+    address?: EntryFieldTypes.Symbol;
 }
 
 /**
@@ -100,7 +106,7 @@ export interface TypeBlogPostFields {
  * @type {TypeBlogPostSkeleton}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 27
+ * @version 29
  */
 export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPost">;
 /**
@@ -109,7 +115,7 @@ export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPo
  * @type {TypeBlogPost}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 27
+ * @version 29
  */
 export type TypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode = LocaleCode> = Entry<TypeBlogPostSkeleton, Modifiers, Locales>;
 
