@@ -3,11 +3,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 const mockFetch = vi.fn();
 vi.stubGlobal( "fetch", mockFetch );
 
-import { getOembed, TikTokOembed } from "./getOembed";
+import { getOembed } from "./getOembed";
 
 const TIKTOK_VIDEO_URL = "https://www.tiktok.com/@testuser/video/1234567890";
 
-const MOCK_OEMBED_RESPONSE: TikTokOembed = {
+const MOCK_API_RESPONSE = {
   title: "Test TikTok Video",
   author_name: "testuser",
   author_url: "https://www.tiktok.com/@testuser",
@@ -23,7 +23,7 @@ describe( "getOembed", () => {
   it( "fetches oEmbed data for a valid TikTok URL", async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: () => Promise.resolve( MOCK_OEMBED_RESPONSE ),
+      json: () => Promise.resolve({ ...MOCK_API_RESPONSE }),
     });
 
     const result = await getOembed( TIKTOK_VIDEO_URL );
@@ -31,7 +31,22 @@ describe( "getOembed", () => {
     expect( mockFetch ).toHaveBeenCalledWith(
       `https://www.tiktok.com/oembed?format=json&dark_mode=1&url=${encodeURIComponent( TIKTOK_VIDEO_URL )}`,
     );
-    expect( result ).toEqual( MOCK_OEMBED_RESPONSE );
+    expect( result ).toEqual({
+      ...MOCK_API_RESPONSE,
+      html: '<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@testuser/video/1234567890"><section>Test content</section></blockquote>',
+    });
+  });
+
+  it( "strips script tags from the oEmbed HTML", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({ ...MOCK_API_RESPONSE }),
+    });
+
+    const result = await getOembed( TIKTOK_VIDEO_URL );
+
+    expect( result?.html ).not.toContain( "<script" );
+    expect( result?.html ).toContain( "tiktok-embed" );
   });
 
   it( "returns null when the fetch fails", async () => {

@@ -10,14 +10,6 @@ export interface TikTokEmbedProps {
 
 const TIKTOK_EMBED_SCRIPT_SRC = "https://www.tiktok.com/embed.js";
 
-function stripScriptTags( html: string ): string {
-  const doc = new DOMParser().parseFromString( html, "text/html" );
-  for( const script of Array.from( doc.querySelectorAll( "script" ) ) ) {
-    script.remove();
-  }
-  return doc.body.innerHTML;
-}
-
 export const TikTokEmbed: FC<TikTokEmbedProps> = ({ oembed, url }) => {
   const scriptRef = useRef<HTMLDivElement>( null );
 
@@ -39,8 +31,8 @@ export const TikTokEmbed: FC<TikTokEmbedProps> = ({ oembed, url }) => {
 
   // Safe: oEmbed HTML is fetched at build time from TikTok's official API —
   // a trusted first-party source, not user-supplied input. Script tags are
-  // stripped since we load embed.js separately via useEffect.
-  const sanitizedHtml = { __html: stripScriptTags( oembed.html ) };
+  // stripped at build time in getOembed since we load embed.js separately.
+  const embedHtml = { __html: oembed.html };
 
   return (
     <section className={ styles.tiktokEmbed }>
@@ -60,7 +52,7 @@ export const TikTokEmbed: FC<TikTokEmbedProps> = ({ oembed, url }) => {
       </header>
       <div
         className={ styles.embedContainer }
-        dangerouslySetInnerHTML={ sanitizedHtml }
+        dangerouslySetInnerHTML={ embedHtml }
       />
       <div ref={ scriptRef } />
     </section>
