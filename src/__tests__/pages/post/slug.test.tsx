@@ -322,7 +322,8 @@ describe( "getStaticProps — TikTok oEmbed", () => {
 describe( "getStaticProps — location map", () => {
   const postWithLocation = makePost({ slug: "loc-post" });
   Object.assign( postWithLocation.fields, {
-    location: { lat: 47.6062, lon: -122.3321 },
+    googleMapsUrl: "https://www.google.com/maps/place/Test/@47.6062,-122.3321,17z",
+    address: "123 Test St, Seattle, WA",
   });
 
   const postWithoutLocation = makePost({ slug: "no-loc-post" });
@@ -336,28 +337,28 @@ describe( "getStaticProps — location map", () => {
     vi.mocked( getTikTokOembed ).mockResolvedValue( null );
   });
 
-  it( "passes lat and lon when location is present", async () => {
+  it( "passes googleMapsUrl and address when present", async () => {
     vi.mocked( getBlogPost ).mockResolvedValue( postWithLocation as never );
 
     const result = await getStaticProps({ params: { slug: "loc-post" } } as never );
 
     expect( result ).toMatchObject({
       props: {
-        locationLat: 47.6062,
-        locationLon: -122.3321,
+        googleMapsUrl: "https://www.google.com/maps/place/Test/@47.6062,-122.3321,17z",
+        locationAddress: "123 Test St, Seattle, WA",
       },
     });
   });
 
-  it( "passes null for location props when location is absent", async () => {
+  it( "passes null for location props when absent", async () => {
     vi.mocked( getBlogPost ).mockResolvedValue( postWithoutLocation as never );
 
     const result = await getStaticProps({ params: { slug: "no-loc-post" } } as never );
 
     expect( result ).toMatchObject({
       props: {
-        locationLat: null,
-        locationLon: null,
+        googleMapsUrl: null,
+        locationAddress: null,
       },
     });
   });
