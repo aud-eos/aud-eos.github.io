@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import * as gtag from "../lib/google-analytics";
 import { GoogleAnalytics } from "@/lib/GoogleAnalytics";
 import CookieConsent from "@/components/CookieConsent";
@@ -24,6 +25,10 @@ export default function App({ Component, pageProps }: AppProps ) {
 
   return (
     <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="view-transition" content="same-origin" />
+      </Head>
       <CookieConsent />
       <GoogleAnalytics />
       <div className={ fontMona_Sans.className }>
