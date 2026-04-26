@@ -56,24 +56,17 @@ lint:
 format:
 	@yarn format
 
-# Upgrade dependencies to their latest minor/patch versions, respecting the
-# tilde (~) ranges in package.json. Safe for routine maintenance — will not
-# introduce breaking major-version changes.
+# Upgrade dependencies interactively. Yarn 4's upgrade-interactive replaces
+# the old `yarn outdated` + `yarn upgrade` pair from yarn 1, showing a table
+# of available updates and letting you pick which to apply.
 upgrade:
-	-@yarn outdated
-	@yarn upgrade --tilde
+	@yarn upgrade-interactive
 
-# Upgrade dependencies to their absolute latest versions, ignoring semver
+# Upgrade all dependencies to their absolute latest versions, ignoring semver
 # ranges in package.json entirely. Use when intentionally adopting major
-# version bumps. Review the `yarn outdated` output before and after carefully.
+# version bumps.
 upgrade-latest:
-	-@yarn outdated
-	@yarn upgrade --latest
-	-@yarn outdated
-
-# Verify package.json dependency integrity
-check:
-	@yarn check
+	@yarn up '*' --recursive
 
 # TypeScript-only type check (no ESLint)
 typecheck:

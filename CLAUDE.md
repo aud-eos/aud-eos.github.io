@@ -4,6 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
+**Package manager: Yarn 4** (pinned via the `packageManager` field in `package.json`). The project relies on **Corepack** to resolve the right yarn version per-project — Corepack reads `packageManager`, downloads the matching yarn release on first use, and shims the `yarn` binary on PATH. CI already runs `corepack enable` before `yarn install --immutable`. New clones on macOS need Corepack installed (Homebrew's Node formula excludes it):
+
+```bash
+brew install corepack   # one-time, removes Homebrew yarn/pnpm if installed
+corepack enable
+```
+
+After that, `yarn install` just works.
+
 **Do not start the dev server** — the user typically runs `yarn dev` themselves in a separate terminal. Never launch it from Claude Code.
 
 ```bash
@@ -20,9 +29,11 @@ yarn format       # ESLint with auto-fix
 Dependency management (Makefile):
 
 ```bash
-make upgrade         # yarn outdated + upgrade to latest minor/patch (~)
-make upgrade-latest  # yarn outdated + upgrade to latest including majors
+make upgrade         # yarn upgrade-interactive (table-style picker for available updates)
+make upgrade-latest  # yarn up '*' --recursive (bumps all packages to latest, including majors)
 ```
+
+Yarn 4 command shifts to remember: `yarn upgrade` → `yarn up`, `yarn list` → `yarn info -AR`, `yarn outdated` → `yarn upgrade-interactive`, `yarn audit` → `yarn npm audit`. CI flag `--frozen-lockfile` is `--immutable` in yarn 4.
 
 Contentful asset management (Makefile):
 
