@@ -66,7 +66,8 @@ Collect or derive all required fields. Show each to the user for approval:
 | **soundcloudUrl** | Ask if they want to embed a SoundCloud track or playlist (yes/no). If yes, collect the full SoundCloud URL. Skip if no. |
 | **youtubeUrl** | Ask if they want to embed a YouTube video (yes/no). If yes, collect the full YouTube URL. Skip if no. |
 | **tiktokUrl** | Ask if they want to embed a TikTok video (yes/no). If yes, collect the full TikTok URL. Fetch oEmbed data via `curl -s "https://www.tiktok.com/oembed?format=json&url=<encoded-url>"` to get the title and thumbnail. Offer to use the TikTok thumbnail as the featured image — download it with `curl -o`, rename to a descriptive filename, and upload via `make upload-images`. |
-| **location** | Ask if they want to add a location (yes/no). Skip if no. |
+| **address** | Ask if they want to add a location (yes/no). If yes, collect a human-readable address (e.g. `Cultiva Law, 2510 Western Ave Suite 500, Seattle, WA 98121`). Renders inside the post's "Location" section header. Skip if no. |
+| **googleMapsUrl** | Only ask if `address` was provided. Collect a Google Maps URL containing an `@lat,lon` segment (the format from the Google Maps "Share → Copy link" button on a pinned place — e.g. `https://www.google.com/maps/place/.../@47.6144758,-122.3524581,...`). The `LocationMap` component (`src/components/LocationMap.tsx`) regex-extracts the coordinates from this URL to render the embedded map iframe. Without this URL the address shows as plain text — no map embed, even if `address` is set. Skip if the user only wants the address text. |
 
 ## SEO Check
 
@@ -149,7 +150,9 @@ Use `mcp__contentful__create_entry` with:
     "spotifyPlaylistId": { "en-US": "<playlistId>" },
     "soundcloudUrl": { "en-US": "<soundcloudUrl>" },
     "youtubeUrl": { "en-US": "<youtubeUrl>" },
-    "tiktokUrl": { "en-US": "<tiktokUrl>" }
+    "tiktokUrl": { "en-US": "<tiktokUrl>" },
+    "address": { "en-US": "<address>" },
+    "googleMapsUrl": { "en-US": "<googleMapsUrl>" }
   },
   "metadata": {
     "tags": [{ "sys": { "type": "Link", "linkType": "Tag", "id": "<tagId>" } }]
@@ -157,7 +160,7 @@ Use `mcp__contentful__create_entry` with:
 }
 ```
 
-Omit optional fields that were not provided (gallery, spotifyPlaylistId, soundcloudUrl, youtubeUrl, tiktokUrl, location). Tags go in `metadata`, not `fields`.
+Omit optional fields that were not provided (gallery, spotifyPlaylistId, soundcloudUrl, youtubeUrl, tiktokUrl, address, googleMapsUrl). Tags go in `metadata`, not `fields`.
 
 If the user chose **publish immediately**, follow up with `mcp__contentful__publish_entry`.
 
