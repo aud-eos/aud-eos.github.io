@@ -24,6 +24,11 @@
     "description": "Music releases produced and written DJ Audeos.",
     "ogImage": null
   },
+  "releases": {
+    "title": "Releases",
+    "description": "Music releases produced and written by DJ Audeos.",
+    "ogImage": null
+  },
   "radio": {
     "title": "Radio",
     "description": "DJ mix shows and broadcasts from DJ Audeos.",
