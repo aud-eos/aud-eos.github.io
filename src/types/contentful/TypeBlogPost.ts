@@ -57,12 +57,6 @@ export interface TypeBlogPostFields {
      */
     spotifyPlaylistId?: EntryFieldTypes.Symbol;
     /**
-     * Field type definition for field 'location' (Location)
-     * @name Location
-     * @localized true
-     */
-    location?: EntryFieldTypes.Location;
-    /**
      * Field type definition for field 'author' (Author)
      * @name Author
      * @localized false
@@ -112,7 +106,7 @@ export interface TypeBlogPostFields {
  * @type {TypeBlogPostSkeleton}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 31
+ * @version 35
  */
 export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPost">;
 /**
@@ -121,7 +115,7 @@ export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPo
  * @type {TypeBlogPost}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 31
+ * @version 35
  */
 export type TypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode = LocaleCode> = Entry<TypeBlogPostSkeleton, Modifiers, Locales>;
 
