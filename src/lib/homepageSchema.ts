@@ -24,7 +24,7 @@ export function buildHomepageSchema( posts: BlogPosts ) {
     "url": SITE_URL,
     "isPartOf": {
       "@type": "WebSite",
-      "name": "Audeos.com",
+      "name": META_TITLE,
       "url": SITE_URL,
     },
     "hasPart": dedupeBySlug( posts.items ).map( post => {
