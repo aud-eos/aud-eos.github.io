@@ -29,7 +29,10 @@ export default function TaggedPostSections({ posts, tags, tagSeoConfig }: Tagged
   return (
     <>
       { sections.map( ( section, sectionIndex ) => {
-        const config = tagSeoConfig[section.tagId];
+        const tagConfig = tagSeoConfig[section.tagId];
+        if( !tagConfig ) {
+          throw new Error( `TaggedPostSections: no tagSeoConfig entry for tag "${section.tagId}"` );
+        }
         return (
           <section
             key={ section.tagId }
@@ -38,9 +41,14 @@ export default function TaggedPostSections({ posts, tags, tagSeoConfig }: Tagged
           >
             <header className={ styles.tagSectionHeader }>
               <h2>
-                <Link href={ `/tags/${section.tagId}` }>{ config.title }</Link>
+                <Link href={ `/tags/${section.tagId}` }>{ tagConfig.title }</Link>
               </h2>
-              <Link href={ `/tags/${section.tagId}` } className={ styles.seeAll }>
+              <Link
+                href={ `/tags/${section.tagId}` }
+                className={ styles.seeAll }
+                aria-hidden="true"
+                tabIndex={ -1 }
+              >
                 See all →
               </Link>
             </header>

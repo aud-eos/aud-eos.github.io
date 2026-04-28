@@ -178,4 +178,29 @@ describe( "TaggedPostSections", () => {
     expect( getByTestId( "bpl-alpha" ).getAttribute( "data-priority" ) ).toBe( "true" );
     expect( getByTestId( "bpl-beta" ).getAttribute( "data-priority" ) ).toBe( "false" );
   });
+
+  it( "renders nothing when no tags have posts", () => {
+    const { container } = render(
+      <TaggedPostSections
+        posts={ { items: [] } as never }
+        tags={ { items: [ tagAlpha, tagBeta ] } as never }
+        tagSeoConfig={ tagSeoConfig as never }
+      />,
+    );
+    expect( container.querySelectorAll( "section" ) ).toHaveLength( 0 );
+  });
+
+  it( "passes firstCardPriority to the first rendered section even when earlier tags are empty", () => {
+    const posts = {
+      items: [ makePost({ slug: "b1", date: "2026-04-01", tagIds: [ "beta" ] }) ],
+    };
+    const { getByTestId } = render(
+      <TaggedPostSections
+        posts={ posts as never }
+        tags={ { items: [ tagAlpha, tagBeta ] } as never }
+        tagSeoConfig={ tagSeoConfig as never }
+      />,
+    );
+    expect( getByTestId( "bpl-beta" ).getAttribute( "data-priority" ) ).toBe( "true" );
+  });
 });
