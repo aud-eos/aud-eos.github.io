@@ -1,5 +1,5 @@
 export interface JsonLdProps {
-  schema: object;
+  schema: Record<string, unknown>;
 }
 
 export function JsonLd({ schema }: JsonLdProps ) {
