@@ -14,7 +14,7 @@ export interface BlogArchiveProps {
   posts: BlogPosts
   tags: TagCollection
   page: number
-  tagId?: string
+  tagId: string | null
   tagSeoConfig?: TagSeoConfig
 }
 
@@ -68,7 +68,7 @@ export default function BlogArchive({ posts, page, tags, tagId, tagSeoConfig }: 
         <main className={ styles.main }>
           <nav className={ styles.tagNav }>
             {
-              tags.items
+              [ ...tags.items ]
                 .sort( sortTagsById )
                 .map( tag => {
                   const isActive = tag.sys.id === tagId;
@@ -87,13 +87,13 @@ export default function BlogArchive({ posts, page, tags, tagId, tagSeoConfig }: 
           </nav>
           <BlogPostList
             posts={ filteredBlogPosts }
-            tagId={ tagId }
+            tagId={ tagId ?? undefined }
             page={ page }
           />
           <Pagination
             posts={ filteredBlogPosts }
             page={ page }
-            tagId={ tagId }
+            tagId={ tagId ?? undefined }
           />
         </main>
       </Layout>
