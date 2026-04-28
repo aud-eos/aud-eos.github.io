@@ -1,9 +1,10 @@
 import { getBlogPosts } from "@/utils/contentfulUtils";
-import Home, { getStaticProps as getStaticPropsHome } from "@/pages";
+import BlogArchive from "@/components/BlogArchive/BlogArchive";
+import { getArchiveStaticProps } from "@/components/BlogArchive/getStaticProps";
 import { PAGE_SIZE } from "@/constants";
 
 
-export const getStaticProps = getStaticPropsHome;
+export const getStaticProps = getArchiveStaticProps;
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
@@ -20,4 +21,4 @@ export async function getStaticPaths() {
   };
 }
 
-export default Home;
+export default BlogArchive;
