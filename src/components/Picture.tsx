@@ -5,6 +5,7 @@ export interface PictureProps {
   alt: string;
   maxWidth?: number;
   breakpoints?: number[],
+  priority?: boolean;
 }
 
 export default function Picture({
@@ -12,6 +13,7 @@ export default function Picture({
   maxWidth = CONTENT_IMAGE_WIDTH,
   alt,
   breakpoints = [ 749, 600, 350 ],
+  priority = false,
 }: PictureProps ) {
   return (
     <picture>
@@ -34,6 +36,8 @@ export default function Picture({
       <img
         src={ getImgSrc( url, { width: maxWidth }) }
         alt={ alt }
+        loading={ priority ? "eager" : "lazy" }
+        { ...( priority ? { fetchPriority: "high" } : {}) }
       />
     </picture>
   );

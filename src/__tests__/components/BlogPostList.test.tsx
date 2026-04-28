@@ -13,7 +13,9 @@ vi.mock( "next/link", () => ({
   ),
 }) );
 vi.mock( "@/components/Picture", () => ({
-  default: ({ alt }: { alt: string }) => <img alt={ alt } />,
+  default: ({ alt, priority }: { alt: string; priority?: boolean }) => (
+    <img alt={ alt } data-priority={ priority ? "true" : "false" } />
+  ),
 }) );
 vi.mock( "@/components/Tags", () => ({
   Tags: () => <div data-testid="tags" />,
@@ -122,5 +124,29 @@ describe( "BlogPostList", () => {
     const links = container.querySelectorAll( "a" );
     const hrefs = Array.from( links ).map( link => link.getAttribute( "href" ) );
     expect( hrefs ).toContain( "/post/post-0" );
+  });
+
+  it( "passes priority to the first card image only when firstCardPriority is true", () => {
+    const { container } = render(
+      <BlogPostList
+        posts={ makePosts( 3 ) as never[] }
+        page={ 1 }
+        firstCardPriority
+      />,
+    );
+    const images = container.querySelectorAll( "img" );
+    expect( images[0].getAttribute( "data-priority" ) ).toBe( "true" );
+    expect( images[1].getAttribute( "data-priority" ) ).toBe( "false" );
+    expect( images[2].getAttribute( "data-priority" ) ).toBe( "false" );
+  });
+
+  it( "does not mark any image priority when firstCardPriority is false (default)", () => {
+    const { container } = render(
+      <BlogPostList posts={ makePosts( 3 ) as never[] } page={ 1 } />,
+    );
+    const images = container.querySelectorAll( "img" );
+    images.forEach( image => {
+      expect( image.getAttribute( "data-priority" ) ).toBe( "false" );
+    });
   });
 });
