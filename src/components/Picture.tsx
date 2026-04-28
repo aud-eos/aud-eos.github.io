@@ -37,7 +37,7 @@ export default function Picture({
         src={ getImgSrc( url, { width: maxWidth }) }
         alt={ alt }
         loading={ priority ? "eager" : "lazy" }
-        { ...( priority && { fetchPriority: "high" satisfies "high" }) }
+        { ...( priority ? { fetchPriority: "high" } : {}) }
       />
     </picture>
   );
