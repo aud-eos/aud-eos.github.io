@@ -89,9 +89,10 @@ export interface BlogPostListProps {
   posts: BlogPost[]
   page: number
   tagId?: string
+  firstCardPriority?: boolean
 }
 
-export default function BlogPostList({ posts, page, tagId }: BlogPostListProps ) {
+export default function BlogPostList({ posts, page, tagId, firstCardPriority = false }: BlogPostListProps ) {
   const listRef = useRef<HTMLUListElement>( null );
 
   useEffect( () => {
@@ -129,7 +130,7 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
         [ ...posts ]
           .sort( sortBlogPostsByDate )
           .slice( PAGE_SIZE * ( page - 1 ), PAGE_SIZE * page )
-          .map( post => {
+          .map( ( post, cardIndex ) => {
 
             const url = `/post/${post.fields.slug}`;
             const pictureUrl = post.fields.image?.fields.file?.url || "";
@@ -144,6 +145,7 @@ export default function BlogPostList({ posts, page, tagId }: BlogPostListProps )
                       url={ pictureUrl }
                       maxWidth={ IMAGE_WIDTH }
                       alt={ altText }
+                      priority={ firstCardPriority && cardIndex === 0 }
                     />
                   </Link>
                   <figcaption>

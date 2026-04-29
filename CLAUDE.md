@@ -80,7 +80,7 @@ The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are gener
 
 | Route | File | Notes |
 |---|---|---|
-| `/` | `pages/index.tsx` | Paginated post list, tag filter, search form |
+| `/` | `pages/index.tsx` | Tag-sectioned overview (3 most recent posts per tag) with JSON-LD |
 | `/search` | `pages/search.tsx` | Client-side Fuse.js search |
 | `/post/[slug]` | `pages/post/[slug].tsx` | Individual blog post |
 | `/page/[page]` | `pages/page/[page].tsx` | Pagination |
