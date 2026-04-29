@@ -71,3 +71,17 @@ upgrade-latest:
 # TypeScript-only type check (no ESLint)
 typecheck:
 	@yarn typecheck
+
+# Dry-run the category backfill — prints planned mapping; no Contentful writes
+backfill-categories:
+	@export CONTENTFUL_SPACE_ID=$(CONTENTFUL_SPACE_ID) \
+		CONTENTFUL_ENVIRONMENT=$(CONTENTFUL_ENVIRONMENT) \
+		CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN=$(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN); \
+		node scripts/backfill-categories.mjs
+
+# Apply the category backfill — writes + republishes every blog post entry
+backfill-categories-apply:
+	@export CONTENTFUL_SPACE_ID=$(CONTENTFUL_SPACE_ID) \
+		CONTENTFUL_ENVIRONMENT=$(CONTENTFUL_ENVIRONMENT) \
+		CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN=$(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN); \
+		node scripts/backfill-categories.mjs --apply

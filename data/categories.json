@@ -1,0 +1,17 @@
+{
+  "music": {
+    "title": "Music",
+    "description": "Releases, edits, mixes, and curated playlists by DJ Audeos.",
+    "ogImage": null
+  },
+  "events": {
+    "title": "Events",
+    "description": "DJ performances, nightlife recaps, and event promotion.",
+    "ogImage": null
+  },
+  "lifestyle": {
+    "title": "Lifestyle",
+    "description": "Visual art, merch, plants, and other interests.",
+    "ogImage": null
+  }
+}
