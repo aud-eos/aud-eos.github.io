@@ -12,6 +12,9 @@ import { SeoHead } from "@/components/SeoHead";
 import { TagSeoConfigMap } from "@/types/tagConfig";
 import tagSeoConfigData from "../../data/tags.json";
 import { validateTagSeoConfig } from "@/utils/tagSeoConfig";
+import { CategoryConfigMap } from "@/types/categoryConfig";
+import categoriesData from "../../data/categories.json";
+import { validateCategoryConfig } from "@/utils/categoryConfig";
 
 export interface HomeProps {
   posts: BlogPosts;
@@ -57,6 +60,12 @@ export async function getStaticProps() {
   const tagSeoConfig: TagSeoConfigMap = tagSeoConfigData satisfies TagSeoConfigMap;
   const contentfulTagIds = tags.items.map( tag => tag.sys.id );
   validateTagSeoConfig( tagSeoConfig, contentfulTagIds );
+
+  const categoryConfig: CategoryConfigMap = categoriesData satisfies CategoryConfigMap;
+  validateCategoryConfig(
+    categoryConfig,
+    posts.items.map( post => post.fields.category ),
+  );
 
   generateFeeds( posts.items );
   const schema = buildHomepageSchema( posts );
