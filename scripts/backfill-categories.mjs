@@ -73,23 +73,29 @@ function printDryRun( plans ) {
   }
 
   process.stdout.write( `Backfill plan (${plans.length} posts):\n\n` );
-  process.stdout.write( "slug".padEnd( 40 ) + "category".padEnd( 12 ) + "via tag\n" );
-  for( const plan of plans ) {
-    const sourceTag = Object
-      .entries( TAG_TO_CATEGORY )
-      .find( ( [ tagId, category ] ) => category === plan.category && plan.tagIds.includes( tagId ) )?.[0]
-      ?? "?";
-    process.stdout.write(
-      plan.slug.padEnd( 40 ) + plan.category.padEnd( 12 ) + sourceTag + "\n",
-    );
-  }
 
   const counts = { music: 0, events: 0, lifestyle: 0 };
   for( const plan of plans ) counts[plan.category]++;
-  process.stdout.write( "\nSummary:\n" );
   for( const category of CATEGORY_PRIORITY ) {
     process.stdout.write( `  ${category.padEnd( 10 )} ${counts[category]}\n` );
   }
+
+  for( const category of CATEGORY_PRIORITY ) {
+    const groupPlans = plans
+      .filter( plan => plan.category === category )
+      .sort( ( a, b ) => a.slug.localeCompare( b.slug ) );
+    if( groupPlans.length === 0 ) continue;
+
+    process.stdout.write( `\n== ${category} ==\n` );
+    for( const plan of groupPlans ) {
+      const sourceTag = Object
+        .entries( TAG_TO_CATEGORY )
+        .find( ( [ tagId, cat ] ) => cat === plan.category && plan.tagIds.includes( tagId ) )?.[0]
+        ?? "?";
+      process.stdout.write( `  ${plan.slug.padEnd( 40 )} | via ${sourceTag}\n` );
+    }
+  }
+
   process.stdout.write( "\nNo changes written. Re-run with --apply to write.\n" );
 }
 
