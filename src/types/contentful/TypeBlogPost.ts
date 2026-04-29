@@ -21,6 +21,12 @@ export interface TypeBlogPostFields {
      */
     slug: EntryFieldTypes.Symbol;
     /**
+     * Field type definition for field 'category' (Category)
+     * @name Category
+     * @localized false
+     */
+    category: EntryFieldTypes.Symbol<"events" | "lifestyle" | "music">;
+    /**
      * Field type definition for field 'description' (Description)
      * @name Description
      * @localized true
@@ -45,29 +51,29 @@ export interface TypeBlogPostFields {
      */
     date?: EntryFieldTypes.Date;
     /**
-     * Field type definition for field 'body' (Body)
-     * @name Body
-     * @localized true
-     */
-    body?: EntryFieldTypes.Text;
-    /**
-     * Field type definition for field 'spotifyPlaylistId' (Spotify Playlist ID)
-     * @name Spotify Playlist ID
-     * @localized false
-     */
-    spotifyPlaylistId?: EntryFieldTypes.Symbol;
-    /**
      * Field type definition for field 'author' (Author)
      * @name Author
      * @localized false
      */
     author: EntryFieldTypes.EntryLink<TypeAuthorSkeleton>;
     /**
+     * Field type definition for field 'body' (Body)
+     * @name Body
+     * @localized true
+     */
+    body?: EntryFieldTypes.Text;
+    /**
      * Field type definition for field 'gallery' (Gallery)
      * @name Gallery
      * @localized false
      */
     gallery?: EntryFieldTypes.Array<EntryFieldTypes.AssetLink>;
+    /**
+     * Field type definition for field 'spotifyPlaylistId' (Spotify Playlist ID)
+     * @name Spotify Playlist ID
+     * @localized false
+     */
+    spotifyPlaylistId?: EntryFieldTypes.Symbol;
     /**
      * Field type definition for field 'soundcloudUrl' (Soundcloud URL)
      * @name Soundcloud URL
@@ -106,7 +112,7 @@ export interface TypeBlogPostFields {
  * @type {TypeBlogPostSkeleton}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 35
+ * @version 37
  */
 export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPost">;
 /**
@@ -115,7 +121,7 @@ export type TypeBlogPostSkeleton = EntrySkeletonType<TypeBlogPostFields, "blogPo
  * @type {TypeBlogPost}
  * @author 5qtbtLdlsTzODfegrwA2Ez
  * @since 2023-04-01T06:07:22.846Z
- * @version 35
+ * @version 37
  */
 export type TypeBlogPost<Modifiers extends ChainModifiers, Locales extends LocaleCode = LocaleCode> = Entry<TypeBlogPostSkeleton, Modifiers, Locales>;
 
