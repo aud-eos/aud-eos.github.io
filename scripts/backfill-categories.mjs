@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { readFileSync } from "fs";
+import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { createClient } from "contentful-management";
 
@@ -103,7 +105,7 @@ async function applyBackfill( client, plans ) {
         { entryId: fresh.sys.id },
         fresh,
       );
-      const wasPublished = plan.entry.sys.publishedVersion !== undefined;
+      const wasPublished = fresh.sys.publishedVersion !== undefined;
       if( wasPublished ) {
         await client.entry.publish({ entryId: updated.sys.id }, updated );
       }
@@ -126,6 +128,31 @@ async function applyBackfill( client, plans ) {
 }
 
 export async function main( args ) {
+  const scriptDir = dirname( fileURLToPath( import.meta.url ) );
+  const categoriesPath = join( scriptDir, "..", "data", "categories.json" );
+  const categoryConfig = JSON.parse( readFileSync( categoriesPath, "utf8" ) );
+  const validCategoryIds = new Set( Object.keys( categoryConfig ) );
+
+  for( const [ tagId, category ] of Object.entries( TAG_TO_CATEGORY ) ) {
+    if( !validCategoryIds.has( category ) ) {
+      process.stderr.write(
+        `Configuration error: TAG_TO_CATEGORY["${tagId}"] = "${category}" is not a key in data/categories.json\n`,
+      );
+      process.exit( 1 );
+      return;
+    }
+  }
+
+  for( const category of CATEGORY_PRIORITY ) {
+    if( !validCategoryIds.has( category ) ) {
+      process.stderr.write(
+        `Configuration error: CATEGORY_PRIORITY entry "${category}" is not a key in data/categories.json\n`,
+      );
+      process.exit( 1 );
+      return;
+    }
+  }
+
   const apply = args.includes( "--apply" );
 
   const spaceId = process.env.CONTENTFUL_SPACE_ID;
