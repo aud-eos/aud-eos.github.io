@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+# Force JavaScript actions onto Node 24 ahead of the June 2026 deprecation.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
