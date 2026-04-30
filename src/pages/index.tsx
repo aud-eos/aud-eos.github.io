@@ -1,29 +1,24 @@
 import Link from "next/link";
 import styles from "@/styles/Home.module.scss";
-import { BlogPosts, getBlogPosts, getTags } from "@/utils/contentfulUtils";
+import { BlogPosts, getBlogPosts } from "@/utils/contentfulUtils";
 import { Layout } from "@/components/Layout/Layout";
-import { TagCollection } from "contentful";
-import TaggedPostSections from "@/components/Home/TaggedPostSections";
+import CategoryPostSections from "@/components/Home/CategoryPostSections";
 import { generateFeeds } from "@/lib/generateFeeds";
 import { buildHomepageSchema } from "@/lib/homepageSchema";
 import { JsonLd } from "@/components/JsonLd";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
 import { SeoHead } from "@/components/SeoHead";
-import { TagSeoConfigMap } from "@/types/tagConfig";
-import tagSeoConfigData from "../../data/tags.json";
-import { validateTagSeoConfig } from "@/utils/tagSeoConfig";
 import { CategoryConfigMap } from "@/types/categoryConfig";
 import categoriesData from "../../data/categories.json";
 import { validateCategoryConfig } from "@/utils/categoryConfig";
 
 export interface HomeProps {
   posts: BlogPosts;
-  tags: TagCollection;
-  tagSeoConfig: TagSeoConfigMap;
+  categoryConfig: CategoryConfigMap;
   schema: ReturnType<typeof buildHomepageSchema>;
 }
 
-export default function Home({ posts, tags, tagSeoConfig, schema }: HomeProps ) {
+export default function Home({ posts, categoryConfig, schema }: HomeProps ) {
   return (
     <>
       <SeoHead
@@ -39,10 +34,9 @@ export default function Home({ posts, tags, tagSeoConfig, schema }: HomeProps ) 
       </SeoHead>
       <Layout isFullwidth>
         <main className={ styles.main }>
-          <TaggedPostSections
+          <CategoryPostSections
             posts={ posts }
-            tags={ tags }
-            tagSeoConfig={ tagSeoConfig }
+            categoryConfig={ categoryConfig }
           />
           <Link href="/page/2" className={ styles.allPostsLink }>
             Browse all posts →
@@ -55,11 +49,6 @@ export default function Home({ posts, tags, tagSeoConfig, schema }: HomeProps ) 
 
 export async function getStaticProps() {
   const posts = await getBlogPosts();
-  const tags = await getTags();
-
-  const tagSeoConfig: TagSeoConfigMap = tagSeoConfigData satisfies TagSeoConfigMap;
-  const contentfulTagIds = tags.items.map( tag => tag.sys.id );
-  validateTagSeoConfig( tagSeoConfig, contentfulTagIds );
 
   const categoryConfig: CategoryConfigMap = categoriesData satisfies CategoryConfigMap;
   validateCategoryConfig(
@@ -68,13 +57,12 @@ export async function getStaticProps() {
   );
 
   generateFeeds( posts.items );
-  const schema = buildHomepageSchema( posts );
+  const schema = buildHomepageSchema( posts, categoryConfig );
 
   return {
     props: {
       posts,
-      tags,
-      tagSeoConfig,
+      categoryConfig,
       schema,
     },
   };
