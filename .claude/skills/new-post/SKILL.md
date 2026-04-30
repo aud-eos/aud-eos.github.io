@@ -55,6 +55,7 @@ Collect or derive all required fields. Show each to the user for approval:
 |-------|---------------|
 | **title** | From brainstorm working title or `$ARGUMENTS` |
 | **slug** | Auto-generate from title (lowercase, hyphens, no special chars). Show for approval. |
+| **category** | **Required.** Must be one of `music`, `events`, or `lifestyle` (validated by Contentful and consumed by `src/utils/categoryConfig.ts`). Pick by mapping the post's primary topic against `data/categories.json` — `music` = releases/edits/mixes/playlists, `events` = DJ performances and nightlife recaps, `lifestyle` = visual art, merch, plants, other interests. Show choice for approval; never invent a new category. |
 | **description** | Draft a 1-2 sentence summary from the body (120-160 chars). Show for approval. |
 | **body** | The markdown content from brainstorm or assembly |
 | **date** | Default to today's date. Ask if a different date is wanted. |
@@ -141,6 +142,7 @@ Use `mcp__contentful__create_entry` with:
   "fields": {
     "title": { "en-US": "<title>" },
     "slug": { "en-US": "<slug>" },
+    "category": { "en-US": "<music|events|lifestyle>" },
     "description": { "en-US": "<description>" },
     "body": { "en-US": "<body>" },
     "date": { "en-US": "<YYYY-MM-DD>" },
