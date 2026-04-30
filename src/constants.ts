@@ -10,3 +10,5 @@ export const POSTS_ANCHOR = "posts";
 export const PAGE_SIZE = 12;
 export const CONTENT_IMAGE_WIDTH = 750;
 export const POSTS_PER_TAG_SECTION = 3;
+export const POSTS_PER_CATEGORY_SECTION = 6;
+export const CATEGORY_IDS = [ "music", "events", "lifestyle" ] as const;
