@@ -341,13 +341,13 @@ describe( "NowPlayingCard", () => {
     }
   });
 
-  it( "renders progress bar at 0% when duration_ms is 0", async () => {
+  it( "renders progress ring at 0% when duration_ms is 0", async () => {
     mockFetchOnce({
       ...livePayload,
       track: { ...livePayload.track, position_ms: 0, duration_ms: 0 },
     });
     render( <NowPlayingCard /> );
-    const bar = await screen.findByTestId( "now-playing-progress-fill" );
-    expect( bar.style.width ).toBe( "0%" );
+    const ring = await screen.findByTestId( "now-playing-progress-fill" );
+    expect( ring.style.getPropertyValue( "--progress-percent" ) ).toBe( "0" );
   });
 });

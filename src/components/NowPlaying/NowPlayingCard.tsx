@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, type CSSProperties } from "react";
 import { AUDEOS_PLAY_ORIGIN } from "@/constants";
 import styles from "./NowPlayingCard.module.scss";
 
@@ -148,6 +148,11 @@ export default function NowPlayingCard() {
     return <div data-testid="now-playing-skeleton" className={ styles.skeleton } />;
   }
 
+  const trackDurationMs = data.track?.duration_ms ?? 0;
+  const progressPercent = trackDurationMs > 0
+    ? Math.min( 100, ( displayPositionMs / trackDurationMs ) * 100 )
+    : 0;
+
   return (
     <a
       href={ `${AUDEOS_PLAY_ORIGIN}/channels/${data.channel.slug}` }
@@ -155,51 +160,59 @@ export default function NowPlayingCard() {
       rel="noopener noreferrer"
       className={ styles.card }
     >
-      <p className={ styles.sourceLabel }>{ SOURCE_LABEL[data.source] }</p>
-      { data.track ? (
-        <div className={ styles.trackInfo }>
-          <h2 className={ styles.trackTitle }>{ data.track.title }</h2>
-          { data.track.artist && (
-            <p className={ styles.artist }>{ data.track.artist }</p>
-          ) }
-          <div className={ styles.progress }>
-            <div className={ styles.progressTrack }>
-              <div
-                data-testid="now-playing-progress-fill"
-                className={ styles.progressFill }
-                style={ {
-                  width: data.track.duration_ms > 0
-                    ? `${Math.min( 100, ( displayPositionMs / data.track.duration_ms ) * 100 )}%`
-                    : "0%",
-                } }
-              />
-            </div>
-            <span className={ styles.progressTime }>
-              { formatMs( displayPositionMs ) } / { formatMs( data.track.duration_ms ) }
+      <span className={ styles.cardBorder } aria-hidden="true" />
+      <div className={ styles.vinyl } aria-hidden="true" />
+
+      <div className={ styles.content }>
+        <p className={ styles.sourceLabel }>
+          { SOURCE_LABEL[data.source] }
+          <span className={ styles.eq } aria-hidden="true">
+            <span /><span /><span /><span />
+          </span>
+        </p>
+        { data.track ? (
+          <>
+            <h2 className={ styles.trackTitle }>{ data.track.title }</h2>
+            { data.track.artist && (
+              <p className={ styles.artist }>{ data.track.artist }</p>
+            ) }
+          </>
+        ) : (
+          <p className={ styles.noMetadata }>No metadata available.</p>
+        ) }
+        { data.next_track && (
+          <p className={ styles.upNext }>
+            Up next · { data.next_track.title }
+            { data.next_track.artist && ` · ${data.next_track.artist}` }
+          </p>
+        ) }
+        <div className={ styles.footer }>
+          <p data-testid="now-playing-channel-info" className={ styles.channelInfo }>
+            { data.channel.name }
+            { data.channel.description && ` · ${data.channel.description}` }
+          </p>
+          <div className={ styles.footerRow }>
+            <span className={ styles.listenerCount }>
+              { data.listener_count } listening
             </span>
+            <span className={ styles.cta }>Tune in →</span>
           </div>
         </div>
-      ) : (
-        <p className={ styles.noMetadata }>No metadata available.</p>
-      ) }
-      { data.next_track && (
-        <p className={ styles.upNext }>
-          Up next · { data.next_track.title }
-          { data.next_track.artist && ` · ${data.next_track.artist}` }
-        </p>
-      ) }
-      <div className={ styles.footer }>
-        <p data-testid="now-playing-channel-info" className={ styles.channelInfo }>
-          { data.channel.name }
-          { data.channel.description && ` · ${data.channel.description}` }
-        </p>
-        <div className={ styles.footerRow }>
-          <span className={ styles.listenerCount }>
-            { data.listener_count } listening
-          </span>
-          <span className={ styles.cta }>Tune in →</span>
-        </div>
       </div>
+
+      { data.track && (
+        <div className={ styles.ringWrap }>
+          <div
+            data-testid="now-playing-progress-fill"
+            className={ styles.ring }
+            style={ { "--progress-percent": String( progressPercent ) } as CSSProperties }
+            aria-hidden="true"
+          />
+          <span className={ styles.ringTime }>
+            { formatMs( displayPositionMs ) } / { formatMs( data.track.duration_ms ) }
+          </span>
+        </div>
+      ) }
     </a>
   );
 }
