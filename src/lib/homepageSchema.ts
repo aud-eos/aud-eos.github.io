@@ -1,21 +1,15 @@
-import { BlogPost, BlogPosts } from "@/utils/contentfulUtils";
-import { resolvePostDate } from "@/utils/blogPostUtils";
-import { META_DESCRIPTION, META_TITLE, SITE_URL } from "@/constants";
+import { BlogPosts } from "@/utils/contentfulUtils";
+import { resolvePostDate, sortBlogPostsByDate } from "@/utils/blogPostUtils";
+import { CategoryConfigMap } from "@/types/categoryConfig";
+import {
+  CATEGORY_IDS,
+  META_DESCRIPTION,
+  META_TITLE,
+  POSTS_PER_CATEGORY_SECTION,
+  SITE_URL,
+} from "@/constants";
 
-function dedupeBySlug( posts: BlogPost[] ): BlogPost[] {
-  const seen = new Set<string>();
-  const unique: BlogPost[] = [];
-  posts.forEach( post => {
-    const slug = post.fields.slug;
-    if( !seen.has( slug ) ) {
-      seen.add( slug );
-      unique.push( post );
-    }
-  });
-  return unique;
-}
-
-export function buildHomepageSchema( posts: BlogPosts ) {
+export function buildHomepageSchema( posts: BlogPosts, categoryConfig: CategoryConfigMap ) {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -27,14 +21,27 @@ export function buildHomepageSchema( posts: BlogPosts ) {
       "name": META_TITLE,
       "url": SITE_URL,
     },
-    "hasPart": dedupeBySlug( posts.items ).map( post => {
-      const imageUrl = post.fields.image?.fields.file?.url;
+    "hasPart": CATEGORY_IDS.map( categoryId => {
+      const config = categoryConfig[categoryId];
+      const categoryPosts = posts.items
+        .filter( post => post.fields.category === categoryId )
+        .sort( sortBlogPostsByDate )
+        .slice( 0, POSTS_PER_CATEGORY_SECTION );
       return {
-        "@type": "BlogPosting",
-        "headline": post.fields.title,
-        "url": `${SITE_URL}/post/${post.fields.slug}`,
-        "datePublished": resolvePostDate( post ),
-        "image": imageUrl ? `https:${imageUrl}` : undefined,
+        "@type": "CollectionPage",
+        "name": config.title,
+        "description": config.description,
+        "url": `${SITE_URL}/category/${categoryId}`,
+        "hasPart": categoryPosts.map( post => {
+          const imageUrl = post.fields.image?.fields.file?.url;
+          return {
+            "@type": "BlogPosting",
+            "headline": post.fields.title,
+            "url": `${SITE_URL}/post/${post.fields.slug}`,
+            "datePublished": resolvePostDate( post ),
+            "image": imageUrl ? `https:${imageUrl}` : undefined,
+          };
+        }),
       };
     }),
   };

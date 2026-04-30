@@ -80,11 +80,13 @@ The build output goes to `dist/` (not `.next/`). Feeds (RSS/Atom/JSON) are gener
 
 | Route | File | Notes |
 |---|---|---|
-| `/` | `pages/index.tsx` | Tag-sectioned overview (3 most recent posts per tag) with JSON-LD |
+| `/` | `pages/index.tsx` | Category-sectioned overview (6 most recent posts per category) with nested CollectionPage JSON-LD |
 | `/search` | `pages/search.tsx` | Client-side Fuse.js search |
 | `/post/[slug]` | `pages/post/[slug].tsx` | Individual blog post |
-| `/page/[page]` | `pages/page/[page].tsx` | Pagination |
-| `/tags/[tagId]` | `pages/tags/[tagId].tsx` | Tag-filtered listing |
+| `/page/[page]` | `pages/page/[page].tsx` | Pagination (chronological archive) |
+| `/category/[slug]` | `pages/category/[slug].tsx` | Category landing page (3 categories) |
+| `/category/[slug]/page/[page]` | `pages/category/[slug]/page/[page].tsx` | Paginated category listing |
+| `/tags/[tagId]` | `pages/tags/[tagId].tsx` | Tag-filtered listing (reachable from per-card chips) |
 | `/tags/[tagId]/page/[page]` | `pages/tags/[tagId]/page/[page].tsx` | Paginated tag listing |
 | `/author/[slug]` | `pages/author/[slug].tsx` | Author profile page |
 
