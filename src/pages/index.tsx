@@ -38,7 +38,7 @@ export default function Home({ posts, categoryConfig, schema }: HomeProps ) {
             posts={ posts }
             categoryConfig={ categoryConfig }
           />
-          <Link href="/page/2" className={ styles.allPostsLink }>
+          <Link href="/page/1" className={ styles.allPostsLink }>
             Browse all posts →
           </Link>
         </main>
