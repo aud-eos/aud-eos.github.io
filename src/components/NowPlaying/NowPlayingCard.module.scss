@@ -29,19 +29,19 @@
       0 8px 24px rgba(0, 0, 0, 0.4);
   }
 
-  /* Aurora drift — soft radial gradients animating slowly behind the glass */
+  /* Aurora drift — bold radial blobs that translate + rotate slowly behind the glass */
   &::before {
     content: "";
     position: absolute;
-    inset: -25%;
+    inset: -50%;
     z-index: -2;
     background:
-      radial-gradient(ellipse at 15% 30%, rgba(168, 85, 247, 0.5), transparent 60%),
-      radial-gradient(ellipse at 85% 75%, rgba(56, 189, 248, 0.45), transparent 60%),
-      radial-gradient(ellipse at 60% 25%, rgba(236, 72, 153, 0.35), transparent 60%);
-    background-size: 180% 180%;
-    animation: aurora 22s ease-in-out infinite alternate;
+      radial-gradient(circle at 25% 30%, rgba(168, 85, 247, 0.7), transparent 45%),
+      radial-gradient(circle at 75% 70%, rgba(56, 189, 248, 0.65), transparent 45%),
+      radial-gradient(circle at 55% 20%, rgba(236, 72, 153, 0.55), transparent 45%);
+    animation: aurora 18s ease-in-out infinite alternate;
     pointer-events: none;
+    will-change: transform;
   }
 
   /* Frosted glass — blurs the aurora behind for that dreamy depth */
@@ -50,16 +50,17 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: rgba(15, 10, 35, 0.35);
-    backdrop-filter: blur(28px) saturate(140%);
-    -webkit-backdrop-filter: blur(28px) saturate(140%);
+    background: rgba(15, 10, 35, 0.25);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
     pointer-events: none;
   }
 }
 
 @keyframes aurora {
-  0%   { background-position: 0% 0%, 100% 100%, 50% 50%; }
-  100% { background-position: 70% 30%, 30% 70%, 80% 20%; }
+  0%   { transform: translate(0%, 0%) rotate(0deg); }
+  50%  { transform: translate(-8%, 6%) rotate(20deg); }
+  100% { transform: translate(8%, -6%) rotate(-20deg); }
 }
 
 .content {
