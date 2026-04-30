@@ -155,49 +155,56 @@ export default function NowPlayingCard() {
       rel="noopener noreferrer"
       className={ styles.card }
     >
-      <p className={ styles.sourceLabel }>{ SOURCE_LABEL[data.source] }</p>
-      { data.track ? (
-        <div className={ styles.trackInfo }>
-          <h2 className={ styles.trackTitle }>{ data.track.title }</h2>
-          { data.track.artist && (
-            <p className={ styles.artist }>{ data.track.artist }</p>
-          ) }
-          <div className={ styles.progress }>
-            <div className={ styles.progressTrack }>
-              <div
-                data-testid="now-playing-progress-fill"
-                className={ styles.progressFill }
-                style={ {
-                  width: data.track.duration_ms > 0
-                    ? `${Math.min( 100, ( displayPositionMs / data.track.duration_ms ) * 100 )}%`
-                    : "0%",
-                } }
-              />
-            </div>
-            <span className={ styles.progressTime }>
-              { formatMs( displayPositionMs ) } / { formatMs( data.track.duration_ms ) }
-            </span>
-          </div>
-        </div>
-      ) : (
-        <p className={ styles.noMetadata }>No metadata available.</p>
-      ) }
-      { data.next_track && (
-        <p className={ styles.upNext }>
-          Up next · { data.next_track.title }
-          { data.next_track.artist && ` · ${data.next_track.artist}` }
-        </p>
-      ) }
-      <div className={ styles.footer }>
-        <p data-testid="now-playing-channel-info" className={ styles.channelInfo }>
-          { data.channel.name }
-          { data.channel.description && ` · ${data.channel.description}` }
-        </p>
-        <div className={ styles.footerRow }>
-          <span className={ styles.listenerCount }>
-            { data.listener_count } listening
+      <div className={ styles.content }>
+        <p className={ styles.sourceLabel }>
+          { SOURCE_LABEL[data.source] }
+          <span className={ styles.eq } aria-hidden="true">
+            <span /><span /><span /><span />
           </span>
-          <span className={ styles.cta }>Tune in →</span>
+        </p>
+        { data.track ? (
+          <div className={ styles.trackInfo }>
+            <h2 className={ styles.trackTitle }>{ data.track.title }</h2>
+            { data.track.artist && (
+              <p className={ styles.artist }>{ data.track.artist }</p>
+            ) }
+            <div className={ styles.progress }>
+              <div className={ styles.progressTrack }>
+                <div
+                  data-testid="now-playing-progress-fill"
+                  className={ styles.progressFill }
+                  style={ {
+                    width: data.track.duration_ms > 0
+                      ? `${Math.min( 100, ( displayPositionMs / data.track.duration_ms ) * 100 )}%`
+                      : "0%",
+                  } }
+                />
+              </div>
+              <span className={ styles.progressTime }>
+                { formatMs( displayPositionMs ) } / { formatMs( data.track.duration_ms ) }
+              </span>
+            </div>
+          </div>
+        ) : (
+          <p className={ styles.noMetadata }>No metadata available.</p>
+        ) }
+        { data.next_track && (
+          <p className={ styles.upNext }>
+            Up next · { data.next_track.title }
+            { data.next_track.artist && ` · ${data.next_track.artist}` }
+          </p>
+        ) }
+        <div className={ styles.footer }>
+          <p data-testid="now-playing-channel-info" className={ styles.channelInfo }>
+            { data.channel.name }
+            { data.channel.description && ` · ${data.channel.description}` }
+          </p>
+          <div className={ styles.footerRow }>
+            <span className={ styles.listenerCount }>
+              { data.listener_count } listening
+            </span>
+            <span className={ styles.cta }>Tune in →</span>
+          </div>
         </div>
       </div>
     </a>
