@@ -28,6 +28,11 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+# Force JavaScript actions onto Node 24 ahead of the June 2026 deprecation
+# (silences "Node.js 20 is deprecated" warnings from transitive deps).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 env:
   NEXT_TELEMETRY_DISABLED: 1
 
@@ -45,7 +50,7 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
       - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
@@ -96,7 +101,7 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
       - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
@@ -406,7 +411,7 @@ jobs:
             exit 1
           fi
       - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v11
+        uses: treosh/lighthouse-ci-action@v12
         with:
           urls: ${{ steps.lighthouse_urls.outputs.urls }}
           uploadArtifacts: true

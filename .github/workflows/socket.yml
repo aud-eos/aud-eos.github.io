@@ -18,6 +18,10 @@ concurrency:
   group: socket-scan-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 
+# Force JavaScript actions onto Node 24 ahead of the June 2026 deprecation.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   socket-security:
     permissions:

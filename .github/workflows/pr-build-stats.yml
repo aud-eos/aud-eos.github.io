@@ -8,6 +8,10 @@ permissions:
   contents: read
   pull-requests: write
 
+# Force JavaScript actions onto Node 24 ahead of the June 2026 deprecation.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -21,7 +25,7 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
       - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
@@ -53,7 +57,7 @@ jobs:
         run: corepack enable
 
       - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
