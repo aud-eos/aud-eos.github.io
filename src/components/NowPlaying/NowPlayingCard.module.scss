@@ -43,15 +43,15 @@
     z-index: -2;
     background: conic-gradient(
       from 0deg,
-      rgba(168, 85, 247, 0.7),
-      rgba(56, 189, 248, 0.7),
-      rgba(236, 72, 153, 0.6),
-      rgba(168, 85, 247, 0.7),
-      rgba(56, 189, 248, 0.7),
-      rgba(168, 85, 247, 0.7)
+      rgba(168, 85, 247, 0.45),
+      rgba(56, 189, 248, 0.4),
+      rgba(236, 72, 153, 0.35),
+      rgba(168, 85, 247, 0.45),
+      rgba(56, 189, 248, 0.4),
+      rgba(168, 85, 247, 0.45)
     );
-    filter: blur(70px);
-    animation: aurora 16s linear infinite;
+    filter: blur(80px);
+    animation: aurora 28s linear infinite;
     pointer-events: none;
     will-change: transform;
   }
@@ -62,9 +62,9 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: rgba(15, 10, 35, 0.18);
-    backdrop-filter: blur(6px) saturate(140%);
-    -webkit-backdrop-filter: blur(6px) saturate(140%);
+    background: rgba(15, 10, 35, 0.3);
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
     pointer-events: none;
   }
 }
