@@ -31,7 +31,7 @@ describe( "Pagination", () => {
 
   it( "renders page number links for filter kind 'all'", () => {
     render( <Pagination posts={ makePosts( 7 ) as never[] } page={ 1 } filter={ { kind: "all" } } /> );
-    expect( screen.getByText( "1" ).getAttribute( "href" ) ).toBe( "/" );
+    expect( screen.getByText( "1" ).getAttribute( "href" ) ).toBe( "/page/1" );
     expect( screen.getByText( "2" ).getAttribute( "href" ) ).toBe( "/page/2" );
     expect( screen.getByText( "3" ).getAttribute( "href" ) ).toBe( "/page/3" );
   });
@@ -73,7 +73,7 @@ describe( "Pagination", () => {
     );
     const prevLink = screen.getByText( "prev" );
     expect( prevLink ).toBeInTheDocument();
-    expect( prevLink.getAttribute( "href" ) ).toBe( "/" );
+    expect( prevLink.getAttribute( "href" ) ).toBe( "/page/1" );
   });
 
   it( "renders a next link when there are more pages", () => {

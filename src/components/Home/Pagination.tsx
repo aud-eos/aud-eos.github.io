@@ -23,8 +23,8 @@ function getPaginatorBase( filter: ArchiveFilter ): string {
 
 function getPaginatorUrl( pageNumber: number, filter: ArchiveFilter ): string {
   const base = getPaginatorBase( filter );
-  if( pageNumber === 1 ) {
-    return base === "/" ? "/" : base.replace( /\/$/, "" );
+  if( pageNumber === 1 && filter.kind !== "all" ) {
+    return base.replace( /\/$/, "" );
   }
   return `${base}page/${pageNumber}`;
 }
