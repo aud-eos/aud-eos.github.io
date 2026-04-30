@@ -7,10 +7,7 @@
 
   position: relative;
   isolation: isolate;
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 1.4rem;
-  align-items: center;
+  display: block;
   width: 100%;
   max-width: 64rem;
   margin: 0 auto 4rem;
@@ -63,37 +60,6 @@
 @keyframes aurora {
   0%   { background-position: 0% 0%, 100% 100%, 50% 50%; }
   100% { background-position: 70% 30%, 30% 70%, 80% 20%; }
-}
-
-.vinyl {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%,
-    var(--neon-magenta) 0 8%,
-    #1a1a1a 9% 12%,
-    #2a2a2a 12% 14%,
-    #1a1a1a 14% 50%,
-    #2a2a2a 50% 53%,
-    #1a1a1a 53% 100%);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 8px 24px rgba(0, 0, 0, 0.5);
-  animation: vinylSpin 9s linear infinite;
-  position: relative;
-}
-
-.vinyl::after {
-  content: "";
-  position: absolute;
-  inset: 47%;
-  background: var(--bg-deep);
-  border-radius: 50%;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
-}
-
-@keyframes vinylSpin {
-  to { transform: rotate(360deg); }
 }
 
 .content {
@@ -287,13 +253,7 @@
 /* ===== Mobile / narrow widths ===== */
 @media (max-width: 720px) {
   .card {
-    grid-template-columns: 80px 1fr;
-    gap: 1rem;
     padding: 1.25rem 1.4rem;
-  }
-  .vinyl {
-    width: 80px;
-    height: 80px;
   }
   .trackTitle {
     font-size: 1.4rem;
@@ -315,7 +275,6 @@
 /* ===== Reduced motion ===== */
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .vinyl,
   .eq span,
   .skeleton {
     animation: none;

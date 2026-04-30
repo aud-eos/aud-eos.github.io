@@ -155,8 +155,6 @@ export default function NowPlayingCard() {
       rel="noopener noreferrer"
       className={ styles.card }
     >
-      <div className={ styles.vinyl } aria-hidden="true" />
-
       <div className={ styles.content }>
         <p className={ styles.sourceLabel }>
           { SOURCE_LABEL[data.source] }
