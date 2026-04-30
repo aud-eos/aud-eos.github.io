@@ -29,16 +29,18 @@
       0 8px 24px rgba(0, 0, 0, 0.4);
   }
 
-  /* Aurora drift — bold radial blobs that translate + rotate slowly behind the glass */
+  /* Aurora drift — bold radial blobs that translate + rotate slowly behind the glass.
+     Inset is -100% (i.e. 3x card size) so even at full rotation the rotated rectangle
+     still covers the visible card area — no corner-cropping artifacts. */
   &::before {
     content: "";
     position: absolute;
-    inset: -50%;
+    inset: -100%;
     z-index: -2;
     background:
-      radial-gradient(circle at 25% 30%, rgba(168, 85, 247, 0.7), transparent 45%),
-      radial-gradient(circle at 75% 70%, rgba(56, 189, 248, 0.65), transparent 45%),
-      radial-gradient(circle at 55% 20%, rgba(236, 72, 153, 0.55), transparent 45%);
+      radial-gradient(circle at 25% 30%, rgba(168, 85, 247, 0.7), transparent 35%),
+      radial-gradient(circle at 75% 70%, rgba(56, 189, 248, 0.65), transparent 35%),
+      radial-gradient(circle at 55% 20%, rgba(236, 72, 153, 0.55), transparent 35%);
     animation: aurora 18s ease-in-out infinite alternate;
     pointer-events: none;
     will-change: transform;
