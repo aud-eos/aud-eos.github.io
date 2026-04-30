@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor, act } from "@testing-library/react";
 
 const livePayload = {
   channel: { slug: "main", name: "Audeos", description: "Live broadcasts and curated playlist" },
@@ -158,5 +158,107 @@ describe( "NowPlayingCard", () => {
     }) ) );
     render( <NowPlayingCard /> );
     expect( await screen.findByText( "● Stream offline" ) ).toBeInTheDocument();
+  });
+
+  it( "polls every 30 seconds when the tab is visible", async () => {
+    const fetchMock = vi.fn( async () => ({
+      ok: true, status: 200, json: async () => livePayload,
+    }) );
+    vi.stubGlobal( "fetch", fetchMock );
+    vi.useFakeTimers();
+    try {
+      render( <NowPlayingCard /> );
+      await vi.advanceTimersByTimeAsync( 0 );
+      expect( fetchMock ).toHaveBeenCalledTimes( 1 );
+      await vi.advanceTimersByTimeAsync( 30_000 );
+      expect( fetchMock ).toHaveBeenCalledTimes( 2 );
+      await vi.advanceTimersByTimeAsync( 30_000 );
+      expect( fetchMock ).toHaveBeenCalledTimes( 3 );
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it( "skips the polled fetch when the tab is hidden", async () => {
+    const fetchMock = vi.fn( async () => ({
+      ok: true, status: 200, json: async () => livePayload,
+    }) );
+    vi.stubGlobal( "fetch", fetchMock );
+    vi.useFakeTimers();
+    try {
+      render( <NowPlayingCard /> );
+      await vi.advanceTimersByTimeAsync( 0 );
+      expect( fetchMock ).toHaveBeenCalledTimes( 1 );
+      Object.defineProperty( document, "visibilityState", {
+        value: "hidden",
+        configurable: true,
+      });
+      await vi.advanceTimersByTimeAsync( 30_000 );
+      expect( fetchMock ).toHaveBeenCalledTimes( 1 );
+    } finally {
+      Object.defineProperty( document, "visibilityState", {
+        value: "visible",
+        configurable: true,
+      });
+      vi.useRealTimers();
+    }
+  });
+
+  it( "fetches immediately when visibilitychange fires with visible", async () => {
+    const fetchMock = vi.fn( async () => ({
+      ok: true, status: 200, json: async () => livePayload,
+    }) );
+    vi.stubGlobal( "fetch", fetchMock );
+    Object.defineProperty( document, "visibilityState", {
+      value: "hidden",
+      configurable: true,
+    });
+    render( <NowPlayingCard /> );
+    await waitFor( () => expect( fetchMock ).toHaveBeenCalledTimes( 1 ) );
+    Object.defineProperty( document, "visibilityState", {
+      value: "visible",
+      configurable: true,
+    });
+    document.dispatchEvent( new Event( "visibilitychange" ) );
+    await waitFor( () => expect( fetchMock ).toHaveBeenCalledTimes( 2 ) );
+  });
+
+  it( "clears polling and listener on unmount", async () => {
+    const fetchMock = vi.fn( async () => ({
+      ok: true, status: 200, json: async () => livePayload,
+    }) );
+    vi.stubGlobal( "fetch", fetchMock );
+    vi.useFakeTimers();
+    try {
+      const { unmount } = render( <NowPlayingCard /> );
+      await vi.advanceTimersByTimeAsync( 0 );
+      expect( fetchMock ).toHaveBeenCalledTimes( 1 );
+      unmount();
+      await vi.advanceTimersByTimeAsync( 60_000 );
+      document.dispatchEvent( new Event( "visibilitychange" ) );
+      expect( fetchMock ).toHaveBeenCalledTimes( 1 );
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it( "auto-recovers from error on a subsequent successful poll", async () => {
+    let callCount = 0;
+    vi.stubGlobal( "fetch", vi.fn( async () => {
+      callCount++;
+      if( callCount === 1 ) throw new Error( "network failure" );
+      return { ok: true, status: 200, json: async () => livePayload };
+    }) );
+    vi.useFakeTimers();
+    try {
+      render( <NowPlayingCard /> );
+      await act( async () => { await vi.advanceTimersByTimeAsync( 0 ); });
+      expect( screen.getByText( "● Stream offline" ) ).toBeInTheDocument();
+      await act( async () => { await vi.advanceTimersByTimeAsync( 30_000 ); });
+      expect( screen.getByText( "Day Party vol. 1" ) ).toBeInTheDocument();
+      expect( screen.queryByText( "● Stream offline" ) ).toBeNull();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

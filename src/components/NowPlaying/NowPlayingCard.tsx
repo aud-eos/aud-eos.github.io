@@ -3,6 +3,7 @@ import { AUDEOS_PLAY_ORIGIN } from "@/constants";
 import styles from "./NowPlayingCard.module.scss";
 
 const MAIN_CHANNEL_SLUG = "main";
+const POLL_INTERVAL_MS = 30_000;
 
 type Track = {
   title: string;
@@ -32,6 +33,8 @@ export default function NowPlayingCard() {
 
   useEffect( () => {
     let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
     const fetchOnce = async () => {
       try {
         const response = await fetch(
@@ -47,8 +50,27 @@ export default function NowPlayingCard() {
         if( !cancelled ) setErrored( true );
       }
     };
+
+    const schedule = () => {
+      timer = setTimeout( () => {
+        if( document.visibilityState === "visible" ) fetchOnce();
+        schedule();
+      }, POLL_INTERVAL_MS );
+    };
+
+    const onVisibility = () => {
+      if( document.visibilityState === "visible" ) fetchOnce();
+    };
+
     fetchOnce();
-    return () => { cancelled = true; };
+    schedule();
+    document.addEventListener( "visibilitychange", onVisibility );
+
+    return () => {
+      cancelled = true;
+      if( timer ) clearTimeout( timer );
+      document.removeEventListener( "visibilitychange", onVisibility );
+    };
   }, [] );
 
   if( errored ) {
