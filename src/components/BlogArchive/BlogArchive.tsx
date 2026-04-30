@@ -5,6 +5,7 @@ import BlogPostList from "@/components/Home/BlogPostList";
 import { Layout } from "@/components/Layout/Layout";
 import { TagCollection } from "contentful";
 import { sortTagsById } from "@/utils/blogPostUtils";
+import { ArchiveFilter } from "@/types/archiveFilter";
 import Pagination from "@/components/Home/Pagination";
 import { META_DESCRIPTION, META_IMAGE, META_TITLE, SITE_URL } from "@/constants";
 import { SeoHead } from "@/components/SeoHead";
@@ -93,7 +94,7 @@ export default function BlogArchive({ posts, page, tags, tagId, tagSeoConfig }: 
           <Pagination
             posts={ filteredBlogPosts }
             page={ page }
-            tagId={ tagId ?? undefined }
+            filter={ tagId ? { kind: "tag", id: tagId } : { kind: "all" } satisfies ArchiveFilter }
           />
         </main>
       </Layout>

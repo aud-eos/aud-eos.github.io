@@ -2,24 +2,35 @@ import { PAGE_SIZE } from "@/constants";
 import Link from "next/link";
 import styles from "@/styles/Home.module.scss";
 import { BlogPost } from "@/utils/contentfulUtils";
-
+import { ArchiveFilter } from "@/types/archiveFilter";
 
 
 interface PaginationProps {
   posts: BlogPost[]
   page: number
-  tagId?: string
+  filter: ArchiveFilter
 }
 
 
-const getPaginatorUrl = ( pageNumber: number, tagId?: string ): string => {
-  const base = tagId ? `/tags/${tagId}/` : "/";
-  const page = pageNumber === 1 ? "" : `page/${pageNumber}`;
-  return base + page;
-};
+function getPaginatorBase( filter: ArchiveFilter ): string {
+  switch ( filter.kind ) {
+  case "all": return "/";
+  case "tag": return `/tags/${filter.id}/`;
+  case "category": return `/category/${filter.id}/`;
+  }
+}
 
 
-export default function Pagination({ posts, page, tagId }: PaginationProps ) {
+function getPaginatorUrl( pageNumber: number, filter: ArchiveFilter ): string {
+  const base = getPaginatorBase( filter );
+  if( pageNumber === 1 ) {
+    return base === "/" ? "/" : base.replace( /\/$/, "" );
+  }
+  return `${base}page/${pageNumber}`;
+}
+
+
+export default function Pagination({ posts, page, filter }: PaginationProps ) {
   const numPages = Math.ceil( posts.length / PAGE_SIZE );
   if( numPages <= 1 ) {
     return null;
@@ -29,7 +40,7 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ) {
       {
         Boolean( page > 1 ) &&
           <Link
-            href={ getPaginatorUrl( page - 1, tagId ) }
+            href={ getPaginatorUrl( page - 1, filter ) }
             rel="prev"
           >prev</Link>
       }
@@ -38,7 +49,7 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ) {
           .from({ length: numPages }, ( _, idx ) => idx + 1 )
           .map( pageNumber => {
             const isCurrentPage: boolean = pageNumber === page;
-            const href: string = getPaginatorUrl( pageNumber, tagId );
+            const href: string = getPaginatorUrl( pageNumber, filter );
             const className: string|undefined = isCurrentPage ? styles.isCurrentPage : undefined;
             return (
               <Link
@@ -53,7 +64,7 @@ export default function Pagination({ posts, page, tagId }: PaginationProps ) {
       {
         Boolean( page < numPages ) &&
           <Link
-            href={ getPaginatorUrl( page + 1, tagId ) }
+            href={ getPaginatorUrl( page + 1, filter ) }
             rel="next"
           >next</Link>
       }
