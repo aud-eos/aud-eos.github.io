@@ -28,6 +28,7 @@ const SOURCE_LABEL: Record<NowPlaying["source"], string> = {
 
 export default function NowPlayingCard() {
   const [ data, setData ] = useState<NowPlaying | null>( null );
+  const [ errored, setErrored ] = useState( false );
 
   useEffect( () => {
     let cancelled = false;
@@ -38,14 +39,31 @@ export default function NowPlayingCard() {
         );
         if( !response.ok ) throw new Error( `HTTP ${response.status}` );
         const payload = await response.json() as NowPlaying;
-        if( !cancelled ) setData( payload );
+        if( !cancelled ) {
+          setData( payload );
+          setErrored( false );
+        }
       } catch {
-        // error handling lands in Task 4
+        if( !cancelled ) setErrored( true );
       }
     };
     fetchOnce();
     return () => { cancelled = true; };
   }, [] );
+
+  if( errored ) {
+    return (
+      <a
+        href={ `${AUDEOS_PLAY_ORIGIN}/channels/${MAIN_CHANNEL_SLUG}` }
+        target="_blank"
+        rel="noopener noreferrer"
+        className={ styles.offline }
+      >
+        <p className={ styles.sourceLabel }>● Stream offline</p>
+        <p className={ styles.offlineCta }>Visit player →</p>
+      </a>
+    );
+  }
 
   if( !data ) {
     return <div data-testid="now-playing-skeleton" className={ styles.skeleton } />;

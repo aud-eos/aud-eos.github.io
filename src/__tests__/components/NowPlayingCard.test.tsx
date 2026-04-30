@@ -130,4 +130,33 @@ describe( "NowPlayingCard", () => {
     render( <NowPlayingCard /> );
     expect( await screen.findByText( "Up next · droptop hotbox" ) ).toBeInTheDocument();
   });
+
+  it( "renders the offline placeholder when the fetch rejects", async () => {
+    vi.stubGlobal( "fetch", vi.fn( async () => {
+      throw new Error( "network failure" );
+    }) );
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "● Stream offline" ) ).toBeInTheDocument();
+    expect( screen.getByText( /Visit player/ ) ).toBeInTheDocument();
+  });
+
+  it( "renders the offline placeholder when fetch returns non-2xx", async () => {
+    vi.stubGlobal( "fetch", vi.fn( async () => ({
+      ok: false,
+      status: 500,
+      json: async () => ({}),
+    }) ) );
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "● Stream offline" ) ).toBeInTheDocument();
+  });
+
+  it( "renders the offline placeholder when JSON parsing fails", async () => {
+    vi.stubGlobal( "fetch", vi.fn( async () => ({
+      ok: true,
+      status: 200,
+      json: async () => { throw new SyntaxError( "bad json" ); },
+    }) ) );
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "● Stream offline" ) ).toBeInTheDocument();
+  });
 });
