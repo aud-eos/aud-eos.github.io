@@ -32,8 +32,6 @@ concurrency:
 # (silences "Node.js 20 is deprecated" warnings from transitive deps).
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
-env:
   NEXT_TELEMETRY_DISABLED: 1
 
 jobs:
