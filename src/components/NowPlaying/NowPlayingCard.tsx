@@ -1,9 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { AUDEOS_PLAY_ORIGIN } from "@/constants";
 import styles from "./NowPlayingCard.module.scss";
 
 const MAIN_CHANNEL_SLUG = "main";
 const POLL_INTERVAL_MS = 30_000;
+const PROGRESS_TICK_MS = 1_000;
+
+function formatMs( ms: number ): string {
+  const totalSeconds = Math.floor( ms / 1000 );
+  const hours = Math.floor( totalSeconds / 3600 );
+  const minutes = Math.floor( ( totalSeconds % 3600 ) / 60 );
+  const seconds = totalSeconds % 60;
+  if( hours > 0 ) {
+    const minutesPadded = minutes.toString().padStart( 2, "0" );
+    const secondsPadded = seconds.toString().padStart( 2, "0" );
+    return `${hours}:${minutesPadded}:${secondsPadded}`;
+  }
+  const secondsPadded = seconds.toString().padStart( 2, "0" );
+  return `${minutes}:${secondsPadded}`;
+}
 
 type Track = {
   title: string;
@@ -21,15 +36,51 @@ type NowPlaying = {
   listener_count: number;
 };
 
+type State = {
+  data: NowPlaying | null;
+  errored: boolean;
+  displayPositionMs: number;
+  epoch: number;
+};
+
+type Action =
+  | { type: "data"; payload: NowPlaying }
+  | { type: "error" }
+  | { type: "tick"; epoch: number };
+
+function reducer( state: State, action: Action ): State {
+  switch ( action.type ) {
+  case "data":
+    return {
+      data: action.payload,
+      errored: false,
+      displayPositionMs: action.payload.track?.position_ms ?? 0,
+      epoch: state.epoch + 1,
+    };
+  case "error":
+    return { ...state, errored: true };
+  case "tick": {
+    if( action.epoch !== state.epoch ) return state;
+    const durationMs = state.data?.track?.duration_ms ?? 0;
+    return {
+      ...state,
+      displayPositionMs: Math.min( state.displayPositionMs + PROGRESS_TICK_MS, durationMs ),
+    };
+  }
+  }
+}
+
 const SOURCE_LABEL: Record<NowPlaying["source"], string> = {
   live: "● Live now",
   scheduled: "Scheduled show",
   loop_fallback: "On rotation",
 };
 
+const INITIAL_STATE: State = { data: null, errored: false, displayPositionMs: 0, epoch: 0 };
+
 export default function NowPlayingCard() {
-  const [ data, setData ] = useState<NowPlaying | null>( null );
-  const [ errored, setErrored ] = useState( false );
+  const [ state, dispatch ] = useReducer( reducer, INITIAL_STATE );
+  const { data, errored, displayPositionMs, epoch } = state;
 
   useEffect( () => {
     let cancelled = false;
@@ -42,12 +93,9 @@ export default function NowPlayingCard() {
         );
         if( !response.ok ) throw new Error( `HTTP ${response.status}` );
         const payload = await response.json() as NowPlaying;
-        if( !cancelled ) {
-          setData( payload );
-          setErrored( false );
-        }
+        if( !cancelled ) dispatch({ type: "data", payload });
       } catch {
-        if( !cancelled ) setErrored( true );
+        if( !cancelled ) dispatch({ type: "error" });
       }
     };
 
@@ -72,6 +120,15 @@ export default function NowPlayingCard() {
       document.removeEventListener( "visibilitychange", onVisibility );
     };
   }, [] );
+
+  useEffect( () => {
+    if( !data?.track ) return;
+    const capturedEpoch = epoch;
+    const interval = setInterval( () => {
+      dispatch({ type: "tick", epoch: capturedEpoch });
+    }, PROGRESS_TICK_MS );
+    return () => clearInterval( interval );
+  }, [ data, epoch ] );
 
   if( errored ) {
     return (
@@ -105,6 +162,22 @@ export default function NowPlayingCard() {
           { data.track.artist && (
             <p className={ styles.artist }>{ data.track.artist }</p>
           ) }
+          <div className={ styles.progress }>
+            <div className={ styles.progressTrack }>
+              <div
+                data-testid="now-playing-progress-fill"
+                className={ styles.progressFill }
+                style={ {
+                  width: data.track.duration_ms > 0
+                    ? `${Math.min( 100, ( displayPositionMs / data.track.duration_ms ) * 100 )}%`
+                    : "0%",
+                } }
+              />
+            </div>
+            <span className={ styles.progressTime }>
+              { formatMs( displayPositionMs ) } / { formatMs( data.track.duration_ms ) }
+            </span>
+          </div>
         </div>
       ) : (
         <p className={ styles.noMetadata }>No metadata available.</p>

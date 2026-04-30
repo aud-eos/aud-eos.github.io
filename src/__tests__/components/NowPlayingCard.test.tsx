@@ -261,4 +261,93 @@ describe( "NowPlayingCard", () => {
       vi.useRealTimers();
     }
   });
+
+  it( "renders the initial position and duration formatted as m:ss", async () => {
+    mockFetchOnce({
+      ...livePayload,
+      track: { ...livePayload.track, position_ms: 95_000, duration_ms: 215_000 },
+    });
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "1:35 / 3:35" ) ).toBeInTheDocument();
+  });
+
+  it( "formats hour-long durations as h:mm:ss", async () => {
+    mockFetchOnce({
+      ...livePayload,
+      track: { ...livePayload.track, position_ms: 0, duration_ms: 3_725_000 },
+    });
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "0:00 / 1:02:05" ) ).toBeInTheDocument();
+  });
+
+  it( "advances the displayed position locally every second", async () => {
+    mockFetchOnce({
+      ...livePayload,
+      track: { ...livePayload.track, position_ms: 60_000, duration_ms: 215_000 },
+    });
+    vi.useFakeTimers();
+    try {
+      render( <NowPlayingCard /> );
+      await act( async () => { await vi.advanceTimersByTimeAsync( 0 ); });
+      expect( screen.getByText( "1:00 / 3:35" ) ).toBeInTheDocument();
+      await act( async () => { await vi.advanceTimersByTimeAsync( 1_000 ); });
+      expect( screen.getByText( "1:01 / 3:35" ) ).toBeInTheDocument();
+      await act( async () => { await vi.advanceTimersByTimeAsync( 2_000 ); });
+      expect( screen.getByText( "1:03 / 3:35" ) ).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it( "caps the displayed position at duration", async () => {
+    mockFetchOnce({
+      ...livePayload,
+      track: { ...livePayload.track, position_ms: 9_000, duration_ms: 10_000 },
+    });
+    vi.useFakeTimers();
+    try {
+      render( <NowPlayingCard /> );
+      await act( async () => { await vi.advanceTimersByTimeAsync( 0 ); });
+      await act( async () => { await vi.advanceTimersByTimeAsync( 5_000 ); });
+      expect( screen.getByText( "0:10 / 0:10" ) ).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it( "resets the progress to track.position_ms on a new poll", async () => {
+    let callCount = 0;
+    vi.stubGlobal( "fetch", vi.fn( async () => {
+      callCount++;
+      const position = callCount === 1 ? 60_000 : 90_000;
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          ...livePayload,
+          track: { ...livePayload.track, position_ms: position, duration_ms: 215_000 },
+        }),
+      };
+    }) );
+    vi.useFakeTimers();
+    try {
+      render( <NowPlayingCard /> );
+      await act( async () => { await vi.advanceTimersByTimeAsync( 0 ); });
+      expect( screen.getByText( "1:00 / 3:35" ) ).toBeInTheDocument();
+      await act( async () => { await vi.advanceTimersByTimeAsync( 30_000 ); });
+      expect( screen.getByText( "1:30 / 3:35" ) ).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it( "renders progress bar at 0% when duration_ms is 0", async () => {
+    mockFetchOnce({
+      ...livePayload,
+      track: { ...livePayload.track, position_ms: 0, duration_ms: 0 },
+    });
+    render( <NowPlayingCard /> );
+    const bar = await screen.findByTestId( "now-playing-progress-fill" );
+    expect( bar.style.width ).toBe( "0%" );
+  });
 });
