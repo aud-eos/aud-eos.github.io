@@ -12,3 +12,4 @@ export const CONTENT_IMAGE_WIDTH = 750;
 export const POSTS_PER_TAG_SECTION = 3;
 export const POSTS_PER_CATEGORY_SECTION = 6;
 export const CATEGORY_IDS = [ "music", "events", "lifestyle" ] as const;
+export const AUDEOS_PLAY_ORIGIN = "https://play.audeos.com";

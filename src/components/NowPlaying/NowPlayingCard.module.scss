@@ -1,0 +1,174 @@
+.card,
+.offline {
+  display: block;
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto 4rem;
+  padding: 1.5rem 1.75rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.16);
+    transform: translateY(-1px);
+  }
+
+  @media (prefers-color-scheme: light) {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.16);
+      border-color: rgba(0, 0, 0, 0.16);
+    }
+  }
+}
+
+.skeleton {
+  composes: card;
+  min-height: 12rem;
+  pointer-events: none;
+  cursor: default;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+}
+
+.sourceLabel {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
+}
+
+.trackInfo {
+  margin: 0.6rem 0 0;
+}
+
+.trackTitle {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.artist {
+  margin: 0.2rem 0 0;
+  font-size: 1rem;
+  opacity: 0.7;
+}
+
+.noMetadata {
+  margin: 0.6rem 0 0;
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.progress {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+
+  @media (prefers-color-scheme: light) {
+    background: rgba(0, 0, 0, 0.12);
+  }
+}
+
+.progressFill {
+  height: 100%;
+  background: currentColor;
+  transition: width 0.4s linear;
+}
+
+.progressTime {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.upNext {
+  margin: 0.85rem 0 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.footer {
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  @media (prefers-color-scheme: light) {
+    border-top-color: rgba(0, 0, 0, 0.08);
+  }
+}
+
+.channelInfo {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.footerRow {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.listenerCount {
+  opacity: 0.7;
+}
+
+.cta {
+  font-weight: 600;
+}
+
+.offlineCta {
+  margin: 0.6rem 0 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .offline {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+
+  .progressFill {
+    transition: none;
+  }
+
+  .skeleton {
+    animation: none;
+  }
+}

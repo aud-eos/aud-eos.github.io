@@ -3,6 +3,7 @@ import styles from "@/styles/Home.module.scss";
 import { BlogPosts, getBlogPosts } from "@/utils/contentfulUtils";
 import { Layout } from "@/components/Layout/Layout";
 import CategoryPostSections from "@/components/Home/CategoryPostSections";
+import NowPlayingCard from "@/components/NowPlaying/NowPlayingCard";
 import { generateFeeds } from "@/lib/generateFeeds";
 import { buildHomepageSchema } from "@/lib/homepageSchema";
 import { JsonLd } from "@/components/JsonLd";
@@ -34,6 +35,7 @@ export default function Home({ posts, categoryConfig, schema }: HomeProps ) {
       </SeoHead>
       <Layout isFullwidth>
         <main className={ styles.main }>
+          <NowPlayingCard />
           <CategoryPostSections
             posts={ posts }
             categoryConfig={ categoryConfig }
