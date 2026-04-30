@@ -29,40 +29,48 @@
       0 8px 24px rgba(0, 0, 0, 0.4);
   }
 
-  /* Aurora drift — bold radial blobs that translate + rotate slowly behind the glass.
-     Inset is -100% (i.e. 3x card size) so even at full rotation the rotated rectangle
-     still covers the visible card area — no corner-cropping artifacts. */
+  /* Aurora drift — a rotating conic-gradient with a heavy blur produces an
+     unmistakable, continuously-moving color wash. Pivot is the layer's
+     center; inset is square-ish so the rotated layer always covers the card. */
   &::before {
     content: "";
     position: absolute;
-    inset: -100%;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
     z-index: -2;
-    background:
-      radial-gradient(circle at 25% 30%, rgba(168, 85, 247, 0.7), transparent 35%),
-      radial-gradient(circle at 75% 70%, rgba(56, 189, 248, 0.65), transparent 35%),
-      radial-gradient(circle at 55% 20%, rgba(236, 72, 153, 0.55), transparent 35%);
-    animation: aurora 18s ease-in-out infinite alternate;
+    background: conic-gradient(
+      from 0deg,
+      rgba(168, 85, 247, 0.7),
+      rgba(56, 189, 248, 0.7),
+      rgba(236, 72, 153, 0.6),
+      rgba(168, 85, 247, 0.7),
+      rgba(56, 189, 248, 0.7),
+      rgba(168, 85, 247, 0.7)
+    );
+    filter: blur(70px);
+    animation: aurora 16s linear infinite;
     pointer-events: none;
     will-change: transform;
   }
 
-  /* Frosted glass — blurs the aurora behind for that dreamy depth */
+  /* Subtle frost — light backdrop blur for depth, doesn't hide the rotation */
   &::after {
     content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: rgba(15, 10, 35, 0.25);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    background: rgba(15, 10, 35, 0.18);
+    backdrop-filter: blur(6px) saturate(140%);
+    -webkit-backdrop-filter: blur(6px) saturate(140%);
     pointer-events: none;
   }
 }
 
 @keyframes aurora {
-  0%   { transform: translate(0%, 0%) rotate(0deg); }
-  50%  { transform: translate(-8%, 6%) rotate(20deg); }
-  100% { transform: translate(8%, -6%) rotate(-20deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 .content {
