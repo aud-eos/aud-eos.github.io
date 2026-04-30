@@ -59,14 +59,34 @@ export default function NowPlayingCard() {
       className={ styles.card }
     >
       <p className={ styles.sourceLabel }>{ SOURCE_LABEL[data.source] }</p>
-      { data.track && (
-        <div>
+      { data.track ? (
+        <div className={ styles.trackInfo }>
           <h2 className={ styles.trackTitle }>{ data.track.title }</h2>
           { data.track.artist && (
             <p className={ styles.artist }>{ data.track.artist }</p>
           ) }
         </div>
+      ) : (
+        <p className={ styles.noMetadata }>No metadata available.</p>
       ) }
+      { data.next_track && (
+        <p className={ styles.upNext }>
+          Up next · { data.next_track.title }
+          { data.next_track.artist && ` · ${data.next_track.artist}` }
+        </p>
+      ) }
+      <div className={ styles.footer }>
+        <p data-testid="now-playing-channel-info" className={ styles.channelInfo }>
+          { data.channel.name }
+          { data.channel.description && ` · ${data.channel.description}` }
+        </p>
+        <div className={ styles.footerRow }>
+          <span className={ styles.listenerCount }>
+            { data.listener_count } listening
+          </span>
+          <span className={ styles.cta }>Tune in →</span>
+        </div>
+      </div>
     </a>
   );
 }

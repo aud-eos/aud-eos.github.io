@@ -57,4 +57,77 @@ describe( "NowPlayingCard", () => {
     expect( await screen.findByText( "Day Party vol. 1" ) ).toBeInTheDocument();
     expect( screen.getByText( "DJ Audeos" ) ).toBeInTheDocument();
   });
+
+  it( "renders the source label for source=live", async () => {
+    mockFetchOnce({ ...livePayload, source: "live" });
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "● Live now" ) ).toBeInTheDocument();
+  });
+
+  it( "renders the source label for source=scheduled", async () => {
+    mockFetchOnce({ ...livePayload, source: "scheduled" });
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "Scheduled show" ) ).toBeInTheDocument();
+  });
+
+  it( "renders the source label for source=loop_fallback", async () => {
+    mockFetchOnce({ ...livePayload, source: "loop_fallback" });
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "On rotation" ) ).toBeInTheDocument();
+  });
+
+  it( "renders 'No metadata available.' when track is null", async () => {
+    mockFetchOnce({ ...livePayload, track: null });
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "No metadata available." ) ).toBeInTheDocument();
+  });
+
+  it( "skips the artist line when track.artist is null", async () => {
+    mockFetchOnce({ ...livePayload, track: { ...livePayload.track, artist: null } });
+    render( <NowPlayingCard /> );
+    await screen.findByText( "Day Party vol. 1" );
+    expect( screen.queryByText( "DJ Audeos" ) ).toBeNull();
+  });
+
+  it( "renders the listener count and Tune in CTA", async () => {
+    mockFetchOnce( livePayload );
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( /5 listening/ ) ).toBeInTheDocument();
+    expect( screen.getByText( /Tune in/ ) ).toBeInTheDocument();
+  });
+
+  it( "renders the channel name and description in the footer", async () => {
+    mockFetchOnce( livePayload );
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( /Audeos · Live broadcasts and curated playlist/ ) ).toBeInTheDocument();
+  });
+
+  it( "renders only the channel name when description is null", async () => {
+    mockFetchOnce({ ...livePayload, channel: { ...livePayload.channel, description: null } });
+    render( <NowPlayingCard /> );
+    const footer = await screen.findByTestId( "now-playing-channel-info" );
+    expect( footer.textContent ).toBe( "Audeos" );
+  });
+
+  it( "renders the up-next line when next_track is present", async () => {
+    mockFetchOnce( livePayload );
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( /Up next · droptop hotbox · DJ Audeos/ ) ).toBeInTheDocument();
+  });
+
+  it( "skips the up-next line when next_track is null", async () => {
+    mockFetchOnce({ ...livePayload, next_track: null });
+    render( <NowPlayingCard /> );
+    await screen.findByText( "Day Party vol. 1" );
+    expect( screen.queryByText( /Up next/ ) ).toBeNull();
+  });
+
+  it( "renders up-next without artist when next_track.artist is null", async () => {
+    mockFetchOnce({
+      ...livePayload,
+      next_track: { title: "droptop hotbox", artist: null },
+    });
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "Up next · droptop hotbox" ) ).toBeInTheDocument();
+  });
 });
