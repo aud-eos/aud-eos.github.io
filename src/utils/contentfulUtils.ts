@@ -25,45 +25,51 @@ export type BlogPost = Entry<TypeBlogPostSkeleton, "WITHOUT_UNRESOLVABLE_LINKS",
 export type AuthorCollection = EntryCollection<TypeAuthorSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
 export type Author = Entry<TypeAuthorSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
 
-// Retrieve the list of blog posts from Contentful
+// Module-level Promise caches. Next.js's static export build is one Node
+// process — a single fetch per collection is shared across every page's
+// getStaticPaths and getStaticProps. Cuts per-build CDA calls from ~200 to 3.
+// Slug-based lookups derive from the cached collection (no extra fetches).
+let blogPostsPromise: Promise<BlogPosts> | null = null;
+let tagsPromise: Promise<TagCollection> | null = null;
+let authorsPromise: Promise<AuthorCollection> | null = null;
+
 export const getBlogPosts = async (): Promise<BlogPosts> => {
-  const response = await client.withoutUnresolvableLinks.getEntries<TypeBlogPostSkeleton>({
-    content_type: CONTENT_TYPE_BLOG_POST,
-    limit: 1000,
-  });
-  return response;
+  if( !blogPostsPromise ) {
+    blogPostsPromise = client.withoutUnresolvableLinks.getEntries<TypeBlogPostSkeleton>({
+      content_type: CONTENT_TYPE_BLOG_POST,
+      limit: 1000,
+    });
+  }
+  return blogPostsPromise;
 };
 
 
 export const getBlogPost = async (
   slug: EntryFields.Text,
 ): Promise<BlogPost | undefined> => {
-  // Fetch all results where `fields.slug` is equal to the `slug` param
-  const response = await client.withoutUnresolvableLinks.getEntries<TypeBlogPostSkeleton>({
-    content_type: CONTENT_TYPE_BLOG_POST,
-    "fields.slug": slug,
-  });
-  return response.items[0];
+  const all = await getBlogPosts();
+  return all.items.find( post => post.fields.slug === slug );
 };
 
 
 export const getTags = async (): Promise<TagCollection> => {
-  const response = await client.getTags();
-  return response;
+  if( !tagsPromise ) {
+    tagsPromise = client.getTags();
+  }
+  return tagsPromise;
 };
 
 export const getAuthors = async (): Promise<AuthorCollection> => {
-  const response = await client.withoutUnresolvableLinks.getEntries<TypeAuthorSkeleton>({
-    content_type: CONTENT_TYPE_AUTHOR,
-    limit: 1000,
-  });
-  return response;
+  if( !authorsPromise ) {
+    authorsPromise = client.withoutUnresolvableLinks.getEntries<TypeAuthorSkeleton>({
+      content_type: CONTENT_TYPE_AUTHOR,
+      limit: 1000,
+    });
+  }
+  return authorsPromise;
 };
 
 export const getAuthor = async ( slug: EntryFields.Text ): Promise<Author | undefined> => {
-  const response = await client.withoutUnresolvableLinks.getEntries<TypeAuthorSkeleton>({
-    content_type: CONTENT_TYPE_AUTHOR,
-    "fields.slug": slug,
-  });
-  return response.items[0];
+  const all = await getAuthors();
+  return all.items.find( author => author.fields.slug === slug );
 };
