@@ -23,9 +23,9 @@ function formatMs( ms: number ): string {
 type Track = {
   title: string;
   artist: string | null;
-  started_at: string;
-  duration_ms: number;
-  position_ms: number;
+  started_at: string | null;
+  duration_ms: number | null;
+  position_ms: number | null;
 };
 
 type NowPlaying = {
@@ -123,6 +123,7 @@ export default function NowPlayingCard() {
 
   useEffect( () => {
     if( !data?.track ) return;
+    if( data.track.duration_ms === null ) return;
     const capturedEpoch = epoch;
     const interval = setInterval( () => {
       dispatch({ type: "tick", epoch: capturedEpoch });
@@ -162,31 +163,29 @@ export default function NowPlayingCard() {
             <span /><span /><span /><span />
           </span>
         </p>
-        { data.track ? (
+        { data.track && (
           <div className={ styles.trackInfo }>
             <h2 className={ styles.trackTitle }>{ data.track.title }</h2>
             { data.track.artist && (
               <p className={ styles.artist }>{ data.track.artist }</p>
             ) }
-            <div className={ styles.progress }>
-              <div className={ styles.progressTrack }>
-                <div
-                  data-testid="now-playing-progress-fill"
-                  className={ styles.progressFill }
-                  style={ {
-                    width: data.track.duration_ms > 0
-                      ? `${Math.min( 100, ( displayPositionMs / data.track.duration_ms ) * 100 )}%`
-                      : "0%",
-                  } }
-                />
+            { data.track.duration_ms !== null && data.track.duration_ms > 0 && (
+              <div className={ styles.progress }>
+                <div className={ styles.progressTrack }>
+                  <div
+                    data-testid="now-playing-progress-fill"
+                    className={ styles.progressFill }
+                    style={ {
+                      width: `${Math.min( 100, ( displayPositionMs / data.track.duration_ms ) * 100 )}%`,
+                    } }
+                  />
+                </div>
+                <span className={ styles.progressTime }>
+                  { formatMs( displayPositionMs ) } / { formatMs( data.track.duration_ms ) }
+                </span>
               </div>
-              <span className={ styles.progressTime }>
-                { formatMs( displayPositionMs ) } / { formatMs( data.track.duration_ms ) }
-              </span>
-            </div>
+            ) }
           </div>
-        ) : (
-          <p className={ styles.noMetadata }>No metadata available.</p>
         ) }
         { data.next_track && (
           <p className={ styles.upNext }>
