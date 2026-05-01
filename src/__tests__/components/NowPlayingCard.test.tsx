@@ -76,10 +76,30 @@ describe( "NowPlayingCard", () => {
     expect( await screen.findByText( "On rotation" ) ).toBeInTheDocument();
   });
 
-  it( "renders 'No metadata available.' when track is null", async () => {
-    mockFetchOnce({ ...livePayload, track: null });
+  it( "renders the source label and CTA without track UI when track is null", async () => {
+    mockFetchOnce({ ...livePayload, track: null, source: "loop_fallback" });
     render( <NowPlayingCard /> );
-    expect( await screen.findByText( "No metadata available." ) ).toBeInTheDocument();
+    expect( await screen.findByText( "On rotation" ) ).toBeInTheDocument();
+    expect( screen.getByText( /Tune in/ ) ).toBeInTheDocument();
+    expect( screen.queryByText( "Day Party vol. 1" ) ).toBeNull();
+    expect( screen.queryByTestId( "now-playing-progress-fill" ) ).toBeNull();
+  });
+
+  it( "renders title and artist but hides the progress bar when timing fields are null (transition holdover)", async () => {
+    mockFetchOnce({
+      ...livePayload,
+      track: {
+        title: "Day Party vol. 1",
+        artist: "DJ Audeos",
+        started_at: null,
+        duration_ms: null,
+        position_ms: null,
+      },
+    });
+    render( <NowPlayingCard /> );
+    expect( await screen.findByText( "Day Party vol. 1" ) ).toBeInTheDocument();
+    expect( screen.getByText( "DJ Audeos" ) ).toBeInTheDocument();
+    expect( screen.queryByTestId( "now-playing-progress-fill" ) ).toBeNull();
   });
 
   it( "skips the artist line when track.artist is null", async () => {
@@ -341,13 +361,13 @@ describe( "NowPlayingCard", () => {
     }
   });
 
-  it( "renders progress bar at 0% when duration_ms is 0", async () => {
+  it( "hides the progress block when duration_ms is 0", async () => {
     mockFetchOnce({
       ...livePayload,
       track: { ...livePayload.track, position_ms: 0, duration_ms: 0 },
     });
     render( <NowPlayingCard /> );
-    const bar = await screen.findByTestId( "now-playing-progress-fill" );
-    expect( bar.style.width ).toBe( "0%" );
+    await screen.findByText( "Day Party vol. 1" );
+    expect( screen.queryByTestId( "now-playing-progress-fill" ) ).toBeNull();
   });
 });
