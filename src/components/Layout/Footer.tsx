@@ -47,7 +47,12 @@ export const Footer: FC = () => {
 
       <div className={ styles.socialLinks }>
         { SOCIAL_LINKS.map( ({ href, icon: Icon, title }) => (
-          <Link key={ href } href={ href } target="_blank">
+          <Link
+            key={ href }
+            href={ href }
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Icon size={ ICON_SIZE } title={ title } />
           </Link>
         ) ) }

@@ -11,7 +11,20 @@ const eslintConfig = defineConfig( [ ...nextTypescript, ...nextVitals, {
     "@next/next/no-img-element": "off",
   },
 }, {
+  // Tell anchor-aware react/jsx-a11y rules that next/link's <Link> is a link.
+  // Without this, react/jsx-no-target-blank silently skips <Link target="_blank">
+  // because the rule only inspects native <a>/<area> elements.
+  settings: {
+    linkComponents: [
+      { name: "Link", linkAttribute: "href" },
+    ],
+  },
+}, {
   rules: {
+    // Next's preset disables this rule. Re-enable it so target="_blank" without
+    // rel="noopener noreferrer" is caught at lint time, including on Next's <Link>
+    // (see linkComponents setting above). Catches a real foot-gun: tabnabbing.
+    "react/jsx-no-target-blank": [ "error", { allowReferrer: false, enforceDynamicLinks: "always" } ],
     "indent": [ "error", 2 ],
     "array-bracket-spacing": [ 2, "always" ],
     "arrow-parens": [ 2, "as-needed" ],
