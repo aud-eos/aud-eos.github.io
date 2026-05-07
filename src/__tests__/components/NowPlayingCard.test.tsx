@@ -48,7 +48,7 @@ describe( "NowPlayingCard", () => {
     const fetchMock = vi.fn( async () => ({ ok: true, status: 200, json: async () => livePayload }) );
     vi.stubGlobal( "fetch", fetchMock );
     render( <NowPlayingCard /> );
-    expect( fetchMock ).toHaveBeenCalledWith( "https://play.audeos.com/api/now-playing/main" );
+    expect( fetchMock ).toHaveBeenCalledWith( "https://audeos.fm/api/now-playing/main" );
   });
 
   it( "renders the track title and artist after the fetch resolves", async () => {
