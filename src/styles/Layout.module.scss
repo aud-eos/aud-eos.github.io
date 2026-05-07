@@ -158,10 +158,25 @@ footer.footer {
     margin: 2rem auto;
 }
 
-.cookieLink {
+.utilityLinks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.utilityDivider {
+    font-size: 0.8rem;
+    opacity: 0.4;
+}
+
+.utilityLink {
     background: none;
     border: none;
+    padding: 0;
     color: inherit;
+    font: inherit;
     font-size: 0.8rem;
     opacity: 0.5;
     cursor: pointer;
