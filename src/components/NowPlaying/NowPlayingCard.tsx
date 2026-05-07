@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { AUDEOS_PLAY_ORIGIN } from "@/constants";
+import { STREAM_ORIGIN } from "@/constants";
 import styles from "./NowPlayingCard.module.scss";
 
 const MAIN_CHANNEL_SLUG = "main";
@@ -89,7 +89,7 @@ export default function NowPlayingCard() {
     const fetchOnce = async () => {
       try {
         const response = await fetch(
-          `${AUDEOS_PLAY_ORIGIN}/api/now-playing/${MAIN_CHANNEL_SLUG}`,
+          `${STREAM_ORIGIN}/api/now-playing/${MAIN_CHANNEL_SLUG}`,
         );
         if( !response.ok ) throw new Error( `HTTP ${response.status}` );
         const payload = await response.json() as NowPlaying;
@@ -134,7 +134,7 @@ export default function NowPlayingCard() {
   if( errored ) {
     return (
       <a
-        href={ `${AUDEOS_PLAY_ORIGIN}/channels/${MAIN_CHANNEL_SLUG}` }
+        href={ `${STREAM_ORIGIN}/channels/${MAIN_CHANNEL_SLUG}` }
         target="_blank"
         rel="noopener noreferrer"
         className={ styles.offline }
@@ -151,7 +151,7 @@ export default function NowPlayingCard() {
 
   return (
     <a
-      href={ `${AUDEOS_PLAY_ORIGIN}/channels/${data.channel.slug}` }
+      href={ `${STREAM_ORIGIN}/channels/${data.channel.slug}` }
       target="_blank"
       rel="noopener noreferrer"
       className={ styles.card }
