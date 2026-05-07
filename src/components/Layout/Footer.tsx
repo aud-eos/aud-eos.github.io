@@ -59,8 +59,17 @@ export const Footer: FC = () => {
         </p>
       </div>
 
-      <div>
-        <button className={ styles.cookieLink } onClick={ resetCookieConsent }>
+      <div className={ styles.utilityLinks }>
+        <Link
+          href="https://status.audeos.fm"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={ styles.utilityLink }
+        >
+          Stream status
+        </Link>
+        <span className={ styles.utilityDivider } aria-hidden="true">·</span>
+        <button className={ styles.utilityLink } onClick={ resetCookieConsent }>
           Update Cookie Preferences
         </button>
       </div>
