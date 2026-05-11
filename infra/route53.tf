@@ -182,33 +182,3 @@ import {
   id = "Z04082853V3NSCPIUKILC__github-pages-challenge-aud-eos.audeos.com_TXT"
 }
 
-# === Amazon SES — outbound mail via the mail.audeos.com subdomain ===
-# Bounce/complaint MX + SPF for the subdomain. SES DKIM CNAMEs are in
-# ses.tf because they depend on aws_ses_domain_identity.audeos_com
-# (added in PR B).
-
-resource "aws_route53_record" "mail_mx_ses" {
-  zone_id = aws_route53_zone.audeos_com.zone_id
-  name    = "mail.audeos.com"
-  type    = "MX"
-  ttl     = 300
-  records = ["10 feedback-smtp.us-east-1.amazonses.com"]
-}
-
-import {
-  to = aws_route53_record.mail_mx_ses
-  id = "Z04082853V3NSCPIUKILC_mail.audeos.com_MX"
-}
-
-resource "aws_route53_record" "mail_spf_ses" {
-  zone_id = aws_route53_zone.audeos_com.zone_id
-  name    = "mail.audeos.com"
-  type    = "TXT"
-  ttl     = 300
-  records = ["v=spf1 include:amazonses.com ~all"]
-}
-
-import {
-  to = aws_route53_record.mail_spf_ses
-  id = "Z04082853V3NSCPIUKILC_mail.audeos.com_TXT"
-}
