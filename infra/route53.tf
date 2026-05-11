@@ -136,14 +136,17 @@ import {
   id = "Z04082853V3NSCPIUKILC_protonmail3._domainkey.audeos.com_CNAME"
 }
 
-# === DMARC — observation-mode policy on audeos.com ===
+# === DMARC — reject ===
+# audeos.com has no legitimate domain-aligned outbound mail after the
+# SES decom in PR #109. Any From: *@audeos.com claim is spoofed — tell
+# receivers to reject outright.
 
 resource "aws_route53_record" "dmarc" {
   zone_id = aws_route53_zone.audeos_com.zone_id
   name    = "_dmarc.audeos.com"
   type    = "TXT"
   ttl     = 300
-  records = ["v=DMARC1; p=quarantine"]
+  records = ["v=DMARC1; p=reject"]
 }
 
 import {
