@@ -208,6 +208,39 @@ resource "aws_route53_record" "mail_spf_ses" {
   records = ["v=spf1 include:amazonses.com ~all"]
 }
 
+# === Stale play.audeos.com — Phase 5 cleanup ===
+# Adopted via import here purely so they can be destroyed via tofu in
+# the next PR. Originally pointed at a previous deployment (probably a
+# Vultr or similar host); intentionally removed from CF in audeos.fm
+# PR #249 but never deleted from R53 (which was dormant at the time).
+# Removed entirely in the follow-up PR.
+
+resource "aws_route53_record" "play_a" {
+  zone_id = aws_route53_zone.audeos_com.zone_id
+  name    = "play.audeos.com"
+  type    = "A"
+  ttl     = 300
+  records = ["149.248.214.157"]
+}
+
+import {
+  to = aws_route53_record.play_a
+  id = "Z04082853V3NSCPIUKILC_play.audeos.com_A"
+}
+
+resource "aws_route53_record" "play_aaaa" {
+  zone_id = aws_route53_zone.audeos_com.zone_id
+  name    = "play.audeos.com"
+  type    = "AAAA"
+  ttl     = 300
+  records = ["2a09:8280:1::10b:b583:0"]
+}
+
+import {
+  to = aws_route53_record.play_aaaa
+  id = "Z04082853V3NSCPIUKILC_play.audeos.com_AAAA"
+}
+
 import {
   to = aws_route53_record.mail_spf_ses
   id = "Z04082853V3NSCPIUKILC_mail.audeos.com_TXT"
