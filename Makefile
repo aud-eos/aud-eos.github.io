@@ -71,3 +71,42 @@ upgrade-latest:
 # TypeScript-only type check (no ESLint)
 typecheck:
 	@yarn typecheck
+
+# `make tofu-init` — initialize OpenTofu in infra/. Run once after cloning,
+# or whenever backend/provider config changes. Sources infra/.env first
+# (gitignored; copy from infra/.env.example and fill in values).
+tofu-init:
+	@cd infra && set -a && . ./.env && set +a && tofu init
+
+# `make tofu-plan` — show pending OpenTofu changes against AWS. Sources
+# infra/.env. Read-only; does not modify infrastructure. Pass extra flags
+# via ARGS, e.g. `make tofu-plan ARGS="-target=aws_route53_zone.audeos_com"`.
+tofu-plan:
+	@cd infra && set -a && . ./.env && set +a && tofu plan $(ARGS)
+
+# `make tofu-apply` — apply pending OpenTofu changes. Interactive — prompts
+# for "yes" before making changes. Never pass -auto-approve here; apply
+# against shared cloud infra needs human-in-loop confirmation. Pass extra
+# flags via ARGS, e.g. `make tofu-apply ARGS="-target=aws_route53_zone.audeos_com"`.
+tofu-apply:
+	@cd infra && set -a && . ./.env && set +a && tofu apply $(ARGS)
+
+# `make tofu-fmt` — auto-format infra/*.tf files. Run before commit.
+tofu-fmt:
+	@cd infra && tofu fmt -recursive
+
+# `make tofu-validate` — syntax + provider-arg check. No network calls,
+# no state lookups. Quick sanity check before tofu-plan.
+tofu-validate:
+	@cd infra && tofu validate
+
+# `make tofu-providers-lock` — populate `.terraform.lock.hcl` with `h1:`
+# hashes for every platform we run tofu on (local M-series macOS + the
+# linux_amd64 GH Actions runners + linux_arm64 for any future ARM runners
+# or Fly machines). Run after bumping a provider version.
+tofu-providers-lock:
+	@cd infra && set -a && . ./.env && set +a && \
+		tofu providers lock \
+			-platform=darwin_arm64 \
+			-platform=linux_amd64 \
+			-platform=linux_arm64
