@@ -1,0 +1,16 @@
+# Local environment — never commit secrets
+.env
+
+# OpenTofu / Terraform local state
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Override files — only commit named overrides intentionally
+*_override.tf
+*_override.tf.json
