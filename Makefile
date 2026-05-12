@@ -56,6 +56,10 @@ lint:
 format:
 	@yarn format
 
+# Perform a vulnerability audit against the installed packages.
+audit:
+	@yarn npm audit
+
 # Upgrade dependencies interactively. Yarn 4's upgrade-interactive replaces
 # the old `yarn outdated` + `yarn upgrade` pair from yarn 1, showing a table
 # of available updates and letting you pick which to apply.
