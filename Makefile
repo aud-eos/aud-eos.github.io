@@ -72,6 +72,22 @@ upgrade-latest:
 typecheck:
 	@yarn typecheck
 
+# `make cleanup` — run after a PR merges to return to a clean main.
+# Switches to main, fast-forwards, force-deletes the (just-merged) branch
+# you were on, and prunes stale remote-tracking refs that GitHub
+# auto-deleted on merge. Refuses if the working tree has uncommitted
+# changes; pass through harmlessly if you're already on main.
+cleanup:
+	@if [ -n "$$(git status --porcelain)" ]; then \
+		echo "Refusing: uncommitted changes. Commit or stash first."; exit 1; \
+	fi; \
+	branch=$$(git rev-parse --abbrev-ref HEAD); \
+	if [ "$$branch" = "main" ]; then \
+		git pull --ff-only && git remote prune origin; \
+	else \
+		git checkout main && git pull --ff-only && git branch -D "$$branch" && git remote prune origin; \
+	fi
+
 # `make tofu-init` — initialize OpenTofu in infra/. Run once after cloning,
 # or whenever backend/provider config changes. Sources infra/.env first
 # (gitignored; copy from infra/.env.example and fill in values).
