@@ -39,20 +39,20 @@ export default function CategoryPostSections({ posts, categoryConfig }: Category
               <h2>
                 <Link href={ `/category/${section.categoryId}` }>{ config.title }</Link>
               </h2>
-              <Link
-                href={ `/category/${section.categoryId}` }
-                className={ styles.seeAll }
-                aria-hidden="true"
-                tabIndex={ -1 }
-              >
-                See all →
-              </Link>
             </header>
             <BlogPostList
               posts={ section.categoryPosts }
               page={ 1 }
               firstCardPriority={ sectionIndex === 0 }
             />
+            <div className={ styles.seeAllFooter }>
+              <Link
+                href={ `/category/${section.categoryId}` }
+                className={ styles.seeAll }
+              >
+                See all { config.title } →
+              </Link>
+            </div>
           </section>
         );
       }) }
