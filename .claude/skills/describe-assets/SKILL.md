@@ -1,6 +1,6 @@
 ---
 name: describe-assets
-description: Add SEO-friendly descriptions to Contentful media assets that are missing them. Picks random assets, shows the image, suggests a description, and lets the user refine before saving.
+description: Add SEO-friendly descriptions to Contentful media assets that are missing them. Picks random assets, shows the image, AI-generates a suggested alt text from the image, and lets the user refine before saving.
 disable-model-invocation: true
 argument-hint: [count]
 ---
