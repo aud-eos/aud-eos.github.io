@@ -48,6 +48,19 @@ upload-images:
 		CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN=$(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN); \
 		node scripts/upload-images.mjs "$(DIR)"
 
+# Apply a tag migration plan against Contentful. Adds/removes tags on entries,
+# republishes the modified entries, and optionally deletes tags afterward.
+# Plan format: see scripts/migrations/*.json — each entry in `updates` lists
+# tagsToAdd (concatenated to existing) and tagsToRemove (filtered out).
+# Bypasses the MCP's 5-entries-per-mutation cap by using the management SDK.
+# Usage:
+#   make migrate-tags PLAN="scripts/migrations/2026-05-14-tag-cleanup.json"
+migrate-tags:
+	@export CONTENTFUL_SPACE_ID=$(CONTENTFUL_SPACE_ID) \
+		CONTENTFUL_ENVIRONMENT=$(CONTENTFUL_ENVIRONMENT) \
+		CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN=$(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN); \
+		node scripts/migrate-tags.mjs "$(PLAN)"
+
 # Run ESLint + TypeScript typecheck
 lint:
 	@yarn lint
