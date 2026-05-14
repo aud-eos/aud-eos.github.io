@@ -45,6 +45,14 @@ make upload-images DIR="/path/to/video.mov"   # Upload a single video to Content
 
 Supports images (.jpg, .jpeg, .png, .gif, .webp) and videos (.mov, .mp4, .webm). Outputs a JSON array of `{ filename, assetId, url }` to stdout. Reads credentials from `.env` automatically. Always rename files to descriptive filenames before uploading.
 
+Tag migrations (Makefile):
+
+```bash
+make migrate-tags PLAN="scripts/migrations/2026-05-14-tag-cleanup.json"
+```
+
+Applies a tag migration plan: adds/removes tags on entries, republishes the modified entries, and optionally deletes tags afterward. Plan format defined by `scripts/migrate-tags.mjs` — each entry in `updates` lists `tagsToAdd` (concatenated to existing) and `tagsToRemove` (filtered out); top-level `tagDeletions` removes the listed tag IDs from the space. Bypasses the Contentful MCP's 5-entries-per-mutation cap by using the management SDK directly. Use for bulk taxonomy changes; check plan into `scripts/migrations/` for audit trail.
+
 Blog post creation (Claude Code skill):
 
 ```bash

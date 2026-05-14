@@ -1,0 +1,798 @@
+{
+  "description": "Tag taxonomy expansion (2026-05-14): adds 12 new tags, migrates 4 posts from `plantlife` to `cannabis`, prepares `plantlife` and `technology` for deletion.",
+  "updates": [
+    {
+      "entryId": "18SEYjx9AokNSu6qUMs1zv",
+      "title": "Winner's Circle & Dr. Helmet presents BASO New Exhibition",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "capitol-hill"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "35sVBAPdpm9oycizadqK2t",
+      "title": "Art Show at Winner's Circle on Broadway ft. Sicko and DJ Audeos",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "capitol-hill"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "67h1yaLOIdG8pmdNqoRgsU",
+      "title": "Halloween Party at Gan Bei Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "halloween"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "4SKuW9Ziz7wLwWxzidAmHL",
+      "title": "Lights On at Northwest Local Cannabis",
+      "currentTags": [
+        "plantlife"
+      ],
+      "tagsToAdd": [
+        "cannabis"
+      ],
+      "tagsToRemove": [
+        "plantlife"
+      ]
+    },
+    {
+      "entryId": "XPJFRya3xIAqvnkcr95OE",
+      "title": "u suck (dj mix)",
+      "currentTags": [
+        "dj",
+        "playlists",
+        "radio"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "1qa9BG8u8fbOhkBNluSCPT",
+      "title": "What is Love x Pepas Mashup",
+      "currentTags": [
+        "dj",
+        "edits"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "5XlF6zZEXNx3VNIwQy6sdD",
+      "title": "Mysterious Psych O — J Boog x Post Malone Mashup",
+      "currentTags": [
+        "dj",
+        "edits"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "6neJ4LeUwHLKRdCPk4qqLm",
+      "title": "Post Malone x J Boog — Psycho Reggae Mashup",
+      "currentTags": [
+        "dj",
+        "edits"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "2BThdM95iT14jUKFHpu7ms",
+      "title": "Messin' with Serato Stems: Drake x INOJ Mashup",
+      "currentTags": [
+        "dj",
+        "edits"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "3PSZoD1GlFHrAJ3eKywbnj",
+      "title": "Halloween Party at Rose Temple, Capitol Hill, Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "halloween",
+        "capitol-hill"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "4HiUc6f7zL0NnzQ6cyL5c",
+      "title": "Remembering MJ: The King Of Pop at Royal Room in Columbia City, Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "columbia-city"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "3kjRNrFrZryWG19QIHr8xb",
+      "title": "Prince Tribute at The Royal Room in Columbia City, Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "columbia-city"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "3fnWJ7LQ2HO9WX0FNAMHlq",
+      "title": "Memorial Day Weekend at Taco City in Columbia City, Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "columbia-city"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "DUTQsCFyhcmlBjcAe8Msq",
+      "title": "Country Wedding with DJ Audeos at Shangri-La On The Green Campground in Enumclaw",
+      "currentTags": [
+        "dj"
+      ],
+      "tagsToAdd": [
+        "wedding"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "3zXwrccX8Sg6GksW7Xp9If",
+      "title": "Daz Dillinger Live in Belltown | DPG Budz x SPR Launch",
+      "currentTags": [
+        "dj",
+        "nightlife",
+        "plantlife"
+      ],
+      "tagsToAdd": [
+        "belltown",
+        "cannabis"
+      ],
+      "tagsToRemove": [
+        "plantlife"
+      ]
+    },
+    {
+      "entryId": "7IAo0fWgQSDCdesSGj0UE6",
+      "title": "New Logo for The Northwest Clothing",
+      "currentTags": [
+        "graphics",
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "logo"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "68OkG9gmzFdBtmkGmIuA6j",
+      "title": "DJ Audeos - Day Party Mix",
+      "currentTags": [
+        "dj",
+        "playlists",
+        "radio"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "4B12B1ZsomBxYKwWK7cvuk",
+      "title": "NWAC Snowbash at evo Fremont — September 2018",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "TK5KVdmpURHDRu9vIPkFt",
+      "title": "I was the DJ for my cousins wedding in Puyallup, WA",
+      "currentTags": [
+        "dj"
+      ],
+      "tagsToAdd": [
+        "wedding"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "1flH94FbNmdRkl4emWsBND",
+      "title": "No Requests with DJ Audeos at Speckled and Drake in Capitol Hill, Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "capitol-hill"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "3pftjZ48RQpsM72JkYAcvs",
+      "title": "Wedding DJ at Wisteria Hall, UW Botanic Gardens — Seattle",
+      "currentTags": [
+        "dj"
+      ],
+      "tagsToAdd": [
+        "wedding"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "4FFMgP6gtjzFw6y83334VM",
+      "title": "Open Format Fridays at Vittles in Belltown Seattle featuring DJ Audeos",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "belltown"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "7aFT3vNKxcA77oROGykOKV",
+      "title": "DJing NWAC SnowBash 2016 at evo Seattle",
+      "currentTags": [
+        "dj"
+      ],
+      "tagsToAdd": [
+        "halloween"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "7HOHDtRVS0tbchKeN4qgvZ",
+      "title": "DJing a Wedding in Shelburne, Vermont",
+      "currentTags": [
+        "dj"
+      ],
+      "tagsToAdd": [
+        "wedding"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "3JPstZk1fflYCFqKnnO6U1",
+      "title": "I got to DJ a Wedding Reception at the Roche Harbor Resort in Friday Harbor, WA",
+      "currentTags": [
+        "dj"
+      ],
+      "tagsToAdd": [
+        "wedding"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "4kNqG6TzOxCOqGJyfIekUq",
+      "title": "Holiday Party at Vittles in Belltown",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "belltown"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "23r3pFqAzkAg8qnRbPTpB7",
+      "title": "DJ Audeos Saturdays at Vittles Neighborhood Bistro & Bar in Belltown, Seattle, WA",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "belltown"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "2eaRJm8XAmgwZgWI4Hfn2i",
+      "title": "DJ Audeos - Droptop Hotbox Mix",
+      "currentTags": [
+        "dj",
+        "plantlife",
+        "playlists",
+        "radio"
+      ],
+      "tagsToAdd": [
+        "mixes",
+        "cannabis"
+      ],
+      "tagsToRemove": [
+        "plantlife"
+      ]
+    },
+    {
+      "entryId": "7IiIaW5BbMOw8Gs7JiqNb5",
+      "title": "Wedding Reception DJ at Tacoma's Landmark Event Center Rooftop",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "wedding"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "41QyYUg1gsxopLpP9jxLJ",
+      "title": "Beacon Hillfinger Design",
+      "currentTags": [
+        "graphics",
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "logo"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "AMheazfl9IC5TQsRFTgFR",
+      "title": "DJ Audeos - Rear Wax (DJ mix show)",
+      "currentTags": [
+        "dj",
+        "radio"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "3fofhVpjWuHoXwaPpjL9Ia",
+      "title": "DJ Audeos - Slappers (DJ mix show)",
+      "currentTags": [
+        "dj",
+        "radio"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "5csdxvbPq4T4PpcoPq11Bx",
+      "title": "Cassandra McClure x The North West Clothing",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "photoshoot"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "10kqURxodims9F093Qphsi",
+      "title": "\"Howl-O-Ween\" Halloween Party at the Sexton Bar in Ballard",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "halloween"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "44zmCiejkGpNKtHsCAivDL",
+      "title": "The Northwest Clothing x Hempfest in Seattle",
+      "currentTags": [
+        "merch",
+        "plantlife"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "cannabis"
+      ],
+      "tagsToRemove": [
+        "plantlife"
+      ]
+    },
+    {
+      "entryId": "7CpUwEn62XrXxGIaASjhbm",
+      "title": "My Tam's Going Away Party with DJ Audeos at 2312 in Belltown, Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "belltown"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "5DkqonuAM2WVKVSDh66AwI",
+      "title": "Ballard Is For Lovers",
+      "currentTags": [
+        "graphics",
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "2Hde1agTz3sRBDCjUsjTak",
+      "title": "Pioneer Square Art Walk at CrisisNW in Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "art-walk",
+        "pioneer-square"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "3OoK1MSKAiAxqQiDkrHZaJ",
+      "title": "Tac Town Never Back Down Design",
+      "currentTags": [
+        "graphics",
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "x7hbBGcS7SBcw3T74hz4i",
+      "title": "Sasquatch 2013 at The Gorge Amphitheatre",
+      "currentTags": [
+        "merch",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "6DOSGG0ElDK6RQyMK9EoaZ",
+      "title": "Pioneer Square Art Walk Party — May 2013",
+      "currentTags": [
+        "dj",
+        "merch",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "art-walk",
+        "pioneer-square"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "3Tt8kDcVLifVvJcwhCy2y9",
+      "title": "Charmaine Glock models The North West Clothing — Seattle Photoshoot",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "photoshoot"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "9CJgdLmYNxs8C3yXY54Et",
+      "title": "Neko Jamilla x The North West Clothing",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "photoshoot"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "6OjSt3nbrcIjNGj8OcyOa7",
+      "title": "Pioneer Square Art Walk Tattoo Party ft. Mario James at The OK Hotel",
+      "currentTags": [
+        "dj",
+        "merch",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "art-walk",
+        "pioneer-square"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "4SnC2k0FvkaeOBEAJqLzbi",
+      "title": "Yaye Kassamali x The North West Clothing",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "photoshoot",
+        "pioneer-square"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "2PB4H73JpUjlEt13FYPyTW",
+      "title": "Sunday Night Social at Mestizo Ultra Lounge in Belltown, Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "belltown"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "5mtKec7hG3gsyZazgmgwJP",
+      "title": "Ladies Night Tuesdays at Splash Lounge in Belltown Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "belltown"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "4AYmHZIHLd8P0RsCJe2HQE",
+      "title": "DJ Audeos - Breakup Beats (DJ mix show)",
+      "currentTags": [
+        "dj",
+        "radio"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "1e2mhlEWsdvWzCrPWSECiL",
+      "title": "DJing a private party at Dry Soda headquarters in Pioneer Square, Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "pioneer-square"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "1MPgzwM0gzY3adZ96WoPm4",
+      "title": "Be My #2 x American Boy (Audeos Edit)",
+      "currentTags": [
+        "dj",
+        "edits"
+      ],
+      "tagsToAdd": [
+        "mixes"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "70mvg4B2UuEh6FWMDa3bGE",
+      "title": "Uniquely Seattle: Kimberly Nichole at Chop Suey in Seattle",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "capitol-hill"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "4QKclBXIljtVnljAhkt7KG",
+      "title": "Officials Vintage is now carrying The North West tees",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "eyLfI4Pvy4hQWqcQTtU1W",
+      "title": "Anne rocking The North West Hoodie",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "photoshoot"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "7wJBIDZKfYZ196uQnTLF19",
+      "title": "Photoshoot with Syreeta McKelvey at the Olympic Sculpture Park in Downtown Seattle",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "photoshoot"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "2o7ZcC2cjZ4Bkidr6B3TYl",
+      "title": "DJ Audeos - Erotic City Mix",
+      "currentTags": [
+        "dj",
+        "playlists",
+        "radio"
+      ],
+      "tagsToAdd": [
+        "mixes",
+        "pioneer-square"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "5ppxTjExpcS8crwDtQU58E",
+      "title": "The North West Crew Wins A Trophy",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "24Y55lbqbp2CVhR7tc87P8",
+      "title": "The North West Native Logo Design",
+      "currentTags": [
+        "graphics",
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "logo"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "28gQtDWvkShZbxDe7JXEPA",
+      "title": "Boiler Room After Hours in Capitol Hill with DJ Audeos",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "capitol-hill"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "gDrhOs1Etjt0RUUcP1lgS",
+      "title": "Water: Jan 23, 2008 at Columbia City Theatre",
+      "currentTags": [
+        "dj",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "columbia-city"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "5rlAxBOae5TmuTTeN4yFT9",
+      "title": "Jamaican 45 Donuts on B-Girl Radio",
+      "currentTags": [
+        "dj",
+        "radio"
+      ],
+      "tagsToAdd": [
+        "mixes",
+        "capitol-hill"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "70FiwG9pWCvQnXyHbR69wp",
+      "title": "Sasquatch at the Gorge",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "7uKv4g8XZr4RI4IV2qtD0l",
+      "title": "Happy Halloween",
+      "currentTags": [
+        "merch"
+      ],
+      "tagsToAdd": [
+        "the-north-west-clothing",
+        "halloween"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "5puicdSE8EWITAklefiP4s",
+      "title": "Major W8 - A Night of Fashion, Drinking, and Dancing",
+      "currentTags": [
+        "merch",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "columbia-city"
+      ],
+      "tagsToRemove": []
+    },
+    {
+      "entryId": "2m6BSnPohSNC0SdhwyrVnd",
+      "title": "Nights at the Maharaja Cuisine Of India in Capitol Hill, Seattle",
+      "currentTags": [
+        "merch",
+        "nightlife"
+      ],
+      "tagsToAdd": [
+        "capitol-hill"
+      ],
+      "tagsToRemove": []
+    }
+  ],
+  "tagDeletions": [
+    "plantlife",
+    "technology"
+  ]
+}
