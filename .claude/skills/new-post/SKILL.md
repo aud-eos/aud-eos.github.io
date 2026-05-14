@@ -58,17 +58,17 @@ Collect or derive all required fields. Show each to the user for approval:
 | **category** | **Required.** Must be one of `music`, `events`, or `lifestyle` (validated by Contentful and consumed by `src/utils/categoryConfig.ts`). Pick by mapping the post's primary topic against `data/categories.json` — `music` = releases/edits/mixes/playlists, `events` = DJ performances and nightlife recaps, `lifestyle` = visual art, merch, plants, other interests. Show choice for approval; never invent a new category. |
 | **description** | Draft a 1-2 sentence summary from the body (120-160 chars). Show for approval. |
 | **body** | The markdown content from brainstorm or assembly |
-| **date** | Default to today's date. Ask if a different date is wanted. |
+| **date** | Default to today's date. Ask if a different date is wanted. If the user supplies a backdated date (a date in the past, e.g. for an archival post), write the post **as if it were authored on that date** — no "back in 2013", "throwback", "looking back", or year mentions in the body. Use the brand voice's preferred present tense for vibe. Treat the date as the present. |
 | **author** | Fetch authors via `mcp__contentful__search_entries` with content type `author`. If only one exists, use it. If multiple, ask user to pick. |
 | **image** | Asset link from featured image upload (required) |
 | **gallery** | Array of asset links from gallery upload (if any) |
-| **tags** | Fetch existing tags via `mcp__contentful__list_tags`. Suggest relevant ones. Never suggest creating new tags. |
+| **tags** | Fetch existing tags via `mcp__contentful__list_tags`. Prefer existing tags when they accurately describe the post — but **suggest creating new tags for granular subjects not yet covered**. Categories (`music`/`events`/`lifestyle`) now handle main site navigation, so tags can be more topical (specific genres, places, themes, collaborators, gear, etc.). New tag IDs should be lowercase-hyphenated (e.g. `pioneer-square`, `house-mix`) and plausibly apply to more than one post. Avoid near-duplicates of existing tags. Show all suggested tags (new and existing) for user approval before writing to Contentful — never auto-create. |
 | **spotifyPlaylistId** | Ask if they want to embed a Spotify playlist (yes/no). Skip if no. |
 | **soundcloudUrl** | Ask if they want to embed a SoundCloud track or playlist (yes/no). If yes, collect the full SoundCloud URL. Skip if no. |
 | **youtubeUrl** | Ask if they want to embed a YouTube video (yes/no). If yes, collect the full YouTube URL. Skip if no. |
 | **tiktokUrl** | Ask if they want to embed a TikTok video (yes/no). If yes, collect the full TikTok URL. Fetch oEmbed data via `curl -s "https://www.tiktok.com/oembed?format=json&url=<encoded-url>"` to get the title and thumbnail. Offer to use the TikTok thumbnail as the featured image — download it with `curl -o`, rename to a descriptive filename, and upload via `make upload-images`. |
 | **address** | Ask if they want to add a location (yes/no). If yes, collect a human-readable address (e.g. `Cultiva Law, 2510 Western Ave Suite 500, Seattle, WA 98121`). Renders inside the post's "Location" section header. Skip if no. |
-| **googleMapsUrl** | Only ask if `address` was provided. Collect a Google Maps URL containing an `@lat,lon` segment (the format from the Google Maps "Share → Copy link" button on a pinned place — e.g. `https://www.google.com/maps/place/.../@47.6144758,-122.3524581,...`). The `LocationMap` component (`src/components/LocationMap.tsx`) regex-extracts the coordinates from this URL to render the embedded map iframe. Without this URL the address shows as plain text — no map embed, even if `address` is set. Skip if the user only wants the address text. |
+| **googleMapsUrl** | Only ask if `address` was provided. Collect a Google Maps URL containing an `@lat,lon` segment (the format from the Google Maps "Share → Copy link" button on a pinned place — e.g. `https://www.google.com/maps/place/.../@47.6144758,-122.3524581,...`). The `LocationMap` component (`src/components/LocationMap.tsx`) regex-extracts the coordinates from this URL to render the embedded map iframe. **Trim the URL** before sending to Contentful — the `googleMapsUrl` field is a Symbol with a 255-char limit, and Google's "Copy link" output is routinely 400+ chars. **Rebuild the trimmed URL using the venue's actual coords from the `!3d<lat>!4d<lon>` segment** — NOT the `@lat,lon,zoom` view-center segment already in the URL. The `@` segment reflects whatever map view the user was looking at when they hit Share (often zoomed-out, often off-target by 100m to many miles); the `!3d!4d` segment always holds the pinned place's accurate coords. Build the result as `https://www.google.com/maps/place/<Name>/@<3dlat>,<4dlon>,17z` — the regex (`/@(-?\d+\.?\d*),(-?\d+\.?\d*)/`) just needs the coords, and the trimmed URL still resolves to the named place when clicked. Drop the trailing `/data=...`, `&entry=...`, `&g_ep=...` query params. Without this URL the address shows as plain text — no map embed, even if `address` is set. Skip if the user only wants the address text. |
 
 ## SEO Check
 
@@ -176,7 +176,7 @@ Report back with:
 
 ## Important Rules
 
-- **Never suggest creating new tags** — only suggest from existing tags in the space
+- **Tags can be new or existing** — prefer existing tags when they fit; suggest creating new tags for granular subjects not yet covered. Avoid near-duplicates of existing tags. Always confirm new tag IDs with the user before writing to Contentful — never auto-create.
 - **Featured image is required** — do not proceed to entry creation without one
 - **Always show content for approval** before any Contentful write operation
 - **Remind about descriptive filenames** before image uploads
